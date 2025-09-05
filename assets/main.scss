@@ -3,19 +3,50 @@
 
 @import "minima";
 
-/* ===== Your custom palette (example: purple/blue/gray) ===== */
+/* ===== Custom Dark Red / Gray / White Palette ===== */
+
+/* Base background and text */
 body {
-  background-color: #f9fafb;  /* light gray */
-  color: #1f2937;             /* slate text */
+  background-color: #f9f9f9;   /* light gray/white */
+  color: #1c1c1c;              /* almost black text */
 }
 
-.site-title { color: #4f46e5; }     /* indigo/purple */
-a { color: #2563eb; }               /* blue links */
-a:hover { color: #1d4ed8; }
-
+/* Site header (top bar) */
 .site-header {
-  background-color: #111827;   /* dark header */
+  background-color: #7a0c0c;   /* dark red */
   border-bottom: none;
 }
-.site-nav .page-link { color: #f9fafb; }      /* white nav links */
-.site-nav .page-link:hover { color: #93c5fd; }/* light blue hover */
+
+/* Site title in header */
+.site-title {
+  color: #ffffff !important;   /* white title text */
+}
+
+/* Nav links */
+.site-nav .page-link {
+  color: #f3f4f6;              /* light gray links */
+}
+.site-nav .page-link:hover {
+  color: #ffe0e0;              /* pale red hover */
+}
+
+/* Links in page body */
+a {
+  color: #a10d0d;              /* medium red */
+}
+a:hover {
+  color: #7a0c0c;              /* darker red hover */
+}
+
+/* Footer */
+.site-footer {
+  background-color: #1c1c1c;   /* dark gray footer */
+  color: #d1d5db;              /* light gray text */
+  border-top: none;
+}
+.site-footer a {
+  color: #e5e7eb;
+}
+.site-footer a:hover {
+  color: #ffffff;
+}
