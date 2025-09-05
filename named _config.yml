@@ -1,6 +1,6 @@
 title: "Kaan Borekci"
 description: "Medical Devices · Robotics · ML for Healthcare"
-theme: minima
+theme: jekyll-theme-minimal
 
 # Show these pages in the top header
 header_pages:
