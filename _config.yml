@@ -1,6 +1,14 @@
-remote_theme: pages-themes/minimal@v0.2.0
-plugins:
-  - jekyll-remote-theme
-
 title: "Kaan Borekci"
 description: "Medical Devices · Robotics · ML for Healthcare"
+
+theme: minima  
+# remote_theme: pages-themes/minimal@v0.2.0
+# plugins:
+#   - jekyll-remote-theme
+
+# Tell minima which pages to put in the header nav:
+header_pages:
+  - index.md
+  - projects.md
+  - resume.md
+  - contact.md
