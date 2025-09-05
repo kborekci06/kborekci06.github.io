@@ -2,6 +2,7 @@
 title: Home
 layout: page
 ---
+
 # Hi, I'm Kaan Borekci 
 
 I design and build **medical devices**, **robotics systems**, and **machine learning pipelines** for healthcare applications.  
