@@ -1,3 +1,8 @@
+---
+title: Resume
+layout: page
+---
+
 # Resume
 
 [📄 Download Resume (PDF)](/assets/RESUME-KAAN-BOREKCI-2025.pdf)
