@@ -1,7 +1,9 @@
 ---
 title: Projects
-layout: page
+layout: default
 ---
+
+[Home](/) · [Projects](/projects) · [Resume](/resume) · [Contact](/contact)
 
 # Projects
 
