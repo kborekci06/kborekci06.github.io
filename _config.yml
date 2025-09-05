@@ -12,3 +12,6 @@ header_pages:
   - projects.md
   - resume.md
   - contact.md
+
+sass:
+  style: compressed
