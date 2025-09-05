@@ -3,8 +3,6 @@ title: Contact
 layout: default
 ---
 
-[Home](/) · [Projects](/projects) · [Resume](/resume) · [Contact](/contact)
-
 # Contact
 
 📧 [kaan@borekci.com](mailto:kaan@borekci.com)  
