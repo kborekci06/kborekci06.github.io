@@ -1,6 +1,6 @@
 ---
 title: Home
-layout: page
+layout: default
 ---
 
 [Home](/) · [Projects](/projects) · [Resume](/resume) · [Contact](/contact)
