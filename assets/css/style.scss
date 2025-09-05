@@ -1,0 +1,21 @@
+---
+---
+
+@import "minima";
+
+body {
+  background-color: #f9fafb;    /* light gray */
+  color: #1f2937;               /* slate gray text */
+}
+
+.site-title {
+  color: #2563eb;               /* blue site title */
+}
+
+a {
+  color: #16a34a;               /* green links */
+}
+
+a:hover {
+  color: #15803d;               /* darker green on hover */
+}
