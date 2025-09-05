@@ -1,0 +1,10 @@
+title: "Kaan Borekci"
+description: "Medical Devices · Robotics · ML for Healthcare"
+theme: minima
+
+# Show these pages in the top header
+header_pages:
+  - index.md
+  - projects.md
+  - resume.md
+  - contact.md
