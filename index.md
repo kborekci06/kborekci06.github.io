@@ -3,8 +3,6 @@ title: Home
 layout: default
 ---
 
-[Home](/) · [Projects](/projects) · [Resume](/resume) · [Contact](/contact)
-
 # Hi, I'm Kaan Borekci 
 
 I design and build **medical devices**, **robotics systems**, and **machine learning pipelines** for healthcare applications.  
