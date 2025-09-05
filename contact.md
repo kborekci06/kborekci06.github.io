@@ -1,3 +1,8 @@
+---
+title: Contact
+layout: page
+---
+
 # Contact
 
 📧 [kaan@borekci.com](mailto:kaan@borekci.com)  
