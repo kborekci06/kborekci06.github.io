@@ -3,8 +3,6 @@ title: Projects
 layout: default
 ---
 
-[Home](/) · [Projects](/projects) · [Resume](/resume) · [Contact](/contact)
-
 # Projects
 
 ## Diaphragm Control Device (Patent Pending, BMES 2025)
