@@ -91,3 +91,11 @@ a:hover {
 .site-nav .page-link:hover {
   color: #ffe0e0 !important;   /* light red hover */
 }
+
+.embed-wrap {
+  margin-top: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
