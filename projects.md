@@ -1,19 +1,20 @@
 ---
 title: Projects
-layout: default
+layout: page
+permalink: /projects/
 ---
 
 # Projects
 
-## Diaphragm Control Device (Patent Pending, BMES 2025)
-- First-step platform for closed-loop diaphragm pacer regulation.  
-- Programmed firmware in **Embedded C** (I²C, UART, SPI).  
-- Designed custom PCB extending runtime by 20+ hrs.  
-- Recognition: Selected for **BMES 2025** (San Diego).  
+## [Diaphragm Control Device (Patent Pending, BMES 2025)](/projects/diaphragm-control/)
+Patent-pending embedded device for **pediatric congenital central hypoventilation syndrome**.  
+First-step **data-collection platform** toward closed-loop diaphragm pacer regulation.  
+Recognition: **Selected for BMES 2025 (San Diego)**.  
+[Read more →](/projects/diaphragm-control/)
 
 ---
 
-## Infant Pose Lifting Evaluation (SRAL)
-- Built pipeline to evaluate 3D pose lifters on retrospective infant videos.  
-- Developed evaluation framework
-- Implemented benchmarks on CUDA-enabled Linux system.  
+## [Infant Pose Lifting Evaluation (SRAL)](/projects/infant-pose-pipeline/)
+Evaluation pipeline for **retrospective, uncalibrated infant videos**, introducing **anatomical-constraint metrics**.  
+Benchmarked across **8+ lifting models** using MMPose on CUDA-enabled Linux system.  
+[Read more →](/projects/infant-pose-pipeline/)
