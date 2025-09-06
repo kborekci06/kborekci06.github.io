@@ -23,10 +23,10 @@ This experience **sparked my passion for medical devices**. Working in the Roger
 </div>
 
 <!-- Inline PDF embed (works across modern browsers) -->
-<object data="/assets/nature-digital-medicine-2020.pdf#view=FitH" type="application/pdf" width="100%" height="900">
-  <iframe src="/assets/nature-digital-medicine-2020.pdf#view=FitH" width="100%" height="900" style="border:0;">
+<object data="/assets/HYDROCEPHALUS-NATURE-2020.pdf#view=FitH" type="application/pdf" width="100%" height="900">
+  <iframe src="/assets/HYDROCEPHALUS-NATURE-2020.pdf#view=FitH" width="100%" height="900" style="border:0;">
     <p>Inline PDF viewer unavailable in this browser. 
-       <a href="/assets/nature-digital-medicine-2020.pdf" target="_blank" rel="noopener">Open PDF in a new tab</a>.
+       <a href="/assets/HYDROCEPHALUS-NATURE-2020.pdf" target="_blank" rel="noopener">Open PDF in a new tab</a>.
     </p>
   </iframe>
 </object>
