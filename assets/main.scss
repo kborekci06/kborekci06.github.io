@@ -50,3 +50,26 @@ a:hover {
 .site-footer a:hover {
   color: #ffffff;
 }
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #7a0c0c;            /* matches your red palette */
+  text-decoration: none;
+  font-weight: 600;
+  margin-right: 8px;
+}
+.btn:hover { background: #f9f9f9; }
+
+.resume-buttons {
+  display: flex;
+  justify-content: space-between;  /* pushes buttons to edges */
+  margin-bottom: 1rem;
+}
+
+.resume-buttons .btn {
+  flex: 0 0 auto;
+}
