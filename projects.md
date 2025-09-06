@@ -23,3 +23,9 @@ Benchmarked across **8+ lifting models** using MMPose on CUDA-enabled Linux syst
 ## [Mevacor (Lovastatin) Drug Analysis](/projects/lovastatin/)
 Collaborative final project for BME 340.  
 [Read More →](/projects/lovastatin/)
+
+---
+
+## [Publication — Nature Digital Medicine (2020)](/publications/nature-digital-medicine/)
+Early coauthorship from work in the Rogers Lab that catalyzed my interest in medical devices.  
+[Read more →](/publications/nature-digital-medicine/)
