@@ -9,12 +9,12 @@ title: Nature Digital Medicine — Coauthored Paper
 **Role:** Bioelectronics Research Intern (while in high school)
 
 ## Why this matters to me
-This was the project that **sparked my passion for medical devices**. Contributing in the Rogers Lab showed me how tightly **engineering, clinical needs, and translational impact** can align.
+This experience **sparked my passion for medical devices**. Working in the Rogers Lab showed me how engineering decisions directly translate to clinical impact.
 
 ## My contributions
 - Evaluated embedded sensor systems for **hydrocephalus shunt flow** detection.  
-- **Characterized device drift** and validated **phantom model** experiments simulating physiological flow conditions.  
-- Contributed analyses that supported the final manuscript; listed as a **coauthor** in *Nature Digital Medicine (2020)*.
+- **Characterized device drift** and validated **phantom model** experiments simulating physiological flow.  
+- Contributed analyses used in the manuscript; listed as a **coauthor** in *Nature Digital Medicine (2020)*.
 
 ## Access the article
 <div class="resume-buttons">
@@ -22,13 +22,13 @@ This was the project that **sparked my passion for medical devices**. Contributi
   <a class="btn" href="https://www.nature.com/articles/s41746-020-0239-1#citeas" target="_blank" rel="noopener">View citation</a>
 </div>
 
-<!-- Attempt inline embed (may be blocked by publisher security) -->
-<div class="embed-wrap">
-  <iframe
-    src="https://www.nature.com/articles/s41746-020-0239-1"
-    width="100%" height="900" style="border:1px solid #ddd"
-    loading="lazy">
+<!-- Inline PDF embed (works across modern browsers) -->
+<object data="/assets/nature-digital-medicine-2020.pdf#view=FitH" type="application/pdf" width="100%" height="900">
+  <iframe src="/assets/nature-digital-medicine-2020.pdf#view=FitH" width="100%" height="900" style="border:0;">
+    <p>Inline PDF viewer unavailable in this browser. 
+       <a href="/assets/nature-digital-medicine-2020.pdf" target="_blank" rel="noopener">Open PDF in a new tab</a>.
+    </p>
   </iframe>
-</div>
+</object>
 
-> If the article doesn't render above, click **Open on nature.com** — some browsers block publisher pages from being embedded for security.
+> If you prefer the publisher page, use the **Open on nature.com** button above.
