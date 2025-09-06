@@ -5,10 +5,10 @@ layout: default
 
 # Resume
 
-<p>
-  <a class="btn" href="/assets/RESUME-KAAN-BOREKCI-2025.pdf" target="_blank" rel="noopener">Open in new tab</a>
-  <a class="btn" href="/assets/RESUME-KAAN-BOREKCI-2025.pdf" download>Download PDF</a>
-</p>
+<div class="resume-buttons">
+  <a class="btn left" href="/assets/RESUME-KAAN-BOREKCI-2025.pdf" target="_blank" rel="noopener">Open in new tab</a>
+  <a class="btn right" href="/assets/RESUME-KAAN-BOREKCI-2025.pdf" download>Download PDF</a>
+</div>
 
 <!-- Inline viewer -->
 <object data="/assets/RESUME-KAAN-BOREKCI-2025.pdf#view=FitH" type="application/pdf" width="100%" height="900">
