@@ -20,6 +20,6 @@ Benchmarked across **8+ lifting models** using MMPose on CUDA-enabled Linux syst
 
 ---
 
-## Mevacor (Lovastatin) Drug Analysis
+## [Mevacor (Lovastatin) Drug Analysis](/projects/lovastatin/)
 Collaborative final project for BME 340.  
 [Read More →](lovastatin.md)
