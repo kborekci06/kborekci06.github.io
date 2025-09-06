@@ -73,3 +73,21 @@ a:hover {
 .resume-buttons .btn {
   flex: 0 0 auto;
 }
+
+/* ===== Mobile nav menu fixes ===== */
+
+/* Background of the dropdown */
+.site-nav {
+  background-color: #7a0c0c;   /* match your dark red header */
+}
+
+/* Links inside the dropdown */
+.site-nav .page-link {
+  color: #ffffff !important;   /* make links white */
+  font-weight: 600;
+}
+
+/* Hover / active link states */
+.site-nav .page-link:hover {
+  color: #ffe0e0 !important;   /* light red hover */
+}
