@@ -17,3 +17,9 @@ Recognition: **Selected for BMES 2025 (San Diego)**.
 Evaluation pipeline for **retrospective, uncalibrated infant videos**, introducing **anatomical-constraint metrics**.  
 Benchmarked across **8+ lifting models** using MMPose on CUDA-enabled Linux system.  
 [Read more →](/projects/infant-pose-pipeline/)
+
+---
+
+## Mevacor (Lovastatin) Drug Analysis
+Collaborative final project for BME 340.  
+[Read More →](lovastatin.md)
