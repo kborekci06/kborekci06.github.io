@@ -1,6 +1,9 @@
 title: "Kaan Borekci"
 description: "Medical Devices · Robotics · ML for Healthcare"
 
+maintenance: true
+maintenance_message: "This site is being updated. Please check back after Sept 14, 2025."
+
 theme: minima  
 permalink: pretty
 # remote_theme: pages-themes/minimal@v0.2.0
