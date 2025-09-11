@@ -3,7 +3,7 @@ title: Home
 layout: Site Under Maintenance
 ---
 
-# 🚧 Site Under Maintenance
+# 🚧 Site Under Maintenance 🚧
 This portfolio is being updated and will be back online soon.  
 Please check back after **September 14, 2025**.
 
