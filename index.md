@@ -68,13 +68,13 @@ On this site, you can explore my [Featured Work](#featured-work), [Projects](/pr
 
 ## My Journey
 
-### Education:
+### **Education:**
 - **2025–26:** M.S. Mechanical Engineering (Robotics & Control) @ Northwestern University
 - **2021–25:** B.S. Biomedical Engineering @ Northwestern University
 
-### Experiences
-- **2024–present:** **Shirley Ryan AbilityLab** — infant pose-lifting evaluation pipeline → [project](/projects/infant-pose-pipeline/)  
-- **2024–present:** **Senior Capstone to Independent Project, Collab with Lurie Children’s—CAMP** — diaphragm control device (R&D, patent pending) → [project](/projects/diaphragm-control/)  
-- **2023:** **Mirkin Lab** — novel ImageJ workflow (80+ hrs), presented to Dr. Chad Mirkin  
-- **2022:** **INVO** — $2.75B / 180+ startups funding database used by leadership
+### **Key Experiences:**
+- **2024–present:** **Shirley Ryan AbilityLab** — Infant Pose Estimation Pipeline → [project](/projects/infant-pose-pipeline/)  
+- **2024–present:** **Senior Capstone to Independent Project, Collab with Lurie Children’s CAMP** — Digital Phrenic Nerve Project for Diaphragm control (R&D, patent pending) → [project](/projects/diaphragm-control/)  
+- **2023:** **Mirkin Lab** — Crystal Engineering, Nanotechnology using DNA-Coated Gold Nanoparticles  
+- **2022:** **Inovation and New Ventures Office (INVO)** — Technology Transfer Office @ Northwestern
 -->
