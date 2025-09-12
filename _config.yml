@@ -10,8 +10,8 @@ permalink: pretty
 # Tell minima which pages to put in the header nav:
 header_pages:
   - index.md
-  # - projects.md
-  # - publications.md
-  # - resume.md
-  # - contact.md
+  - projects.md
+  - publications.md
+  - resume.md
+  - contact.md
 
