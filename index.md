@@ -4,7 +4,7 @@ title: "Home"
 description: "Medical Devices • Robotics • Embedded Systems • ML for Healthcare"
 ---
 
-# Who am I: An Engineer on the Edge
+## Who am I: An Engineer on the Edge
 
 No cliffs involved, just the crossroads of healthcare and engineering, where I have built my foundation! 
 
