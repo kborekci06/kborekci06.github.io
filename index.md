@@ -1,5 +1,15 @@
 ---
 layout: default
+title: "Site Under Maintenance"
+---
+
+# 🚧 Site Under Maintenance
+This portfolio is being updated and will be back online soon.  
+Please check back after **September 14, 2025**.
+
+<!--
+---
+layout: default
 title: "Home"
 description: "Medical Devices • Robotics • Embedded Systems • ML for Healthcare"
 ---
@@ -67,3 +77,4 @@ On this site, you can explore my [Featured Work](#featured-work), [Projects](/pr
 - **2024–present:** **Senior Capstone to Independent Project, Collab with Lurie Children’s—CAMP** — diaphragm control device (R&D, patent pending) → [project](/projects/diaphragm-control/)  
 - **2023:** **Mirkin Lab** — novel ImageJ workflow (80+ hrs), presented to Dr. Chad Mirkin  
 - **2022:** **INVO** — $2.75B / 180+ startups funding database used by leadership
+-->
