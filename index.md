@@ -5,7 +5,7 @@ title: "Site Under Maintenance"
 
 # 🚧 Site Under Maintenance
 This portfolio is being updated and will be back online soon.  
-Please check back after **September 14, 2025**.
+Please check back after **September  20th, 2025**.
 
 <!--
 ---
