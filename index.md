@@ -14,9 +14,7 @@ title: "Home"
 description: "Medical Devices • Robotics • Embedded Systems • ML for Healthcare"
 ---
 
-## Who am I: An Engineer on the Edge
-
-No cliffs involved, just the crossroads of healthcare and engineering, where I have built my foundation! 
+## Who am I
 
 Hi, my name is Kaan Borekci, and my background is in **Biomedical Engineering (B.S.)**, a discipline that sits at the intersection of physiology, pharmaceuticals, medical devices, prosthetics & orthotics, and clinical trial research. This broad training gave me the privilege of exploring multiple domains early on in my career, with each showing me how engineering and natural systems go hand-in-hand.
 
