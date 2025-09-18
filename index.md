@@ -1,13 +1,15 @@
+<!--
 ---
 layout: default
 title: "Site Under Maintenance"
 ---
 
+
 # 🚧 Site Under Maintenance
 This portfolio is being updated and will be back online soon.  
 Please check back after **September  20th, 2025**.
+-->
 
-<!--
 ---
 layout: default
 title: "Home"
@@ -75,4 +77,4 @@ On this site, you can explore my [Featured Work](#featured-work), [Projects](/pr
 - **2024–present:** **Senior Capstone to Independent Project, Collab with Lurie Children’s CAMP** — Digital Phrenic Nerve Project for Diaphragm control (R&D, patent pending) → [project](/projects/diaphragm-control/)  
 - **2023:** **Mirkin Lab** — Crystal Engineering, Nanotechnology using DNA-Coated Gold Nanoparticles  
 - **2022:** **Inovation and New Ventures Office (INVO)** — Technology Transfer Office @ Northwestern
--->
+
