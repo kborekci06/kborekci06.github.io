@@ -4,7 +4,73 @@ title: "Home"
 description: "Kaan Borekci Engineering Portfolio"
 ---
 
-This portfolio website is currently undergoing changes to improve design and introduce updated content. In the meanwhile, please see my [RESUME](/resume/)
+---
+layout: default
+title: "Home"
+description: "Medical Devices • Robotics • Embedded Systems • ML for Healthcare"
+---
+
+# Kaan Börekçi
+
+I build **medical and robotic systems** at the intersection of **embedded firmware, sensing, and clinical translation**.
+
+My work spans: (1) embedded data-collection and control platforms for pediatric respiratory care, (2) ML pipelines for biomechanical/clinical inference from video, and (3) modular, documentation-first engineering projects designed to be auditable and scalable.
+
+<div class="cta-row">
+  <a class="btn" href="/projects/">Projects</a>
+  <a class="btn" href="/resume/">Resume (PDF)</a>
+  <a class="btn" href="/contact/">Contact</a>
+</div>
+
+---
+
+## Featured Work
+
+<div class="grid">
+  <div class="card">
+    <div class="card__title">BioNexus (New — Weekly Updates)</div>
+    <div class="card__meta">Modular medical embedded systems build • Starting this week</div>
+    <p class="card__text">
+      A ~5-month, module-by-module engineering build focused on reusable hardware/firmware blocks, clear test strategy, and recruiter-visible progress.
+    </p>
+    <div class="card__actions">
+      <a class="btn" href="/projects/">Open BioNexus →</a>
+      <a class="btn btn--ghost" href="https://github.com/kborekci06" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Phrenic Nerve / Diaphragm Control Device (Lurie Children’s)</div>
+    <div class="card__meta">Embedded firmware + custom PCB • Patent pending • BMES 2025</div>
+    <p class="card__text">
+      First-step data-collection platform toward closed-loop diaphragm pacer regulation for pediatric CCHS.
+    </p>
+    <div class="card__actions">
+      <a class="btn" href="/projects/diaphragm-control/">Read more →</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__title">Infant Pose Lifting Evaluation (Shirley Ryan AbilityLab)</div>
+    <div class="card__meta">Biomedical ML research • CUDA pipeline • Retrospective videos</div>
+    <p class="card__text">
+      Evaluation framework for 3D pose lifters on in-the-wild infant videos, with reproducible metrics and alignment.
+    </p>
+    <div class="card__actions">
+      <a class="btn" href="/projects/infant-pose-pipeline/">Read more →</a>
+    </div>
+  </div>
+</div>
+
+---
+
+## What I’m focusing on right now
+
+- **BioNexus:** a modular medical embedded systems build with weekly progress posts.
+- **Systems thinking:** requirements → architecture → verification → documentation.
+- **Recruiter-friendly storytelling:** problem → approach → failure modes → results → next steps.
+
+> If you’re hiring for embedded / robotics / medtech roles: the fastest way to understand my work is the **Projects** page.
 
 
 <!-- ---
@@ -12,6 +78,9 @@ layout: default
 title: "Home"
 description: "Medical Devices • Robotics • Embedded Systems • ML for Healthcare"
 ---
+
+This portfolio website is currently undergoing changes to improve design and introduce updated content. In the meanwhile, please see my [RESUME](/resume/)
+
 
 ## Who am I
 
