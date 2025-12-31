@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "Site Under Maintanence"
-description: "Website under revision until Monday November 17th, 2025"
+title: "Home"
+description: "Kaan Borekci Engineering Portfolio"
 ---
 
 This portfolio website is currently undergoing changes to improve design and introduce updated content. In the meanwhile, please see my [RESUME](/resume/)
