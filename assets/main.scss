@@ -99,3 +99,59 @@ a:hover {
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,.06);
 }
+
+/* ===== Home page layout components ===== */
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0 6px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 16px 16px 14px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+.card__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.card__meta {
+  font-size: 0.92rem;
+  opacity: 0.75;
+  margin-bottom: 10px;
+}
+
+.card__text {
+  margin: 0 0 12px 0;
+}
+
+.card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Button variants */
+.btn--ghost {
+  background: transparent;
+}
+
+/* Make nav links legible on your dark header */
+.site-nav .page-link {
+  color: #ffffff !important;
+}
