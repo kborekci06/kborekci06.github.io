@@ -25,6 +25,7 @@ body {
 
 :root {
   --bg: #ffffff;
+  /*--text: #111827;*/
   --text: #111827;
   --muted: rgba(17, 24, 39, 0.72);
   --border: rgba(17, 24, 39, 0.12);
@@ -90,7 +91,7 @@ a:hover {
   border-radius: 10px;
   border: 1px solid var(--border);
   background: #ffffff;
-  color: var(--text);
+  color: #ffffff;
   text-decoration: none;
   font-weight: 700;
 }
