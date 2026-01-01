@@ -6,10 +6,6 @@ description: "Kaan Borekci Engineering Portfolio"
 
 <section class="hero">
   <div class="hero__left">
-    <!-- <div class="pill">
-      <span class="pill__dot"></span>
-      Available for hire -->
-    </div>
 
     <h1 class="hero__title">
       Hello, I’m<br/>
