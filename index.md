@@ -63,7 +63,11 @@ I am a **Biomedical Engineer (B.S.)** now pursuing **Mechanical Engineering (M.S
 > If you’re hiring for embedded / robotics / medtech roles: the fastest way to understand my work is the **Projects** page.
 
 
-
+<!-- ---
+layout: default
+title: "Home"
+description: "Medical Devices • Robotics • Embedded Systems • ML for Healthcare"
+---
 
 This portfolio website is currently undergoing changes to improve design and introduce updated content. In the meanwhile, please see my [RESUME](/resume/)
 
@@ -129,4 +133,4 @@ On this site, you can explore my [Featured Work](#featured-work), [Projects](/pr
 - **2024–present:** **Senior Capstone to Independent Project, Collab with Lurie Children’s CAMP** — Digital Phrenic Nerve Project for Diaphragm control (R&D, patent pending) → [project](/projects/diaphragm-control/)  
 - **2023:** **Mirkin Lab** — Crystal Engineering, Nanotechnology using DNA-Coated Gold Nanoparticles  
 - **2022:** **Inovation and New Ventures Office (INVO)** — Technology Transfer Office @ Northwestern
-
+ -->
