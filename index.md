@@ -17,7 +17,7 @@ description: "Kaan Borekci Engineering Portfolio"
     </h1>
 
     <p class="hero__subtitle">
-       <strong>Biomedical (B.S.)</strong> and <strong> Mechanical (M.S.) Engineer</strong>, building end-to-end embedded medical devices, from implants and wearables to robotics. My specialty is prototyping and developing embedded firmware and hardware; however my background also spans ML/AI for healthcare, quantitative systems physiology, and biological fluid mechanics & transport. <br> <strong>My mission</strong> is to work in interface roles within MedTech that connect engineers, clinicians, and business stakeholders, translating the voice of the customer into rapid prototypes and developing biomedical engineering solutions that improve quality of life for all.
+       <strong>Biomedical (B.S.)</strong> and <strong> Mechanical (M.S.) Engineer</strong>, building end-to-end embedded medical devices, from implants and wearables to robotics. My specialty is prototyping and developing embedded firmware and hardware; however my background also spans ML/AI for healthcare, quantitative systems physiology, and biological fluid mechanics & transport. <br> <br> <strong>My mission</strong> is to work in interface roles within MedTech that connect engineers, clinicians, and business stakeholders, translating the voice of the customer into rapid prototypes and developing biomedical engineering solutions that improve quality of life for all.
     </p>
 
     <p class="hero__blurb">
