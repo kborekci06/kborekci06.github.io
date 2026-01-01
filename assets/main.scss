@@ -3,6 +3,24 @@
 
 @import "minima";
 
+/* ===== Layout overrides (make hero match wide screenshot) ===== */
+
+.wrapper {
+  max-width: 1120px;
+}
+
+.page-content {
+  padding: 36px 0;
+}
+
+/* Subtle background glow like the reference (still light/minimal) */
+body {
+  background:
+    radial-gradient(900px 520px at 12% 12%, rgba(17,24,39,0.035), transparent 60%),
+    radial-gradient(900px 520px at 88% 22%, rgba(17,24,39,0.028), transparent 62%),
+    #ffffff;
+}
+
 /* ===== Minimal Light Palette ===== */
 
 :root {
