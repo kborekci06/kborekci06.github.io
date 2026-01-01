@@ -4,9 +4,7 @@ title: "Home"
 description: "Kaan Borekci Engineering Portfolio"
 ---
 
-I build **medical and robotic systems** at the intersection of **embedded firmware, sensing, and clinical translation**.
-
-My work spans: (1) embedded data-collection and control platforms for pediatric respiratory care, (2) ML pipelines for biomechanical/clinical inference from video, and (3) modular, documentation-first engineering projects designed to be auditable and scalable.
+I am a **Biomedical Engineer (B.S.)** now pursuing **Mechanical Engineering (M.S.)** who loves building end-to-end medical devices, from implants and wearables to robotics. My specialty is developing hardware and software/firmware for MedTech, however my background also spans ML/AI for healthcare, quantitative systems physiology, and biological fluid mechanics & transport. My mission is to work in interface roles that connect engineers, clinicians, and business stakeholders, translating the voice of the customer into rapid prototypes and developing biomedical engineering solutions that improve quality of life for all.
 
 <div class="cta-row">
   <a class="btn" href="/projects/">Projects</a>
@@ -65,11 +63,7 @@ My work spans: (1) embedded data-collection and control platforms for pediatric 
 > If you’re hiring for embedded / robotics / medtech roles: the fastest way to understand my work is the **Projects** page.
 
 
-<!-- ---
-layout: default
-title: "Home"
-description: "Medical Devices • Robotics • Embedded Systems • ML for Healthcare"
----
+
 
 This portfolio website is currently undergoing changes to improve design and introduce updated content. In the meanwhile, please see my [RESUME](/resume/)
 
@@ -135,4 +129,4 @@ On this site, you can explore my [Featured Work](#featured-work), [Projects](/pr
 - **2024–present:** **Senior Capstone to Independent Project, Collab with Lurie Children’s CAMP** — Digital Phrenic Nerve Project for Diaphragm control (R&D, patent pending) → [project](/projects/diaphragm-control/)  
 - **2023:** **Mirkin Lab** — Crystal Engineering, Nanotechnology using DNA-Coated Gold Nanoparticles  
 - **2022:** **Inovation and New Ventures Office (INVO)** — Technology Transfer Office @ Northwestern
- -->
+
