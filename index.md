@@ -4,12 +4,6 @@ title: "Home"
 description: "Kaan Borekci Engineering Portfolio"
 ---
 
----
-layout: default
-title: "Home"
-description: "Medical Devices • Robotics • Embedded Systems • ML for Healthcare"
----
-
 <section class="hero">
   <div class="hero__left">
     <div class="pill">
