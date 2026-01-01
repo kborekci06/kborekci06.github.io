@@ -231,10 +231,10 @@ a:hover {
 }
 
 .portrait img {
-  width: 100%;
+  width: 120%;
   height: 100%;
   object-fit: cover;
-  transform: translateX(-4%);
+  transform: scale(1.00) translateX(-4%);
 }
 
 .portrait__tag {
