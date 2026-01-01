@@ -122,7 +122,7 @@ a:hover {
 .hero {
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
-  gap: 25px;
+  gap: 40px;
   align-items: center;
   padding: 44px 0 24px 0;
 }
@@ -130,7 +130,7 @@ a:hover {
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 22px;
   }
 }
 
@@ -214,7 +214,7 @@ a:hover {
 
 .portrait {
   position: relative;
-  width: min(460px, 82vw);;
+  width: min(520px, 86vw);
   aspect-ratio: 1 / 1;
   margin-left: auto;
   border-radius: 999px;
