@@ -17,8 +17,7 @@ description: "Kaan Borekci Engineering Portfolio"
     </h1>
 
     <p class="hero__subtitle">
-      Engineer building <strong>medical & robotic systems</strong> with embedded firmware,
-      sensing, and ML for healthcare.
+       <strong>Biomedical Engineer (B.S.)</strong> pursuing <strong>M.S. in Mechanical Engineering</strong> building end-to-end embedded medical devices, from implants and wearables to robotics. My specialty is prototyping and developing embedded firmware and hardware; however my background also spans ML/AI for healthcare, quantitative systems physiology, and biological fluid mechanics & transport. My mission is to work in interface roles that connect engineers, clinicians, and business stakeholders, translating the voice of the customer into rapid prototypes and developing biomedical engineering solutions that improve quality of life for all.
     </p>
 
     <p class="hero__blurb">
@@ -38,14 +37,14 @@ description: "Kaan Borekci Engineering Portfolio"
         </svg>
       </a>
 
-      <a class="social" href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <a class="social" href="https://linkedin.com/in/kborekci" target="_blank" rel="noopener" aria-label="LinkedIn">
         <!-- LinkedIn icon -->
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
           <path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 23.5h4V7.98h-4V23.5zM8.5 7.98h3.83v2.12h.05c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1v9.36h-4v-8.3c0-1.98-.04-4.52-2.76-4.52-2.76 0-3.18 2.16-3.18 4.39v8.43h-4V7.98z"/>
         </svg>
       </a>
 
-      <a class="social" href="/contact/" aria-label="Contact">
+      <a class="social" href="mailto:kaan@borekci.com" aria-label="Contact">
         <!-- Mail icon -->
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
           <path fill="currentColor" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
