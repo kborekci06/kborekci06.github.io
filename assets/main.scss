@@ -91,13 +91,21 @@ a:hover {
   border-radius: 10px;
   border: 1px solid var(--border);
   background: #ffffff;
-  color: var(--text);
+  color: var(--text) !important;
   text-decoration: none;
   font-weight: 700;
 }
 
 .btn:hover {
   transform: translateY(-1px);
+}
+
+.btn:visited {
+  color: var(--text) !important;
+}
+
+.btn:hover {
+  color: var(--text) !important;
 }
 
 .btn--primary {
@@ -112,6 +120,7 @@ a:hover {
 
 .btn--secondary {
   background: #ffffff;
+  color: var(--text) !important;
 }
 
 .btn--ghost {

@@ -25,7 +25,7 @@ description: "Kaan Borekci Engineering Portfolio"
     </p>
 
     <div class="hero__cta">
-      <a class="btn btn--primary" href="/resume/">Download Resume</a>
+      <a class="btn btn--secondary" href="/resume/">Download Resume</a>
       <a class="btn btn--secondary" href="/projects/">View My Work</a>
     </div>
 
