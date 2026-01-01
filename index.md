@@ -13,7 +13,7 @@ description: "Kaan Borekci Engineering Portfolio"
 
     <h1 class="hero__title">
       Hello, I’m<br/>
-      <span class="hero__name">Kaan Börekçi</span>
+      <span class="hero__name">Kaan Borekci</span>
     </h1>
 
     <p class="hero__subtitle">
