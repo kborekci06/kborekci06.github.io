@@ -168,7 +168,15 @@ a:hover {
   font-weight: 800;
 }
 
-.hero__subtitle,
+
+.hero__subtitle {
+  color: var(--muted);
+  max-width: 44rem;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
 .hero__blurb {
   color: var(--muted);
   max-width: 44rem;
