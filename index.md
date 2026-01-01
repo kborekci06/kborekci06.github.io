@@ -8,7 +8,7 @@ description: "Kaan Borekci Engineering Portfolio"
   <div class="hero__left">
     <div class="pill">
       <span class="pill__dot"></span>
-      Available for opportunities
+      Available for hire
     </div>
 
     <h1 class="hero__title">
@@ -57,8 +57,6 @@ description: "Kaan Borekci Engineering Portfolio"
     <div class="portrait">
       <img src="/assets/img/headshot.jpg" alt="Portrait of Kaan Börekçi" />
       <div class="portrait__tag">
-        <span class="pill__dot pill__dot--green"></span>
-        Available for hire
       </div>
     </div>
   </div>
