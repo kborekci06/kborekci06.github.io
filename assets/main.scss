@@ -81,6 +81,11 @@ a:hover {
   opacity: 0.75;
 }
 
+/* Footer cleanup (avoid duplicate name) */
+.site-footer .p-name {
+  display: none;
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
