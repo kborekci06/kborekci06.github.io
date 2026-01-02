@@ -8,8 +8,8 @@ description: "Kaan Borekci Engineering Portfolio"
   <div class="hero__left">
 
     <h1 class="hero__title">
-      Hello, I’m<br/>
-      <span class="hero__name">Kaan Borekci</span>
+      <span class="hero__kicker">Hello, I’m</span><br/>
+      <span class="hero__name">Kaan&nbsp;Borekci</span>
     </h1>
 
     <p class="hero__subtitle">
