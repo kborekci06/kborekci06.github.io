@@ -438,7 +438,7 @@ a:hover {
     border: 6px solid rgba(17, 24, 39, 0.05);
     background: #fff;
     display: block;
-    shape-margin: 14px
+    shape-margin: 18px
   }
 
   .hero__subtitle .portrait--mobile img {
@@ -450,9 +450,9 @@ a:hover {
 
   .hero__subtitle {
     text-align: justify;
-    hyphens: auto;
-    -webkit-hyphens: auto; /* iOS Safari */
-    -ms-hyphens: auto;
+    // hyphens: auto;
+    // -webkit-hyphens: auto; /* iOS Safari */
+    // -ms-hyphens: auto;
     // text-justify: auto;
   }
 
