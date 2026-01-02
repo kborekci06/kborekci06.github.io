@@ -406,3 +406,32 @@ a:hover {
 .proj-title a:hover {
   text-decoration: underline;
 }
+
+/* ===== Mobile-only portrait inside text column (hidden on desktop) ===== */
+.portrait--mobile {
+  display: none;
+}
+
+/* ===== Phone layout: wrap intro text around a smaller portrait ===== */
+@media (max-width: 640px) {
+  /* Hide the right-column portrait on phones */
+  .hero__right {
+    display: none;
+  }
+
+  /* Show + float the mobile portrait so text wraps */
+  .portrait--mobile {
+    display: block;
+    float: right;
+    width: 170px;            /* adjust 150–200px */
+    margin: 0 0 14px 14px;   /* space between photo and text */
+    border-width: 6px;
+  }
+
+  /* Clear the float so content below the hero doesn't wrap */
+  .hero::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
