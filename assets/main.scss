@@ -434,6 +434,8 @@ a:hover {
     overflow: hidden;
     border: 6px solid rgba(17, 24, 39, 0.05);
     background: #fff;
+    display: block;
+    shape-margin: 10px
   }
 
   .hero__subtitle .portrait--mobile img {
@@ -441,6 +443,11 @@ a:hover {
     height: 100%;
     object-fit: cover;
     transform: scale(1.15) translateX(-4%);
+  }
+
+  .hero__subtitle {
+    text-align: left;
+    text-justify: auto;
   }
 
   /* Clear float after the hero so nothing below wraps */
