@@ -422,20 +422,23 @@ a:hover {
   /* Circular wrap around the mobile portrait */
   .hero__subtitle .portrait--mobile {
     float: right;
-    width: 170px;
-    height: 170px;
-    margin: 0 0 14px 14px;
-
-    /* Circle shape */
-    border-radius: 50%;
+  
+    /* Slightly smaller = more visible curvature */
+    width: 150px;
+    height: 150px;
+  
+    /* Pull it up so more lines wrap */
+    margin: -8px 0 14px 14px;
+  
+    /* Perfect circular wrap */
+    shape-outside: circle(48%);
     clip-path: circle(50%);
-    shape-outside: circle(50%);
-
+    border-radius: 50%;
+    shape-margin: 12px;
+  
     overflow: hidden;
     border: 6px solid rgba(17, 24, 39, 0.05);
     background: #fff;
-    display: block;
-    shape-margin: 10px
   }
 
   .hero__subtitle .portrait--mobile img {
@@ -446,6 +449,7 @@ a:hover {
   }
 
   .hero__subtitle {
+    line-height: 1.55;
     text-align: left;
     // text-justify: auto;
   }
