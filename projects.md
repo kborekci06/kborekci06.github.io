@@ -54,6 +54,14 @@ mini_projects:
     blurb: "BME 340 final report: mechanism, PK/PD, toxicology, clinical trials, and business context—structured like an industry brief."
     tags: ["Pharma", "Analysis"]
 
+    # Future-proofing: to add a new tile, add one YAML block to either featured_projects or mini_projects at the top of this file. The grid, hover overlay, and links update automatically.
+
+    # - title: "New Project Name"
+    # url: "/projects/new-project/"
+    # image: "/assets/img/projects/new-project.jpg"
+    # blurb: "One sentence about the problem and one sentence about what you built."
+    # tags: ["Embedded", "Robotics"]
+
 ---
 
 # Projects
@@ -121,8 +129,3 @@ mini_projects:
   </article>
   {% endfor %}
 </div>
-
-<p class="projects-note">
-  <strong>Future-proofing:</strong> to add a new tile, add one YAML block to either <code>featured_projects</code> or <code>mini_projects</code> at the top of this file.
-  The grid, hover overlay, and links update automatically.
-</p>
