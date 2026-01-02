@@ -59,8 +59,7 @@ mini_projects:
 # Projects
 
 <p class="projects-lede">
-  A curated selection of engineering work spanning <strong>medical devices</strong>, <strong>robotics</strong>, and <strong>ML for healthcare</strong>.
-  Hover over a tile for a short summary. Click the image or title to open the full project page.
+  A curated selection of engineering work spanning <strong>medical devices</strong> <strong>robotics</strong>, and <strong>ML for healthcare</strong>. Hover over a tile for a short summary. Click the image or title to open the full project page.
 </p>
 
 ---
