@@ -1,3 +1,6 @@
+---
+---
+
 @import "minima";
 
 // Montserrat Font Import
@@ -160,24 +163,12 @@ a:hover {
   gap: 40px;
   align-items: center;
   padding: 44px 0 24px 0;
-  grid-template-areas: "left right";
-  justify-items: start;
-}
-
-.hero__left {
-  grid-area: left;
-}
-
-.hero__right {
-  grid-area: right;
-  justify-self: end;
 }
 
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
     gap: 22px;
-    grid-template-areas: "left" "right";
   }
 }
 
@@ -414,47 +405,4 @@ a:hover {
 
 .proj-title a:hover {
   text-decoration: underline;
-}
-
-/* ===== Phone layout: wrap text around the headshot ===== */
-@media (max-width: 640px) {
-  /* Stop using grid so text can wrap around the portrait */
-  .hero {
-    display: block;
-  }
-
-  /* Float the portrait container to the right so text wraps */
-  .hero__right {
-    float: right;
-    margin: 0 0 14px 14px; /* space between photo and text */
-  }
-
-  /* Make the circle smaller on phones */
-  .portrait {
-    width: 170px;          /* try 150–200px */
-    border-width: 6px;     /* slightly thinner ring on mobile */
-    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-  }
-
-  /* Your big headings can stay large; optionally reduce a bit */
-  .hero__kicker {
-    font-size: 1.35rem;
-    letter-spacing: 0.18em;
-  }
-
-  .hero__name {
-    font-size: 2.4rem;
-  }
-
-  /* Ensure the content below doesn't wrap around the float */
-  .hero::after {
-    content: "";
-    display: block;
-    clear: both;
-  }
-
-  /* Optional: hide the little tag pill on the photo on phones */
-  .portrait__tag {
-    display: none;
-  }
 }
