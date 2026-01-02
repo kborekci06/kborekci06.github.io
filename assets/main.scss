@@ -4,9 +4,12 @@
 @import "minima";
 
 // Montserrat Font Import
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 /* ===== Layout overrides ===== */
+strong, b {
+  font-weight: 600;
+}
 
 .wrapper {
   max-width: 1120px;
