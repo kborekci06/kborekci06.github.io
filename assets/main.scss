@@ -1,3 +1,6 @@
+---
+---
+
 @import "minima";
 
 // Montserrat Font Import
@@ -160,24 +163,12 @@ a:hover {
   gap: 40px;
   align-items: center;
   padding: 44px 0 24px 0;
-  grid-template-areas: "left right";
-  justify-items: start;
-}
-
-.hero__left {
-  grid-area: left;
-}
-
-.hero__right {
-  grid-area: right;
-  justify-self: end;
 }
 
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
     gap: 22px;
-    grid-template-areas: "left" "right";
   }
 }
 
@@ -414,39 +405,4 @@ a:hover {
 
 .proj-title a:hover {
   text-decoration: underline;
-}
-
-/* ===== Phone layout: wrap intro text around portrait ===== */
-@media (max-width: 640px) {
-  /* Allow text to flow around the portrait */
-  .hero {
-    display: block;
-  }
-
-  /* Float the portrait itself so it can wrap the text */
-  .hero__right {
-    float: right;
-    margin: 0 0 14px 14px;
-  }
-
-  /* Keep the portrait circular and smaller on phones */
-  .portrait {
-    width: 170px;
-    border-width: 6px;
-    border-radius: 999px;
-    overflow: hidden;
-    aspect-ratio: 1 / 1;
-  }
-
-  /* Avoid the bottom "tag" pill covering the image on small screens */
-  .portrait__tag {
-    display: none;
-  }
-
-  /* Clear float so sections below the hero don't wrap around it */
-  .hero::after {
-    content: "";
-    display: block;
-    clear: both;
-  }
 }
