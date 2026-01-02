@@ -3,6 +3,9 @@
 
 @import "minima";
 
+// Montserrat Font Import
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
+
 /* ===== Layout overrides ===== */
 
 .wrapper {
@@ -34,6 +37,20 @@ body {
 body {
   background-color: var(--bg);
   color: var(--text);
+
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  font-weight: 300;        /* Montserrat Light */
+  line-height: 1.7;
+  letter-spacing: 0.01em; /* subtle, clean */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;        /* Regular */
+  text-transform: uppercase;
+  letter-spacing: 0.28em; /* wide tracking like the reference */
 }
 
 /* Header (light + subtle divider) */
@@ -44,12 +61,21 @@ body {
 
 .site-title {
   color: var(--text) !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 1.15rem;
 }
 
 /* Nav links */
 .site-nav .page-link {
   color: var(--text) !important;
-  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
 }
 
 .site-nav .page-link:hover {
