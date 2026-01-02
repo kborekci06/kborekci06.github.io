@@ -414,21 +414,42 @@ a:hover {
 
 /* ===== Phone layout: wrap intro text around a smaller portrait ===== */
 @media (max-width: 640px) {
-  /* Hide the right-column portrait on phones */
-  .hero__right {
-    display: none;
-  }
 
-  /* Show + float the mobile portrait so text wraps */
-  .portrait--mobile {
+  /* Hide the right-column portrait on phones */
+  .hero__right { display: none; }
+
+  /* Make sure the left column is in normal flow (not grid/flex quirks) */
+  .hero__left { display: block; }
+
+  /* Float the mobile portrait so text can wrap */
+  .hero__left .portrait--mobile {
     display: block;
     float: right;
-    width: 170px;            /* adjust 150–200px */
-    margin: 0 0 14px 14px;   /* space between photo and text */
+    width: 170px;              /* 150–190px */
+    margin: 0 0 12px 12px;     /* space between circle + text */
     border-width: 6px;
+    border-radius: 999px;
+    overflow: hidden;
   }
 
-  /* Clear the float so content below the hero doesn't wrap */
+  /* THIS is the key: prevent the text blocks from clearing the float */
+  .hero__left h1,
+  .hero__left p,
+  .hero__subtitle {
+    clear: none !important;
+  }
+
+  /* Optional: soften the aggressive heading on mobile so it can share space */
+  .hero__kicker {
+    font-size: 1.25rem;
+    letter-spacing: 0.14em;
+  }
+  .hero__name {
+    font-size: 2.2rem;
+    letter-spacing: 0.01em;
+  }
+
+  /* Clear float after hero so the rest of the page doesn't wrap */
   .hero::after {
     content: "";
     display: block;
