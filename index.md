@@ -6,6 +6,9 @@ description: "Kaan Borekci Engineering Portfolio"
 
 <section class="hero">
   <div class="hero__left">
+    <div class="portrait portrait--mobile">
+      <img src="/assets/img/headshot.jpg" alt="Portrait of Kaan Börekçi" />
+    </div>
 
     <h1 class="hero__title">
       <span class="hero__kicker">Hello, I’m</span><br/>
