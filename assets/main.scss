@@ -421,6 +421,7 @@ a:hover {
 
   /* Circular wrap around the mobile portrait */
   .hero__subtitle .portrait--mobile {
+    display: block;
     float: right;
   
     /* Slightly smaller = more visible curvature */
