@@ -62,7 +62,9 @@ mini_projects:
     # blurb: "One sentence about the problem and one sentence about what you built."
     # tags: ["Embedded", "Robotics"]
 
+
 ---
+
 
 # Projects
 
@@ -100,7 +102,9 @@ mini_projects:
   {% endfor %}
 </div>
 
+
 ---
+
 
 ## Mini / Course Projects
 
