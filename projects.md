@@ -69,7 +69,7 @@ mini_projects:
 # Projects
 
 <p class="projects-lede">
-  My engineering work spanning <strong>medical devices</strong>, <strong>robotics</strong>, and <strong>ML for healthcare</strong>.
+  My engineering work spanning medical devices, robotics, and ML for healthcare.
 </p>
 
 
