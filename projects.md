@@ -36,7 +36,7 @@ mini_projects:
     blurb: "Compared evolved sparse topologies against dense baselines for classification, focusing on fitness dynamics and generalization."
     tags: ["Evolutionary Computation", "Machine Learning"]
 
-  - title: "Robotic Manipulation: Controller Design and Trajectory Planning"
+  - title: "Robot Controller Design and Trajectory Planning"
     url: "/projects/robotic-manipulation/"
     image: "/assets/img/projects/robot-manip.jpg"
     blurb: "Manipulation project covering kinematics/dynamics, planning, and closed-loop control with clear evaluation metrics."
@@ -48,7 +48,7 @@ mini_projects:
     blurb: "Embedded system project emphasizing performance constraints, reliability, and system-level debugging."
     tags: ["Embedded Systems", "PCB"]
 
-  - title: "Analysis of Mevacor's (Lovastatin) Clinical Development"
+  - title: "Analysis of Mevacor (Lovastatin) Clinical Development"
     url: "/projects/lovastatin/"
     image: "/assets/img/projects/lovastatin.jpg"
     blurb: "BME 340 final report: mechanism, PK/PD, toxicology, clinical trials, and business context—structured like an industry brief."
