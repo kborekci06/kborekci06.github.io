@@ -72,9 +72,8 @@ mini_projects:
   A curated selection of engineering work spanning <strong>medical devices</strong> <strong>robotics</strong>, and <strong>ML for healthcare</strong>. Hover over a tile for a short summary. Click the image or title to open the full project page.
 </p>
 
----
 
-## Flagship Projects
+<h2 class="projects-section-title">Flagship Projects</h2>
 
 <div class="proj-grid">
   {% for p in page.featured_projects %}
@@ -103,10 +102,7 @@ mini_projects:
 </div>
 
 
----
-
-
-## Mini / Course Projects
+<h2 class="projects-section-title">Mini / Course Projects</h2>
 
 <div class="proj-grid">
   {% for p in page.mini_projects %}
