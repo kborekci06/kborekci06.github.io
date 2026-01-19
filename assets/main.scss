@@ -482,3 +482,51 @@ a:hover {
     clear: both;
   }
 }
+
+/* ===== Contact page ===== */
+
+.contact-intro {
+  max-width: 60ch;
+  margin-bottom: 24px;
+  color: var(--muted);
+}
+
+.contact-primary {
+  margin-bottom: 28px;
+}
+
+.contact-email {
+  font-size: 1.25rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.contact-email:hover {
+  opacity: 0.7;
+}
+
+.contact-socials {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.contact-socials .social {
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.contact-socials .social:hover {
+  opacity: 0.7;
+}
+
+.contact-note {
+  max-width: 60ch;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
