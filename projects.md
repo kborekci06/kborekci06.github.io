@@ -102,7 +102,7 @@ mini_projects:
 </div>
 
 
-<h2 class="projects-section-title">Mini / Course Projects</h2>
+<h2 class="projects-section-title">Course Projects</h2>
 
 <div class="proj-grid">
   {% for p in page.mini_projects %}
