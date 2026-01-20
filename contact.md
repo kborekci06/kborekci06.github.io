@@ -20,7 +20,6 @@ I’m open for opportunities in <strong>MedTech</strong>, <strong>Robotics</stro
       </div>
       <div class="contact-info">
         <h3>Email</h3>
-        <p>kaan@borekci.com</p>
       </div>
     </a>
 
@@ -32,7 +31,6 @@ I’m open for opportunities in <strong>MedTech</strong>, <strong>Robotics</stro
       </div>
       <div class="contact-info">
         <h3>LinkedIn</h3>
-        <p>linkedin.com/in/kborekci</p>
       </div>
     </a>
 
@@ -44,12 +42,11 @@ I’m open for opportunities in <strong>MedTech</strong>, <strong>Robotics</stro
       </div>
       <div class="contact-info">
         <h3>GitHub</h3>
-        <p>github.com/kborekci06</p>
       </div>
     </a>
   </div>
 
-  <div class="section-divider"></div>
+  <!-- <div class="section-divider"></div>
 
   <div class="socials">
     <a class="social" href="https://github.com/kborekci06" target="_blank" rel="noopener" aria-label="GitHub">
@@ -69,9 +66,5 @@ I’m open for opportunities in <strong>MedTech</strong>, <strong>Robotics</stro
         <path fill="currentColor" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
       </svg>
     </a>
-  </div>
+  </div> -->
 
-  <p class="cta-text">
-    Feel free to reach out — I'd love to discuss potential collaborations!
-  </p>
-</div>
