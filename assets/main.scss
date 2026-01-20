@@ -490,3 +490,20 @@ a:hover {
   margin-bottom: 24px;
   color: var(--muted);
 }
+
+.contact-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.socials .social svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 640px) {
+  .contact-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}
