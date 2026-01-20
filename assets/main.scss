@@ -496,6 +496,14 @@ a:hover {
   height: 20px;
 }
 
+/* Contact cards: icon + title on the same line */
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;          /* space between icon and text */
+  text-decoration: none;
+}
+
 .socials .social svg {
   width: 16px;
   height: 16px;
