@@ -522,5 +522,6 @@ a:hover {
 }
 
 .contact-card {
-  color: var(--text);
+  color: #000;              /* or var(--text) */
+  text-decoration: none;
 }
