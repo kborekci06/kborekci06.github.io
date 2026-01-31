@@ -4,7 +4,8 @@ title: BioNexus
 permalink: /projects/bionexus/
 ---
 
-# A Non-Invasive, Modular, Multi-System Medical Device
+<h1>A Non-Invasive, Modular, Multi-System Medical Device</h1>
+
 
 ## Motive
 Data collection in the field of medical technologies usually involves one of the following:

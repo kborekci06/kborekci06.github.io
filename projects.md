@@ -73,7 +73,7 @@ mini_projects:
 </p>
 
 
-<h2 class="projects-section-title">Flagship Projects</h2>
+<h2 class="projects-section-title">Ongoing Projects</h2>
 
 <div class="proj-grid">
   {% for p in page.featured_projects %}
