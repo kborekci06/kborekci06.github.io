@@ -30,32 +30,6 @@ featured_projects:
     tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
 
 
-internships:
-  - title: "Infant Motor Development Research"
-    url: "/projects/infant-pose-pipeline/"
-    image: "/assets/img/projects/infant-pose.mov"
-    blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
-    tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
-
-  - title: "International Institute for Nanotechnology"
-    url: "/projects/iin-mirkin-lab/"
-    image: "/assets/img/projects/iin-mirkin.png"
-    blurb: "Crystal Engineering in Prof. Chad Mirkin's lab."
-    tags: ["Crystal Engineering", "Nanotechnology"]
-
-  - title: "Innovation and New Ventures Office"
-    url: "/projects/invo-nu/"
-    image: "/assets/img/projects/invo.png"
-    blurb: "Innovation and New Ventures Office at Northwestern"
-    tags: ["Technology Transfer", "Venture", "Intellectual Property"]
-
-  - title: "Querrey Simpson Institute for Bioelectronics"
-    url: "/projects/qsib-rogers-lab/"
-    image: "/assets/img/projects/qsib-rogers.png"
-    blurb: "Biolectroncis Research at Prof. John Rogers' lab"
-    tags: ["Nature Article Coauthor", "Bioelectronics", "Senspr Testing"]   
-
-
 mini_projects:
   - title: "Evolutionary Computation: NEAT Approach to EMG Classification"
     url: "/projects/neat-vs-mlp/"
@@ -81,6 +55,32 @@ mini_projects:
     blurb: "BME 340 final report: mechanism, PK/PD, toxicology, clinical trials, and business context—structured like an industry brief."
     tags: ["Pharmaceutical Engineering", "Clinical Trials"]
 
+
+    internships:
+  - title: "Infant Motor Development Research"
+    url: "/projects/infant-pose-pipeline/"
+    image: "/assets/img/projects/infant-pose.mov"
+    blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
+    tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
+
+  - title: "International Institute for Nanotechnology"
+    url: "/projects/iin-mirkin-lab/"
+    image: "/assets/img/projects/iin-mirkin.png"
+    blurb: "Crystal Engineering in Prof. Chad Mirkin's lab."
+    tags: ["Crystal Engineering", "Nanotechnology"]
+
+  - title: "Innovation and New Ventures Office"
+    url: "/projects/invo-nu/"
+    image: "/assets/img/projects/invo.png"
+    blurb: "Innovation and New Ventures Office at Northwestern"
+    tags: ["Technology Transfer", "Venture", "Intellectual Property"]
+
+  - title: "Querrey Simpson Institute for Bioelectronics"
+    url: "/projects/qsib-rogers-lab/"
+    image: "/assets/img/projects/qsib-rogers.png"
+    blurb: "Biolectroncis Research at Prof. John Rogers' lab"
+    tags: ["Nature Article Coauthor", "Bioelectronics", "Sensor Testing"]   
+
     # Future-proofing: to add a new tile, add one YAML block to either featured_projects or mini_projects at the top of this file. The grid, hover overlay, and links update automatically.
 
     # - title: "New Project Name"
@@ -100,10 +100,38 @@ mini_projects:
 </p>
 
 
-<h2 class="projects-section-title">Ongoing Projects</h2>
+<h2 class="projects-section-title">Flagship Projects</h2>
 
 <div class="proj-grid">
   {% for p in page.featured_projects %}
+  <article class="proj-card">
+    <a class="proj-link" href="{{ p.url }}" aria-label="{{ p.title }}">
+      <div class="proj-media">
+        <img class="proj-img" src="{{ p.image }}" alt="{{ p.title }}" loading="lazy" />
+        <div class="proj-overlay">
+          <div class="proj-overlay__inner">
+            <p class="proj-desc">{{ p.blurb }}</p>
+            {% if p.tags %}
+            <div class="proj-tags">
+              {% for t in p.tags %}
+                <span class="proj-tag">{{ t }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <h3 class="proj-title"><a href="{{ p.url }}">{{ p.title }}</a></h3>
+  </article>
+  {% endfor %}
+</div>
+
+<h2 class="projects-section-title">Course Projects</h2>
+
+<div class="proj-grid">
+  {% for p in page.mini_projects %}
   <article class="proj-card">
     <a class="proj-link" href="{{ p.url }}" aria-label="{{ p.title }}">
       <div class="proj-media">
@@ -132,35 +160,6 @@ mini_projects:
 
 <div class="proj-grid">
   {% for p in page.internships %}
-  <article class="proj-card">
-    <a class="proj-link" href="{{ p.url }}" aria-label="{{ p.title }}">
-      <div class="proj-media">
-        <img class="proj-img" src="{{ p.image }}" alt="{{ p.title }}" loading="lazy" />
-        <div class="proj-overlay">
-          <div class="proj-overlay__inner">
-            <p class="proj-desc">{{ p.blurb }}</p>
-            {% if p.tags %}
-            <div class="proj-tags">
-              {% for t in p.tags %}
-                <span class="proj-tag">{{ t }}</span>
-              {% endfor %}
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </a>
-
-    <h3 class="proj-title"><a href="{{ p.url }}">{{ p.title }}</a></h3>
-  </article>
-  {% endfor %}
-</div>
-
-
-<h2 class="projects-section-title">Course Projects</h2>
-
-<div class="proj-grid">
-  {% for p in page.mini_projects %}
   <article class="proj-card">
     <a class="proj-link" href="{{ p.url }}" aria-label="{{ p.title }}">
       <div class="proj-media">
