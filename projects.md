@@ -38,7 +38,7 @@ mini_projects:
 
   - title: "Robot Controller Design and Trajectory Planning"
     url: "/projects/robotic-manipulation/"
-    image: "/assets/img/projects/robot-manip.jpg"
+    image: "/assets/img/projects/robot-manip.mov"
     blurb: "Manipulation project covering kinematics/dynamics, planning, and closed-loop control with clear evaluation metrics."
     tags: ["Robotics", "Control"]
 
