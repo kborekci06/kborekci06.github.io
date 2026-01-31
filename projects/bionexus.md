@@ -19,7 +19,7 @@ Although constraints such as weight, power consumption, connectivity, and cost c
 
 
 
-## Proposition:
+## Proposition
 I propose a noninvasive, multi-device Body Area Network (BAN) system based on a hub-and-spoke architecture that synchronously collects heterogeneous physiological and bioelectric signals from the human body in real time. The system is designed to support applications spanning clinical research, point-of-care monitoring, and closed-loop control of external devices such as robotic or prosthetic limbs, as well as future implant-assisted systems, through real-time biomedical control signals integrated with physics-informed and machine learning-based models.
 
 The primary novelty of this project lies in its modular hardware and communication architecture, enabled by Ultra-Wideband (UWB)-based inter-device communication. Each sensing node functions as a swappable module, allowing different modalities (e.g., EMG, EEG, EKG) to be interchanged without firmware modification, while a scalable software framework enables the seamless addition of multiple spoke devices to expand the range of captured physiological data. UWB communication further provides time-of-flight (ToF)–based depth information, introducing a spatial and temporal sensing dimension that is critical for physiologically and physically informed inference.
