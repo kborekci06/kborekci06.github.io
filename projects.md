@@ -25,7 +25,7 @@ featured_projects:
 
   - title: "Infant Motor Development Research"
     url: "/projects/infant-pose-pipeline/"
-    image: "/assets/img/projects/infant-pose.jpg"
+    image: "/assets/img/projects/infant_pose.mov"
     blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
     tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
 
