@@ -19,9 +19,8 @@ description: "Kaan Borekci Engineering Portfolio"
       <span class="portrait portrait--mobile">
         <img src="/assets/img/headshot.jpg" alt="Portrait of Kaan Börekçi" />
       </span>
-      <strong>Biomedical (B.S.)</strong> and <strong> Mechanical (M.S.) Engineer</strong>, building end-to-end embedded medical devices, from implants and wearables to robotics. My specialty is prototyping and developing embedded firmware and hardware; however my background also spans ML/AI for healthcare, quantitative systems physiology, and biological fluid mechanics & transport. <br> <br> <strong>My mission</strong> is to work in interface roles within MedTech that connect engineers, clinicians, and business stakeholders, translating the voice of the customer into rapid prototypes and developing biomedical engineering solutions that improve quality of life for all. <br> <br> Currently launching <strong>BioNexus</strong>: a 20+ week spanning, modular medical embedded systems project.<a href="/projects/"> 
-      
-      <!-- Click Here</a> to follow along with weekly progress updates. -->
+      <strong>Biomedical (B.S.)</strong> and <strong> Mechanical (M.S.) Engineer</strong>, building end-to-end embedded medical devices, from implants and wearables to robotics. My specialty is prototyping and developing embedded firmware and hardware; however my background also spans ML/AI for healthcare, quantitative systems physiology, and biological fluid mechanics & transport. <br> <br> <strong>My mission</strong> is to work in interface roles within MedTech that connect engineers, clinicians, and business stakeholders, translating the voice of the customer into rapid prototypes and developing biomedical engineering solutions that improve quality of life for all. <br> <br> Currently launching <strong>BioNexus</strong>: a 20+ week spanning, modular medical embedded systems project.
+      <!-- <a href="/projects/"> Click Here</a> to follow along with weekly progress updates. -->
     </p>
 
     <div class="hero__cta">
