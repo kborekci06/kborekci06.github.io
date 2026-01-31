@@ -9,7 +9,7 @@ title: Nature Digital Medicine — Coauthored Paper
 **Role:** Bioelectronics Research Intern (while in high school)
 
 ## Why this matters to me
-This experience **sparked my passion for medical devices**. Working in the Rogers Lab showed me how engineering decisions directly translate to clinical impact.
+This experience sparked my passion for medical devices. Working in the Rogers Lab showed me how engineering decisions directly translate to clinical impact.
 
 ## My contributions
 - Evaluated embedded sensor systems for **hydrocephalus shunt flow** detection.  
