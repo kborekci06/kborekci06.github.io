@@ -44,7 +44,7 @@ mini_projects:
 
   - title: "Electronic System Design: Live Video Streaming"
     url: "/projects/live-video-streaming/"
-    image: "/assets/img/projects/video-stream.jpg"
+    image: "/assets/img/projects/video-stream.png"
     blurb: "Embedded system project emphasizing performance constraints, reliability, and system-level debugging."
     tags: ["Embedded Systems", "PCB"]
 
