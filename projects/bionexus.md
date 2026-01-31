@@ -1,7 +1,7 @@
 ---
 layout: page
 title: BioNexus
-permalink: /projects/diaphragm-control/
+permalink: /projects/bionexus/
 ---
 
 # BioNexus: A Non-Invasive, Modular, Multi-System Medical Device
