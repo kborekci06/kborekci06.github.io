@@ -504,6 +504,11 @@ a:hover {
   text-decoration: none;
 }
 
+.contact-info h3 {
+  margin: 0;
+  line-height: 1.2;
+}
+
 .socials .social svg {
   width: 16px;
   height: 16px;
@@ -514,4 +519,8 @@ a:hover {
     width: 18px;
     height: 18px;
   }
+}
+
+.contact-card {
+  color: var(--text);
 }
