@@ -525,3 +525,22 @@ a:hover {
   color: var(--text) !important;
   text-decoration: none !important;
 }
+
+/* ===== Figures ===== */
+figure {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+figure img {
+  display: block;
+  margin: 0 auto;      /* centers the image */
+  max-width: 780px;    /* your desired cap */
+  width: 100%;         /* responsive */
+  height: auto;
+}
+
+figure figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.95em;
+}
