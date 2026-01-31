@@ -50,7 +50,7 @@ mini_projects:
 
   - title: "Analysis of Mevacor (Lovastatin) Clinical Development"
     url: "/projects/lovastatin/"
-    image: "/assets/img/projects/lovastatin.jpg"
+    image: "/assets/img/projects/lovastatin.png"
     blurb: "BME 340 final report: mechanism, PK/PD, toxicology, clinical trials, and business context—structured like an industry brief."
     tags: ["Pharmaceutical Engineering", "Clinical Trials"]
 
