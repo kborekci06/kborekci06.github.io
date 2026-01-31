@@ -19,7 +19,7 @@ featured_projects:
 
   - title: "Digital Diaphragm Platform"
     url: "/projects/diaphragm-control/"
-    image: "/assets/img/projects/diaphragm-control.jpg"
+    image: "/assets/img/projects/diaphragm-control.png"
     blurb: "Patent-pending embedded device work for pediatric CCHS: first-step data-collection platform toward closed-loop diaphragm pacer regulation."
     tags: ["Embedded Systems", "Clinical", "PCB"]
 
