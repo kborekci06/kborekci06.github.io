@@ -131,7 +131,7 @@ mini_projects:
 <h2 class="projects-section-title">Internships</h2>
 
 <div class="proj-grid">
-  {% for p in page.mini_projects %}
+  {% for p in page.internships %}
   <article class="proj-card">
     <a class="proj-link" href="{{ p.url }}" aria-label="{{ p.title }}">
       <div class="proj-media">
