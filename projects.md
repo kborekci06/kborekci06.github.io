@@ -32,7 +32,7 @@ featured_projects:
 mini_projects:
   - title: "Evolutionary Computation: NEAT Approach to EMG Classification"
     url: "/projects/neat-vs-mlp/"
-    image: "/assets/img/projects/neat-mlp.jpg"
+    image: "/assets/img/projects/neat-mlp.gif"
     blurb: "Compared evolved sparse topologies against dense baselines for classification, focusing on fitness dynamics and generalization."
     tags: ["Evolutionary Computation", "Machine Learning"]
 
