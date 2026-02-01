@@ -11,12 +11,6 @@ layout: default
 # - tags: optional, small labels
 
 featured_projects:
-  - title: "BioNexus"
-    url: "/projects/bionexus/"
-    image: "/assets/img/projects/bionexus.jpg"
-    blurb: "A modular, documentation-first medical embedded systems build with weekly milestones, verification, and open hardware/firmware releases."
-    tags: ["Embedded Systems", "MedTech"]
-
   - title: "Digital Diaphragm Platform"
     url: "/projects/diaphragm-control/"
     image: "/assets/img/projects/diaphragm-control.png"
@@ -28,6 +22,12 @@ featured_projects:
     image: "/assets/img/projects/infant-pose.mov"
     blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
     tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
+
+  - title: "BioNexus"
+    url: "/projects/bionexus/"
+    image: "/assets/img/projects/bionexus.jpg"
+    blurb: "A modular, documentation-first medical embedded systems build with weekly milestones, verification, and open hardware/firmware releases."
+    tags: ["Embedded Systems", "MedTech"]
 
 
 mini_projects:
