@@ -9,6 +9,6 @@ permalink: pretty
 header_pages:
   - index.md
   - projects.md
-  - publications.md
+  # - internships.md
   - resume.md
   - contact.md
