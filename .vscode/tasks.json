@@ -1,3 +1,7 @@
+// CMD+SHIFT+B to run the default build task, which will start the Jekyll server and open the browser.
+// http://127.0.0.1:4000 is ther server address for Jekyll
+
+
 {
     "version": "2.0.0",
     "tasks": [
@@ -7,7 +11,7 @@
         "command": "export PATH=\"$HOME/.rbenv/bin:$PATH\" && eval \"$(rbenv init - zsh)\" && rbenv local 3.2.4 && bundle exec jekyll serve --livereload --incremental",
         "isBackground": true,
         "problemMatcher": []
-        }
+        },
       {
         "label": "Open Browser",
         "type": "shell",
