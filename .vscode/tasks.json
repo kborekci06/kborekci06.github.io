@@ -7,11 +7,10 @@
         "command": "bundle exec jekyll serve --livereload --incremental",
         "problemMatcher": [],
         "isBackground": true,
-        "group": {
-          "kind": "build",
-          "isDefault": true
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated"
         }
       }
     ]
   }
-  
