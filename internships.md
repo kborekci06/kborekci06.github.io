@@ -1,6 +1,6 @@
 ---
-layout: default
 title: Internships
+layout: default
 ---
 
 <h1>Internships</h1>
