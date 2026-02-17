@@ -1,0 +1,24 @@
+- title: "Evolutionary Computation: NEAT Approach to EMG Classification"
+  url: "/projects/neat-vs-mlp/"
+  image: "/assets/img/projects/neat-mlp.gif"
+  blurb: "Compared evolved sparse topologies against dense baselines for classification, focusing on fitness dynamics and generalization."
+  tags: ["Evolutionary Computation", "Machine Learning"]
+
+- title: "Robot Controller Design and Trajectory Planning"
+  url: "/projects/robotic-manipulation/"
+  image: "/assets/img/projects/robot-manip.mp4"
+  poster: "/assets/img/projects/robot-manip.png"
+  blurb: "Manipulation project covering kinematics/dynamics, planning, and closed-loop control with clear evaluation metrics."
+  tags: ["Robotics", "Control"]
+
+- title: "Electronic System Design: Live Video Streaming"
+  url: "/projects/live-video-streaming/"
+  image: "/assets/img/projects/video-stream.png"
+  blurb: "Embedded system project emphasizing performance constraints, reliability, and system-level debugging."
+  tags: ["Embedded Systems", "PCB"]
+
+- title: "Analysis of Mevacor (Lovastatin) Clinical Development"
+  url: "/projects/lovastatin/"
+  image: "/assets/img/projects/lovastatin.png"
+  blurb: "BME 340 final report: mechanism, PK/PD, toxicology, clinical trials, and business context—structured like an industry brief."
+  tags: ["Pharmaceutical Engineering", "Clinical Trials"]
