@@ -1,0 +1,31 @@
+/* ===== Typography ===== */
+
+strong, b {
+    font-weight: 600;
+  }
+  
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: $font-sans;
+    font-weight: 300;        /* Montserrat Light */
+    line-height: 1.7;
+    letter-spacing: 0.01em;  /* subtle, clean */
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font-sans;
+    font-weight: 400;        /* Regular */
+    text-transform: uppercase;
+    letter-spacing: 0.28em;  /* wide tracking like the reference */
+  }
+  
+  /* Body links */
+  a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }

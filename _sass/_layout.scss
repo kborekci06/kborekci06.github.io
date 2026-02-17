@@ -1,0 +1,66 @@
+/* ===== Layout overrides ===== */
+
+.wrapper {
+    max-width: 1120px;
+  }
+  
+  .page-content {
+    padding: 36px 0;
+  }
+  
+  /* Subtle background glow like the reference (still light/minimal) */
+  body {
+    background:
+      radial-gradient(900px 520px at 12% 12%, rgba(17,24,39,0.035), transparent 60%),
+      radial-gradient(900px 520px at 88% 22%, rgba(17,24,39,0.028), transparent 62%),
+      #ffffff;
+  }
+  
+  /* Header (light + subtle divider) */
+  .site-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .site-title {
+    color: var(--text) !important;
+    font-family: $font-sans;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 1.22rem;
+  }
+  
+  /* Nav links */
+  .site-nav .page-link {
+    color: var(--text) !important;
+    font-family: $font-sans;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.80rem;
+  }
+  
+  .site-nav .page-link:hover {
+    opacity: 0.75;
+  }
+  
+  /* Footer (light + subtle divider) */
+  .site-footer {
+    background-color: #ffffff;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+  }
+  
+  .site-footer a {
+    color: var(--text);
+  }
+  
+  .site-footer a:hover {
+    opacity: 0.75;
+  }
+  
+  /* Footer cleanup (avoid duplicate name) */
+  .site-footer .p-name {
+    display: none;
+  }

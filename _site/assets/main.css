@@ -196,9 +196,12 @@ table td { border: 1px solid #e8e8e8; }
 .highlight .vi { color: #008080; }
 .highlight .il { color: #099; }
 
-/* ===== Layout overrides ===== */
-strong, b { font-weight: 600; }
+/* Montserrat Font Import */
+/* ===== Design tokens ===== */
+:root { --bg: #ffffff; --text: #111827; --muted: rgba(17, 24, 39, 0.72); --border: rgba(17, 24, 39, 0.12); --shadow: rgba(0, 0, 0, 0.08); }
 
+/* Font stack */
+/* ===== Layout overrides ===== */
 .wrapper { max-width: 1120px; }
 
 .page-content { padding: 36px 0; }
@@ -206,27 +209,15 @@ strong, b { font-weight: 600; }
 /* Subtle background glow like the reference (still light/minimal) */
 body { background: radial-gradient(900px 520px at 12% 12%, rgba(17, 24, 39, 0.035), transparent 60%), radial-gradient(900px 520px at 88% 22%, rgba(17, 24, 39, 0.028), transparent 62%), #ffffff; }
 
-/* ===== Minimal Light Palette ===== */
-:root { --bg: #ffffff; --text: #111827; --muted: rgba(17, 24, 39, 0.72); --border: rgba(17, 24, 39, 0.12); --shadow: rgba(0, 0, 0, 0.08); }
-
-body { background-color: var(--bg); color: var(--text); font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 300; /* Montserrat Light */ line-height: 1.7; letter-spacing: 0.01em; /* subtle, clean */ }
-
-h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; font-weight: 400; /* Regular */ text-transform: uppercase; letter-spacing: 0.28em; /* wide tracking like the reference */ }
-
 /* Header (light + subtle divider) */
 .site-header { background-color: #ffffff; border-bottom: 1px solid var(--border); }
 
-.site-title { color: var(--text) !important; font-family: 'Montserrat', sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.32em; font-size: 1.22rem; }
+.site-title { color: var(--text) !important; font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.32em; font-size: 1.22rem; }
 
 /* Nav links */
-.site-nav .page-link { color: var(--text) !important; font-family: 'Montserrat', sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.80rem; }
+.site-nav .page-link { color: var(--text) !important; font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.80rem; }
 
 .site-nav .page-link:hover { opacity: 0.75; }
-
-/* Body links */
-a { color: var(--text); text-decoration: none; }
-
-a:hover { text-decoration: underline; }
 
 /* Footer (light + subtle divider) */
 .site-footer { background-color: #ffffff; color: var(--text); border-top: 1px solid var(--border); }
@@ -238,7 +229,19 @@ a:hover { text-decoration: underline; }
 /* Footer cleanup (avoid duplicate name) */
 .site-footer .p-name { display: none; }
 
-/* Buttons */
+/* ===== Typography ===== */
+strong, b { font-weight: 600; }
+
+body { background-color: var(--bg); color: var(--text); font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 300; /* Montserrat Light */ line-height: 1.7; letter-spacing: 0.01em; /* subtle, clean */ }
+
+h1, h2, h3, h4, h5, h6 { font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 400; /* Regular */ text-transform: uppercase; letter-spacing: 0.28em; /* wide tracking like the reference */ }
+
+/* Body links */
+a { color: var(--text); text-decoration: none; }
+
+a:hover { text-decoration: underline; }
+
+/* ===== Buttons ===== */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0.65rem 1.05rem; border-radius: 10px; border: 1px solid var(--border); background: #ffffff; color: var(--text) !important; text-decoration: none; font-weight: 700; }
 
 .btn:hover { transform: translateY(-1px); color: var(--text) !important; }
@@ -259,11 +262,9 @@ a:hover { text-decoration: underline; }
 @media (max-width: 900px) { .hero { grid-template-columns: 1fr; gap: 22px; } }
 .hero__title { margin: 18px 0 12px 0; line-height: 1.02; letter-spacing: -0.01em; }
 
-/* Smaller + lighter = less aggressive */
-.hero__kicker { display: inline-block; font-weight: 400; /* Montserrat Regular */ text-transform: uppercase; letter-spacing: 0.22em; /* wider */ font-size: clamp(1.6rem, 3.2vw, 2.4rem); color: rgba(17, 24, 39, 0.78); /* slightly softer than pure black */ }
+.hero__kicker { display: inline-block; font-weight: 400; text-transform: uppercase; letter-spacing: 0.22em; font-size: clamp(1.6rem, 3.2vw, 2.4rem); color: rgba(17, 24, 39, 0.78); }
 
-/* Still strong, but not as heavy */
-.hero__name { display: inline-block; font-weight: 500; /* slightly lighter than bold */ text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(2.6rem, 5.2vw, 4rem); color: var(--text); }
+.hero__name { display: inline-block; font-weight: 500; text-transform: uppercase; letter-spacing: 0.02em; font-size: clamp(2.6rem, 5.2vw, 4rem); color: var(--text); }
 
 .hero__subtitle { color: var(--muted); max-width: 44rem; text-align: justify; text-justify: inter-word; }
 
@@ -271,12 +272,16 @@ a:hover { text-decoration: underline; }
 
 .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 16px 0; }
 
+/* Socials */
 .socials { display: flex; gap: 10px; margin-top: 6px; }
 
 .social { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--border); background: #ffffff; color: var(--text); text-decoration: none; }
 
 .social:hover { transform: translateY(-1px); }
 
+.socials .social svg { width: 16px; height: 16px; }
+
+/* Portrait */
 .portrait { position: relative; width: min(480px, 80vw); aspect-ratio: 1 / 1; margin-left: auto; border-radius: 999px; border: 10px solid rgba(17, 24, 39, 0.05); box-shadow: 0 18px 45px var(--shadow); overflow: hidden; background: #ffffff; }
 
 @media (max-width: 900px) { .portrait { margin: 0; } }
@@ -284,10 +289,9 @@ a:hover { text-decoration: underline; }
 
 .portrait__tag { position: absolute; right: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.92); font-weight: 800; font-size: 0.92rem; }
 
-/* ===== Projects grid (tile gallery like reference) ===== */
+/* ===== Projects grid (tile gallery) ===== */
 .projects-section-title { position: relative; margin-top: 32px; padding-top: 18px; margin-bottom: 28px; }
 
-/* thin divider line above the section title */
 .projects-section-title::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: var(--border); }
 
 .projects-lede { margin: 0 0 18px 0; color: var(--muted); max-width: none; width: 100%; }
@@ -305,6 +309,9 @@ a:hover { text-decoration: underline; }
 .proj-media { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #ffffff; border: 1px solid var(--border); }
 
 .proj-img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.01); transition: transform 240ms ease; }
+
+/* For autoplay previews (Option 2) */
+.proj-video { display: block; pointer-events: none; /* keep the <a> clickable across browsers */ }
 
 .proj-overlay { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.92); opacity: 0; transition: opacity 200ms ease; }
 
@@ -326,36 +333,29 @@ a:hover { text-decoration: underline; }
 
 .proj-title a:hover { text-decoration: underline; }
 
-/* ===== Mobile-only portrait inside text column (hidden on desktop) ===== */
-.portrait--mobile { display: none; }
-
-/* ===== Phone layout: wrap body text around the portrait (no header wrap) ===== */
-@media (max-width: 640px) { /* Hide the right-column portrait on phones */
-  .hero__right { display: none; }
-  /* Circular wrap around the mobile portrait */
-  .hero__subtitle .portrait--mobile { float: right; width: 170px; height: 170px; margin: 0 0 14px 14px; /* Circle shape */ border-radius: 50%; clip-path: circle(50%); shape-outside: circle(50%); overflow: hidden; border: 6px solid rgba(17, 24, 39, 0.05); background: #fff; display: block; shape-margin: 25px; }
-  .hero__subtitle .portrait--mobile img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15) translateX(-4%); }
-  .hero__subtitle { text-align: left; }
-  /* Clear float after the hero so nothing below wraps */
-  .hero::after { content: ""; display: block; clear: both; } }
 /* ===== Contact page ===== */
 .contact-intro { max-width: 60ch; margin-bottom: 24px; color: var(--muted); }
 
 .contact-icon svg { width: 20px; height: 20px; }
 
 /* Contact cards: icon + title on the same line */
-.contact-card { display: flex; align-items: center; gap: 12px; /* space between icon and text */ text-decoration: none; }
+.contact-card { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text) !important; text-decoration: none !important; }
 
 .contact-info h3 { margin: 3; line-height: 1; }
 
-.socials .social svg { width: 16px; height: 16px; }
-
 @media (max-width: 640px) { .contact-icon svg { width: 18px; height: 18px; } }
-.contact-card { color: var(--text) !important; text-decoration: none !important; }
+/* ===== Mobile-only portrait inside text column ===== */
+.portrait--mobile { display: none; }
 
+/* ===== Phone layout: wrap body text around the portrait ===== */
+@media (max-width: 640px) { .hero__right { display: none; }
+  .hero__subtitle .portrait--mobile { float: right; width: 170px; height: 170px; margin: 0 0 14px 14px; border-radius: 50%; clip-path: circle(50%); shape-outside: circle(50%); overflow: hidden; border: 6px solid rgba(17, 24, 39, 0.05); background: #fff; display: block; shape-margin: 25px; }
+  .hero__subtitle .portrait--mobile img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15) translateX(-4%); }
+  .hero__subtitle { text-align: left; }
+  .hero::after { content: ""; display: block; clear: both; } }
 /* ===== Figures ===== */
 figure { margin: 1.5rem 0; text-align: center; }
 
-figure img { display: block; margin: 0 auto; /* centers the image */ max-width: 780px; /* your desired cap */ width: 100%; /* responsive */ height: auto; }
+figure img { display: block; margin: 0 auto; max-width: 780px; width: 100%; height: auto; }
 
 figure figcaption { margin-top: 0.5rem; font-size: 0.95em; }
