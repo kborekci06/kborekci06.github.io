@@ -1,8 +1,9 @@
 ---
 title: Experience
 layout: default
+---
 
-# Add/edit projects here. The page auto-renders the grid.
+<!-- # Add/edit projects here. The page auto-renders the grid.
 # For each project:
 # - title: shown under the image
 # - url: where the tile links to
@@ -10,7 +11,7 @@ layout: default
 # - blurb: short hover description (2–4 lines)
 # - tags: optional, small labels
 
-# Experience
+# Experience -->
 
 <p class="projects-lede">
   My engineering work spanning medical devices, robotics, and ML for healthcare.
