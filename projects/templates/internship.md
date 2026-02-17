@@ -1,5 +1,6 @@
 ---
 layout: page
+published: false
 title: "{{ORG_OR_LAB}} — {{ROLE_TITLE}}"
 permalink: /projects/{{SLUG}}/
 description: "{{ONE_LINE_FOCUS}}"

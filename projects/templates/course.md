@@ -1,6 +1,7 @@
 ---
 layout: page
-title: "{{PROJECT_TITLE}}"
+title: "Template"
+published: false
 permalink: /projects/{{SLUG}}/
 description: "{{ONE_LINE_OVERVIEW}}"
 tags: [{{TAGS_COMMA_SEPARATED}}]

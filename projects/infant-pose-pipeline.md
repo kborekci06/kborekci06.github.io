@@ -6,7 +6,9 @@ permalink: /projects/infant-pose-pipeline/
 
 # Infant Pose Lifting Evaluation (SRAL)
 
-**Role:** Biomedical ML Research • **Environment:** CUDA-enabled Linux • **Focus:** Evaluation on retrospective, uncalibrated infant videos
+• **Role:** Biomedical ML Research 
+• **Environment:** CUDA-enabled Linux 
+• **Focus:** Evaluation on retrospective, uncalibrated infant videos
 
 <!-- Optional hero image -->
 <!-- ![](/assets/images/sral-hero.jpg){: width="780" } -->
