@@ -9,7 +9,7 @@ I’m open for opportunities in <strong>MedTech</strong>, <strong>Robotics</stro
 </p>
 
 
-{% include contact-methods.html %}
+{% include contact-content.html %}
 
 
 
