@@ -1,0 +1,13 @@
+<figure class="{{ include.class | default: '' }}">
+    <video
+      controls
+      playsinline
+      preload="metadata"
+      {% if include.poster %}poster="{{ include.poster | relative_url }}"{% endif %}
+    >
+      <source src="{{ include.src | relative_url }}" type="video/mp4" />
+    </video>
+    {% if include.caption %}
+      <figcaption>{{ include.caption }}</figcaption>
+    {% endif %}
+  </figure>

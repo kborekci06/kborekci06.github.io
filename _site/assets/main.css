@@ -358,4 +358,14 @@ figure { margin: 1.5rem 0; text-align: center; }
 
 figure img { display: block; margin: 0 auto; max-width: 780px; width: 100%; height: auto; }
 
+/* Add video support inside figures */
+figure video { display: block; margin: 0 auto; max-width: 780px; width: 100%; height: auto; border: 1px solid var(--border); border-radius: 10px; }
+
 figure figcaption { margin-top: 0.5rem; font-size: 0.95em; }
+
+/* ===== Media Layout Helpers ===== */
+.media-grid { display: grid; gap: 18px; }
+
+.media-grid.media-grid--2 { grid-template-columns: 1fr 1fr; }
+
+@media (max-width: 800px) { .media-grid.media-grid--2 { grid-template-columns: 1fr; } }
