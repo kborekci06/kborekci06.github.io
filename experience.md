@@ -1,5 +1,5 @@
 ---
-title: Projects
+title: Experience
 layout: default
 
 # Add/edit projects here. The page auto-renders the grid.
