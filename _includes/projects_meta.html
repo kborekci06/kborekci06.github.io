@@ -1,0 +1,23 @@
+<div class="proj-meta">
+
+    {% if include.dates %}
+      <div class="proj-meta__item"><span class="proj-meta__label">Dates</span> {{ include.dates }}</div>
+    {% endif %}
+  
+    {% if include.role %}
+      <div class="proj-meta__item"><span class="proj-meta__label">Role</span> {{ include.role }}</div>
+    {% endif %}
+  
+    {% if include.context %}
+      <div class="proj-meta__item"><span class="proj-meta__label">Context</span> {{ include.context }}</div>
+    {% endif %}
+  
+    {% if include.team %}
+      <div class="proj-meta__item"><span class="proj-meta__label">Team</span> {{ include.team }}</div>
+    {% endif %}
+  
+    {% if include.tech %}
+      <div class="proj-meta__item"><span class="proj-meta__label">Tech</span> {{ include.tech }}</div>
+    {% endif %}
+  
+  </div>

@@ -1,98 +1,166 @@
 ---
 layout: page
-title: "BioNexus"
-permalink: /projects/bionexus/
-description: "Modular body-area-network hub + sensor ecosystem for rapid medical-device prototyping."
-tags: ["Embedded Systems", "MedTech"]
+title: "{{PROJECT_TITLE}}"
+permalink: /projects/{{SLUG}}/
+description: "{{ONE_LINE_OVERVIEW}}"
+tags: [{{TAGS_COMMA_SEPARATED}}]
+
+dates: "{{DATES}}"
+role: "{{ROLE}}"
+context: "{{CONTEXT}}"
+team: "{{TEAM}}"
+tech: "{{TECH_STACK_SHORT}}"
 ---
 
-## A) Header Block
+<!--
+HOW TO USE
+1) Copy this file to: projects/{{SLUG}}.md
+2) Replace placeholders (search for {{ ... }})
+3) Add tile entry in _data/experience_featured.yml (or internships/course)
+4) Drop media into:
+   - assets/img/projects/{{SLUG}}/
+   - assets/video/projects/{{SLUG}}/
+-->
 
-**One-line overview:** A modular, documentation-first medical embedded systems build with verification and open releases.
+## A) Overview
 
-**Dates:** 2025–Ongoing  
-**Role:** System architect + embedded firmware + hardware integration  
-**Context:** Personal / Research  
-**Team:** Solo (with clinical/research stakeholders)  
-**Tech:** RP2040, I2C/SPI/UART, SD logging, DMA, Python tooling, Jekyll docs
+**One-line overview:** {{ONE_LINE_OVERVIEW}}
+
+{% include project-meta.html
+  dates=page.dates
+  role=page.role
+  context=page.context
+  team=page.team
+  tech=page.tech
+%}
 
 {% include media-figure.html
-  src="/assets/img/projects/bionexus/hero.png"
-  alt="BioNexus hero visual"
-  caption="BioNexus concept: hub-and-spoke architecture enabling swappable sensing modules."
+  src="/assets/img/projects/{{SLUG}}/hero.png"
+  alt="{{PROJECT_TITLE}} hero visual"
+  caption="{{HERO_CAPTION}}"
 %}
 
 ---
 
 ## B) Problem & Motivation
-2–5 sentences explaining: need → who → why it matters → constraints.
+
+{{PROBLEM_2_TO_5_SENTENCES}}
 
 ---
 
 ## C) Requirements & Goals
-- Performance targets: …
-- Constraints: …
-- Success criteria: …
+
+- **Performance targets:** {{PERFORMANCE_TARGETS}}
+- **Constraints:** {{CONSTRAINTS}}
+- **Success criteria:** {{SUCCESS_CRITERIA}}
 
 ---
 
 ## D) Approach & Design Process
 
 ### D1) System architecture
-{% include media-figure.html src="/assets/img/projects/bionexus/architecture.png" caption="High-level data flow and module interfaces." %}
 
-### D2) Key technical decisions
-- Decision + tradeoff + why…
+{% include media-figure.html
+  src="/assets/img/projects/{{SLUG}}/arch.png"
+  alt="System architecture"
+  caption="High-level architecture and data flow."
+%}
+
+### D2) Key technical decisions (tradeoffs)
+
+- {{DECISION_1}}
+- {{DECISION_2}}
+- {{DECISION_3}}
 
 ### D3) Implementation highlights
-- Built …
-- Implemented …
+
+- {{HIGHLIGHT_1}}
+- {{HIGHLIGHT_2}}
+- {{HIGHLIGHT_3}}
+- {{HIGHLIGHT_4}}
 
 ### D4) Testing & validation
-- Verified …
-- Bench tests …
+
+- {{VALIDATION_1}}
+- {{VALIDATION_2}}
+- {{VALIDATION_3}}
+
+{% include media-figure.html
+  src="/assets/img/projects/{{SLUG}}/results.png"
+  alt="Key results plot"
+  caption="Representative results / validation plot."
+%}
 
 ### D5) Challenges & how I solved them
-- …
 
-### D6) Collaboration
-- Clinicians: …
-- My ownership: …
+- {{CHALLENGE_1}}
+- {{CHALLENGE_2}}
+- {{CHALLENGE_3}}
+
+### D6) Collaboration & ownership
+
+- **Worked with:** {{WHO_YOU_WORKED_WITH}}
+- **My ownership:** {{YOUR_OWNERSHIP_ONE_SENTENCE}}
 
 ---
 
 ## E) Results & Current Status
 
 **Results at a glance**
-- …
-- …
+- {{RESULT_1_WITH_NUMBER_IF_POSSIBLE}}
+- {{RESULT_2_WITH_NUMBER_IF_POSSIBLE}}
+- {{RESULT_3_WITH_NUMBER_IF_POSSIBLE}}
 
-Short paragraph: what results mean.
+{{RESULTS_PARAGRAPH_WHAT_IT_MEANS}}
 
-**Current status:** …  
-**Next milestone:** …
+**Current status:** {{CURRENT_STATUS}}  
+**Next milestone:** {{NEXT_MILESTONE}}
 
 ---
 
 ## F) Future Steps & Reflections
-- Next steps…
-- Lessons learned…
+
+- {{NEXT_STEP_1}}
+- {{NEXT_STEP_2}}
+- {{NEXT_STEP_3}}
+
+**Lessons learned (optional)**
+- {{LESSON_1}}
+- {{LESSON_2}}
 
 ---
 
-## G) Media Gallery
-{% include media-video.html src="/assets/video/projects/bionexus/demo.mp4" caption="Demo: logging + UI + module swap workflow." %}
-{% include media-side-by-side.html left_src="/assets/img/projects/bionexus/test-rig.png" left_caption="Test rig." right_src="/assets/img/projects/bionexus/plot.png" right_caption="Representative performance plot." %}
+## G) Media Gallery (optional)
+
+{% include media-video.html
+  src="/assets/video/projects/{{SLUG}}/demo.mp4"
+  poster="/assets/img/projects/{{SLUG}}/poster.png"
+  caption="Demo: {{DEMO_CAPTION}}"
+%}
+
+{% include media-side-by-side.html
+  left_src="/assets/img/projects/{{SLUG}}/arch.png"
+  left_alt="Architecture diagram"
+  left_caption="Architecture."
+  right_src="/assets/img/projects/{{SLUG}}/results.png"
+  right_alt="Results plot"
+  right_caption="Key results."
+%}
 
 ---
 
 ## H) Skills & Tools Used
-- Embedded: …
-- Processes: …
+
+- **Embedded:** {{EMBEDDED_SKILLS}}
+- **Data/ML:** {{ML_SKILLS}}
+- **Mechanical/Fluids:** {{FLUIDS_SKILLS}}
+- **Process:** {{PROCESS_SKILLS}}
 
 ---
 
 ## I) Links
-- GitHub: …
-- Docs: …
-- Poster/report: …
+
+- **GitHub:** {{GITHUB_LINK}}
+- **Docs:** {{DOCS_LINK}}
+- **Poster/Report:** {{REPORT_LINK}}
+- **Demo:** {{DEMO_LINK}}
