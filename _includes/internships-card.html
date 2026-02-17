@@ -1,0 +1,23 @@
+<section class="internship">
+    <h2 class="internship__title">
+      {{ include.item.org }} ({{ include.item.year }}) — {{ include.item.role }}
+    </h2>
+  
+    {% if include.item.context %}
+      <p class="internship__context">{{ include.item.context }}</p>
+    {% endif %}
+  
+    {% if include.item.bullets %}
+      <ul class="internship__bullets">
+        {% for b in include.item.bullets %}
+          <li>{{ b }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  
+    {% if include.item.link_url %}
+      <p class="internship__link">
+        <a href="{{ include.item.link_url | relative_url }}">{{ include.item.link_text }}</a>
+      </p>
+    {% endif %}
+  </section>

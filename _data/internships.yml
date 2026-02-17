@@ -1,0 +1,12 @@
+- org: "Nature Digital Medicine"
+  year: 2020
+  role: "Coauthor"
+  context: "Early bioelectronics research in the Rogers Lab during high school; this experience sparked my long-term focus on medical devices."
+  bullets:
+    - "Evaluated embedded sensor systems for hydrocephalus shunt flow detection."
+    - "Characterized device drift; validated phantom model experiments simulating physiological flow."
+    - "Coauthored a peer-reviewed paper in Nature Digital Medicine."
+  link_text: "Read the paper →"
+  link_url: "/publications/nature-digital-medicine/"
+
+  
