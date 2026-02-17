@@ -25,8 +25,9 @@ featured_projects:
 
   - title: "Infant Motor Development Research"
     url: "/projects/infant-pose-pipeline/"
-    image: "/assets/img/projects/infant-pose.mov"
-    blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
+    image: "/assets/img/projects/infant-pose.mp4"
+    poster: "/assets/img/projects/infant-pose.png"
+    blurb: "Reproducible evaluation pipeline..."
     tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
 
 
@@ -59,7 +60,8 @@ mini_projects:
 
   - title: "Robot Controller Design and Trajectory Planning"
     url: "/projects/robotic-manipulation/"
-    image: "/assets/img/projects/robot-manip.mov"
+    image: "/assets/img/projects/robot-manip.mp4"
+    poster: "/assets/img/projects/robot-manip.png"
     blurb: "Manipulation project covering kinematics/dynamics, planning, and closed-loop control with clear evaluation metrics."
     tags: ["Robotics", "Control"]
 
