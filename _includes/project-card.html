@@ -1,0 +1,38 @@
+<article class="proj-card">
+    <a class="proj-link" href="{{ include.p.url }}" aria-label="{{ include.p.title }}">
+      <div class="proj-media">
+        {% assign src = include.p.image | downcase %}
+
+        {% if src contains '.mp4' or src contains '.webm' or src contains '.mov' %}
+        <video
+            class="proj-img proj-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            {% if include.p.poster %}poster="{{ include.p.poster }}"{% endif %}
+            aria-label="{{ include.p.title }}"
+        >
+            <source src="{{ include.p.image }}" />
+        </video>
+        {% else %}
+        <img class="proj-img" src="{{ include.p.image }}" alt="{{ include.p.title }}" loading="lazy" />
+        {% endif %}
+        <div class="proj-overlay">
+          <div class="proj-overlay__inner">
+            <p class="proj-desc">{{ include.p.blurb }}</p>
+            {% if include.p.tags %}
+            <div class="proj-tags">
+              {% for t in include.p.tags %}
+                <span class="proj-tag">{{ t }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </a>
+  
+    <h3 class="proj-title"><a href="{{ include.p.url }}">{{ include.p.title }}</a></h3>
+  </article>
