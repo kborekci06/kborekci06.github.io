@@ -2,7 +2,6 @@
 title: Experience
 layout: default
 ---
-
 <!-- # Add/edit projects here. The page auto-renders the grid.
 # For each project:
 # - title: shown under the image
@@ -12,6 +11,8 @@ layout: default
 # - tags: optional, small labels
 
 # Experience -->
+
+<h1>Experience</h1>
 
 <p class="projects-lede">
   My engineering work spanning medical devices, robotics, and ML for healthcare.
