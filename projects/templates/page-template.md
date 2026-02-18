@@ -10,7 +10,7 @@ published: false
 Use this page as a library of copy/paste blocks when writing project pages.
 
 
-# 1) Minimal Page Front Matter
+## 1) Minimal Page Front Matter
 
 ```yaml
 ---
@@ -28,7 +28,7 @@ tech: "Tools/stack in a short phrase"
 ---
 ```
 
-# Metadata:
+## Metadata:
 {% include project-meta.html
   dates=page.dates
   role=page.role
@@ -37,13 +37,13 @@ tech: "Tools/stack in a short phrase"
   tech=page.tech
 %}
 
-# Bullets
+## Bullets
 - Bullet 1
 - Bullet 2
 - Bullet 3
 
 
-# 2 Videos Side by Side
+## 2 Videos Side by Side
 {% include media-2up.html
   left_src="/assets/video/projects/x/demo1.mp4"
   left_poster="/assets/img/projects/x/poster1.png"
@@ -54,7 +54,7 @@ tech: "Tools/stack in a short phrase"
   right_caption="Controller B"
 %}
 
-# 1 Video 1 Image Side by Side:
+## 1 Video 1 Image Side by Side:
 {% include media-2up.html
   left_src="/assets/img/projects/x/architecture.png"
   left_caption="Architecture"
@@ -64,7 +64,7 @@ tech: "Tools/stack in a short phrase"
   right_caption="Demo"
 %}
 
-# 3 Images Side by Side:
+## 3 Images Side by Side:
 {% include media-3up.html
   a_src="/assets/img/projects/project-slug/arch.png"
   a_alt="Architecture diagram"
@@ -79,7 +79,7 @@ tech: "Tools/stack in a short phrase"
   c_caption="Tracking performance results."
 %}
 
-# 3 Videos Side by Side:
+## 3 Videos Side by Side:
 {% include media-3up.html
   a_src="/assets/video/projects/project-slug/demo1.mp4"
   a_poster="/assets/img/projects/project-slug/poster1.png"
@@ -95,7 +95,7 @@ tech: "Tools/stack in a short phrase"
 %}
 
 
-# Results at a glance:
+## Results at a glance:
 {% include callout.html
   kind="results"
   title="Results at a glance"
@@ -108,53 +108,53 @@ tech: "Tools/stack in a short phrase"
   "
 %}
 
-# Warnings/Callouts:
+## Warnings/Callouts:
 {% include callout.html
   kind="note"
   title="Note"
   content="This build log uses sanitized data due to confidentiality."
 %}
 
-# Clean links section:
+## Clean links section:
 {% assign links = "" | split: "" %}
 {% assign links = links | push: {"label":"GitHub Repo","url":"https://github.com/..."} %}
 {% assign links = links | push: {"label":"Report","url":"/assets/pdf/..."} %}
 {% include section-links.html items=links %}
 
-# Text formatting:
-## Narrow:
+## Text formatting:
+### Narrow:
 <div class="text-narrow">
   <p>Put dense text here…</p>
 </div>
 
-## Wide:
+### Wide:
 <div class="text-wide">
   <p>Put wide content here (tables/grids)…</p>
 </div>
 
-# Spec Table:
+## Spec Table:
 {% assign rows = "" | split: "" %}
 {% assign rows = rows | push: {"label":"Sampling rate","value":"100 Hz (IMU), 20 Hz (CO₂)"} %}
 {% assign rows = rows | push: {"label":"Latency","value":"~12 ms end-to-end"} %}
 {% assign rows = rows | push: {"label":"Power","value":"~2.1 W average (dev setup)"} %}
 {% include spec-table.html title="Specs" rows=rows %}
 
-# Timeline:
+## Timeline:
 {% assign t = "" | split: "" %}
 {% assign t = t | push: {"when":"Week 1","what":"Architecture + requirements","detail":"Defined interfaces, success criteria, test plan."} %}
 {% assign t = t | push: {"when":"Week 2","what":"Firmware bring-up","detail":"I2C/SPI/UART drivers + logging skeleton."} %}
 {% assign t = t | push: {"when":"Week 3","what":"Validation","detail":"End-to-end test with metrics + plots."} %}
 {% include timeline.html title="Milestones" items=t %}
 
-# Accordion:
+## Accordion:
 {% assign acc = "" | split: "" %}
 {% assign acc = acc | push: {"title":"Computed torque control (details)","body":"<p>Explain inverse dynamics + PD error shaping here.</p>"} %}
 {% assign acc = acc | push: {"title":"Trajectory generation (details)","body":"<p>Screw vs Cartesian, cubic vs quintic…</p>"} %}
 {% include accordion.html items=acc %}
 
-# Tag Row:
+## Tag Row:
 {% assign mytags = "Embedded Systems, Robotics, Control, Testing" | split: ", " %}
 {% include tag-row.html tags=mytags %}
 
-# Must add the following to the bottom of the page for autoplay of videos in page:
+## Must add the following to the bottom of the page for autoplay of videos in page:
 <script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>
