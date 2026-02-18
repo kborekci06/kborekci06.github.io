@@ -45,10 +45,12 @@ Placeholder
   a_caption="Critically damped response."
 
   b_src="/assets/img/projects/robot-manip.mp4"
-  b_poster="/assets/img/projects/project-slug/poster2.png"
+  b_poster="/assets/img/projects/robot-manip.png"
   b_caption="Underdamped oscillation."
 
   c_src="/assets/img/projects/robot-manip.mp4"
   c_poster="/assets/img/projects/robot-manip.png"
   c_caption="Torque-limited case."
 %}
+
+<script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>
