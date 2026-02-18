@@ -50,3 +50,6 @@
   c_poster="/assets/img/projects/project-slug/poster3.png"
   c_caption="Torque-limited case."
 %}
+
+# Must add the following to the bottom of the page for autoplay of videos in page:
+<script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>
