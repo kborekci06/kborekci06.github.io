@@ -11,9 +11,11 @@ figure {
     max-width: 780px;
     width: 100%;
     height: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
   }
   
-  /* Add video support inside figures */
+  /* Video support inside figures */
   figure video {
     display: block;
     margin: 0 auto;
@@ -27,21 +29,42 @@ figure {
   figure figcaption {
     margin-top: 0.5rem;
     font-size: 0.95em;
+    color: var(--muted);
   }
   
-  /* ===== Media Layout Helpers ===== */
+  /* ===== Media Layout Helpers (2-up / 3-up) ===== */
   
   .media-grid {
     display: grid;
     gap: 18px;
+    margin: 1.25rem 0; /* consistent spacing around the grid block */
   }
   
-  .media-grid.media-grid--2 {
-    grid-template-columns: 1fr 1fr;
+  /* Remove extra vertical space from figures inside a grid */
+  .media-grid figure {
+    margin: 0;
   }
   
-  @media (max-width: 800px) {
-    .media-grid.media-grid--2 {
+  /* Desktop layouts */
+  .media-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .media-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  /* Tablet: 3-up becomes 2-up */
+  @media (max-width: 980px) {
+    .media-grid--3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  
+  /* Phone: everything becomes 1 column */
+  @media (max-width: 720px) {
+    .media-grid--2,
+    .media-grid--3 {
       grid-template-columns: 1fr;
     }
   }
