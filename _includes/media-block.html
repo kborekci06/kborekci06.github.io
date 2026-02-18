@@ -1,0 +1,25 @@
+{% assign src = include.src | downcase %}
+
+<figure class="media {{ include.class | default: '' }}">
+
+  {% if src contains '.mp4' or src contains '.webm' or src contains '.mov' %}
+    <video
+      controls
+      playsinline
+      preload="metadata"
+      {% if include.poster %}poster="{{ include.poster | relative_url }}"{% endif %}
+    >
+      <source src="{{ include.src | relative_url }}" type="video/mp4" />
+    </video>
+  {% else %}
+    <img
+      src="{{ include.src | relative_url }}"
+      alt="{{ include.alt | default: '' }}"
+      loading="lazy"
+    />
+  {% endif %}
+
+  {% if include.caption %}
+    <figcaption>{{ include.caption }}</figcaption>
+  {% endif %}
+</figure>

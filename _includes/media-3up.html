@@ -1,0 +1,25 @@
+<div class="media-grid media-grid--3 {{ include.class | default: '' }}">
+    <div>
+      {% include media-block.html
+         src=include.a_src
+         alt=include.a_alt
+         poster=include.a_poster
+         caption=include.a_caption %}
+    </div>
+  
+    <div>
+      {% include media-block.html
+         src=include.b_src
+         alt=include.b_alt
+         poster=include.b_poster
+         caption=include.b_caption %}
+    </div>
+  
+    <div>
+      {% include media-block.html
+         src=include.c_src
+         alt=include.c_alt
+         poster=include.c_poster
+         caption=include.c_caption %}
+    </div>
+  </div>
