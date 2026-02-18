@@ -1,0 +1,10 @@
+<div class="accordion">
+    {% for item in include.items %}
+      <details class="accordion__item" {% if item.open %}open{% endif %}>
+        <summary class="accordion__summary">{{ item.title }}</summary>
+        <div class="accordion__body">
+          {{ item.body }}
+        </div>
+      </details>
+    {% endfor %}
+  </div>

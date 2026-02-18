@@ -1,0 +1,8 @@
+<div class="callout {{ include.kind | default: 'note' }}">
+    {% if include.title %}
+      <div class="callout__title">{{ include.title }}</div>
+    {% endif %}
+    <div class="callout__body">
+      {{ include.content }}
+    </div>
+  </div>

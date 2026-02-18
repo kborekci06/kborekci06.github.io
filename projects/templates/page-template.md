@@ -1,3 +1,46 @@
+---
+layout: page
+title: "Project Page Templates (Snippets)"
+permalink: /templates/
+published: false
+---
+
+# Project Page Cookbook (Snippets)
+
+Use this page as a library of copy/paste blocks when writing project pages.
+
+
+# 1) Minimal Page Front Matter
+
+```yaml
+---
+layout: page
+title: "Project Title"
+permalink: /projects/project-slug/
+description: "One-line overview."
+tags: ["Tag1", "Tag2"]
+
+dates: "2025–Ongoing"
+role: "Your role"
+context: "Personal / Course / Internship"
+team: "Solo / Team of X"
+tech: "Tools/stack in a short phrase"
+---
+```
+
+# Metadata:
+{% include project-meta.html
+  dates=page.dates
+  role=page.role
+  context=page.context
+  team=page.team
+  tech=page.tech
+%}
+
+# Bullets
+- Bullet 1
+- Bullet 2
+- Bullet 3
 
 
 # 2 Videos Side by Side
@@ -50,6 +93,68 @@
   c_poster="/assets/img/projects/project-slug/poster3.png"
   c_caption="Torque-limited case."
 %}
+
+
+# Results at a glance:
+{% include callout.html
+  kind="results"
+  title="Results at a glance"
+  content="
+  <ul>
+    <li><strong>Latency:</strong> 12 ms end-to-end</li>
+    <li><strong>Throughput:</strong> 20 Hz sustained</li>
+    <li><strong>Accuracy:</strong> 92% on validation set</li>
+  </ul>
+  "
+%}
+
+# Warnings/Callouts:
+{% include callout.html
+  kind="note"
+  title="Note"
+  content="This build log uses sanitized data due to confidentiality."
+%}
+
+# Clean links section:
+{% assign links = "" | split: "" %}
+{% assign links = links | push: {"label":"GitHub Repo","url":"https://github.com/..."} %}
+{% assign links = links | push: {"label":"Report","url":"/assets/pdf/..."} %}
+{% include section-links.html items=links %}
+
+# Text formatting:
+## Narrow:
+<div class="text-narrow">
+  <p>Put dense text here…</p>
+</div>
+
+## Wide:
+<div class="text-wide">
+  <p>Put wide content here (tables/grids)…</p>
+</div>
+
+# Spec Table:
+{% assign rows = "" | split: "" %}
+{% assign rows = rows | push: {"label":"Sampling rate","value":"100 Hz (IMU), 20 Hz (CO₂)"} %}
+{% assign rows = rows | push: {"label":"Latency","value":"~12 ms end-to-end"} %}
+{% assign rows = rows | push: {"label":"Power","value":"~2.1 W average (dev setup)"} %}
+{% include spec-table.html title="Specs" rows=rows %}
+
+# Timeline:
+{% assign t = "" | split: "" %}
+{% assign t = t | push: {"when":"Week 1","what":"Architecture + requirements","detail":"Defined interfaces, success criteria, test plan."} %}
+{% assign t = t | push: {"when":"Week 2","what":"Firmware bring-up","detail":"I2C/SPI/UART drivers + logging skeleton."} %}
+{% assign t = t | push: {"when":"Week 3","what":"Validation","detail":"End-to-end test with metrics + plots."} %}
+{% include timeline.html title="Milestones" items=t %}
+
+# Accordion:
+{% assign acc = "" | split: "" %}
+{% assign acc = acc | push: {"title":"Computed torque control (details)","body":"<p>Explain inverse dynamics + PD error shaping here.</p>"} %}
+{% assign acc = acc | push: {"title":"Trajectory generation (details)","body":"<p>Screw vs Cartesian, cubic vs quintic…</p>"} %}
+{% include accordion.html items=acc %}
+
+# Tag Row:
+{% assign mytags = "Embedded Systems, Robotics, Control, Testing" | split: ", " %}
+{% include tag-row.html tags=mytags %}
 
 # Must add the following to the bottom of the page for autoplay of videos in page:
 <script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>
