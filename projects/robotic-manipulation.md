@@ -1,4 +1,11 @@
-<!-- Placeholder
+---
+layout: page
+title: "Robotic Manipulation"
+permalink: /robotic-manipulation/
+published: false
+---
+
+<!-- Placeholder -->
 
 
 
@@ -89,4 +96,4 @@
 {% assign mytags = "Embedded Systems, Robotics, Control, Testing" | split: ", " %}
 {% include tag-row.html tags=mytags %}
 
-<script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script> -->
+<script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>

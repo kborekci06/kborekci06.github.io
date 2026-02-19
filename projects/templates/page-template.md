@@ -1,4 +1,4 @@
-<!-- ---
+---
 layout: page
 title: "Project Page Templates (Snippets)"
 permalink: /templates/
@@ -160,4 +160,4 @@ tech: "Tools/stack in a short phrase"
 {% include tag-row.html tags=mytags %}
 
 ## Must add the following to the bottom of the page for autoplay of videos in page:
-<script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script> -->
+<script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>
