@@ -9,6 +9,7 @@ published: false
 
 Use this page as a library of copy/paste blocks when writing project pages.
 
+---
 
 ## 1) Minimal Page Front Matter
 
@@ -96,16 +97,18 @@ tech: "Tools/stack in a short phrase"
 
 
 ## Results at a glance:
+{% capture results_html %}
+<ul>
+  <li><strong>Latency:</strong> 12 ms end-to-end</li>
+  <li><strong>Throughput:</strong> 20 Hz sustained</li>
+  <li><strong>Accuracy:</strong> 92% on validation set</li>
+</ul>
+{% endcapture %}
+
 {% include callout.html
   kind="results"
   title="Results at a glance"
-  content="
-  <ul>
-    <li><strong>Latency:</strong> 12 ms end-to-end</li>
-    <li><strong>Throughput:</strong> 20 Hz sustained</li>
-    <li><strong>Accuracy:</strong> 92% on validation set</li>
-  </ul>
-  "
+  content=results_html
 %}
 
 ## Warnings/Callouts:
