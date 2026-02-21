@@ -7,7 +7,7 @@ permalink: /projects/robotic-manipulation/
 <!-- Placeholder -->
 # Smaller figure 50%
 {% include media-figure.html
-  class="w-50"
+  class="w-10"
   src="/assets/img/projects/robot-manip.png"
   caption="Smaller plot."
 %}
