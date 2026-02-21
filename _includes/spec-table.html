@@ -1,4 +1,7 @@
-{% assign d = site.data.projects[include.slug].specs %}
+{% assign proj = site.data.projects[include.slug] %}
+{% assign d = proj.specs %}
+
+{% if d and d.rows %}
 <table class="spec-table">
   {% if d.title %}<caption>{{ d.title }}</caption>{% endif %}
   <tbody>
@@ -10,3 +13,6 @@
     {% endfor %}
   </tbody>
 </table>
+{% else %}
+<!-- spec-table: missing data for slug={{ include.slug }} -->
+{% endif %}

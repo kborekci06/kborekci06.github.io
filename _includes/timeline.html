@@ -1,5 +1,7 @@
-{% assign d = site.data.projects[include.slug].timeline %}
+{% assign proj = site.data.projects[include.slug] %}
+{% assign d = proj.timeline %}
 
+{% if d and d.items %}
 <div class="timeline">
   {% if d.title %}<div class="timeline__title">{{ d.title }}</div>{% endif %}
   <ol class="timeline__list">
@@ -15,3 +17,6 @@
     {% endfor %}
   </ol>
 </div>
+{% else %}
+<!-- timeline: missing data for slug={{ include.slug }} -->
+{% endif %}

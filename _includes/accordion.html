@@ -1,5 +1,7 @@
-{% assign d = site.data.projects[include.slug].accordion %}
+{% assign proj = site.data.projects[include.slug] %}
+{% assign d = proj.accordion %}
 
+{% if d and d.items %}
 <div class="accordion">
   {% if d.title %}<div class="timeline__title">{{ d.title }}</div>{% endif %}
   {% for item in d.items %}
@@ -11,3 +13,6 @@
     </details>
   {% endfor %}
 </div>
+{% else %}
+<!-- accordion: missing data for slug={{ include.slug }} -->
+{% endif %}
