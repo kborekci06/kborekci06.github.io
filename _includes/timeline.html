@@ -1,20 +1,8 @@
 <div class="timeline">
-    {% if include.title %}
-      <div class="timeline__title">{{ include.title }}</div>
-    {% endif %}
-  
-    <ol class="timeline__list">
-      {% for item in include.items %}
-        <li class="timeline__item">
-          <div class="timeline__dot"></div>
-          <div class="timeline__content">
-            <div class="timeline__when">{{ item.when }}</div>
-            <div class="timeline__what">{{ item.what }}</div>
-            {% if item.detail %}
-              <div class="timeline__detail">{{ item.detail }}</div>
-            {% endif %}
-          </div>
-        </li>
-      {% endfor %}
-    </ol>
-  </div>
+  {% if include.title %}
+    <div class="timeline__title">{{ include.title }}</div>
+  {% endif %}
+  <ol class="timeline__list">
+    {{ include.body }}
+  </ol>
+</div>

@@ -119,10 +119,12 @@ tech: "Tools/stack in a short phrase"
 %}
 
 ## Clean links section:
-{% assign links = "" | split: "" %}
-{% assign links = links | push: {"label":"GitHub Repo","url":"https://github.com/..."} %}
-{% assign links = links | push: {"label":"Report","url":"/assets/pdf/..."} %}
-{% include section-links.html items=links %}
+{% capture link_items %}
+<li><a href="https://github.com/...">GitHub Repo</a></li>
+<li><a href="/assets/pdf/...">Report</a></li>
+{% endcapture %}
+
+{% include link-list.html body=link_items %}
 
 ## Text formatting:
 ### Narrow:
@@ -136,24 +138,64 @@ tech: "Tools/stack in a short phrase"
 </div>
 
 ## Spec Table:
-{% assign rows = "" | split: "" %}
-{% assign rows = rows | push: {"label":"Sampling rate","value":"100 Hz (IMU), 20 Hz (CO₂)"} %}
-{% assign rows = rows | push: {"label":"Latency","value":"~12 ms end-to-end"} %}
-{% assign rows = rows | push: {"label":"Power","value":"~2.1 W average (dev setup)"} %}
-{% include spec-table.html title="Specs" rows=rows %}
+{% capture spec_rows %}
+<tr><th scope="row">Sampling rate</th><td>100 Hz (IMU), 20 Hz (CO₂)</td></tr>
+<tr><th scope="row">Latency</th><td>~12 ms end-to-end</td></tr>
+<tr><th scope="row">Power</th><td>~2.1 W average (dev setup)</td></tr>
+{% endcapture %}
+
+{% include spec-table.html title="Specs" body=spec_rows %}
 
 ## Timeline:
-{% assign t = "" | split: "" %}
-{% assign t = t | push: {"when":"Week 1","what":"Architecture + requirements","detail":"Defined interfaces, success criteria, test plan."} %}
-{% assign t = t | push: {"when":"Week 2","what":"Firmware bring-up","detail":"I2C/SPI/UART drivers + logging skeleton."} %}
-{% assign t = t | push: {"when":"Week 3","what":"Validation","detail":"End-to-end test with metrics + plots."} %}
-{% include timeline.html title="Milestones" items=t %}
+{% capture timeline_items %}
+<li class="timeline__item">
+  <div class="timeline__dot"></div>
+  <div class="timeline__content">
+    <div class="timeline__when">Week 1</div>
+    <div class="timeline__what">Architecture + requirements</div>
+    <div class="timeline__detail">Defined interfaces, success criteria, test plan.</div>
+  </div>
+</li>
+
+<li class="timeline__item">
+  <div class="timeline__dot"></div>
+  <div class="timeline__content">
+    <div class="timeline__when">Week 2</div>
+    <div class="timeline__what">Firmware bring-up</div>
+    <div class="timeline__detail">I2C/SPI/UART drivers + logging skeleton.</div>
+  </div>
+</li>
+
+<li class="timeline__item">
+  <div class="timeline__dot"></div>
+  <div class="timeline__content">
+    <div class="timeline__when">Week 3</div>
+    <div class="timeline__what">Validation</div>
+    <div class="timeline__detail">End-to-end test with metrics + plots.</div>
+  </div>
+</li>
+{% endcapture %}
+
+{% include timeline.html title="Milestones" body=timeline_items %}
 
 ## Accordion:
-{% assign acc = "" | split: "" %}
-{% assign acc = acc | push: {"title":"Computed torque control (details)","body":"<p>Explain inverse dynamics + PD error shaping here.</p>"} %}
-{% assign acc = acc | push: {"title":"Trajectory generation (details)","body":"<p>Screw vs Cartesian, cubic vs quintic…</p>"} %}
-{% include accordion.html items=acc %}
+{% capture accordion_body %}
+<details class="accordion__item">
+  <summary class="accordion__summary">Computed torque control (details)</summary>
+  <div class="accordion__body">
+    <p>Explain inverse dynamics + PD error shaping here.</p>
+  </div>
+</details>
+
+<details class="accordion__item">
+  <summary class="accordion__summary">Trajectory generation (details)</summary>
+  <div class="accordion__body">
+    <p>Screw vs Cartesian, cubic vs quintic…</p>
+  </div>
+</details>
+{% endcapture %}
+
+{% include accordion.html body=accordion_body %}
 
 ## Tag Row:
 {% assign mytags = "Embedded Systems, Robotics, Control, Testing" | split: ", " %}
