@@ -6,13 +6,18 @@ permalink: /projects/robotic-manipulation/
 
 <!-- Placeholder -->
 # Smaller figure 50%
+## Smaller figure 50%
+### Smaller figure 50%
+#### Smaller figure 50%
+##### Smaller figure 50%
+###### **Smaller figure 50%**
 {% include media-figure.html
   class="w-10"
   src="/assets/img/projects/robot-manip.png"
   caption="Smaller plot."
 %}
 
-# 2 Videos Side by Side (shrink the whole block if desired)
+### 2 Videos Side by Side (shrink the whole block if desireddddddddddddddddd)
 {% include media-2up.html
   class="w-100"
   left_src="/assets/img/projects/robot-manip.mp4"
@@ -23,7 +28,7 @@ permalink: /projects/robotic-manipulation/
   right_caption="Controller B"
 %}
 
-# 1 Video 1 Image Side by Side (shrink the whole block if desired)
+### 1 Video 1 Image Side by Side (shrink the whole block if desired)
 {% include media-2up.html
   class="w-100"
   left_src="/assets/img/projects/robot-manip.png"
