@@ -81,58 +81,12 @@ permalink: /projects/robotic-manipulation/
 {% include spec-table.html title="Specs" body=spec_rows %}
 
 ## Timeline:
-{% capture timeline_items %}
-<li class="timeline__item">
-  <div class="timeline__dot"></div>
-  <div class="timeline__content">
-    <div class="timeline__when">Week 1</div>
-    <div class="timeline__what">Architecture + requirements</div>
-    <div class="timeline__detail">Defined interfaces, success criteria, test plan.</div>
-  </div>
-</li>
-
-<li class="timeline__item">
-  <div class="timeline__dot"></div>
-  <div class="timeline__content">
-    <div class="timeline__when">Week 2</div>
-    <div class="timeline__what">Firmware bring-up</div>
-    <div class="timeline__detail">I2C/SPI/UART drivers + logging skeleton.</div>
-  </div>
-</li>
-
-<li class="timeline__item">
-  <div class="timeline__dot"></div>
-  <div class="timeline__content">
-    <div class="timeline__when">Week 3</div>
-    <div class="timeline__what">Validation</div>
-    <div class="timeline__detail">End-to-end test with metrics + plots.</div>
-  </div>
-</li>
-{% endcapture %}
-
-{% include timeline.html title="Milestones" body=timeline_items %}
+{% include timeline.html slug="robotic-manipulation" %}
 
 ## Accordion:
-{% capture accordion_body %}
-<details class="accordion__item">
-  <summary class="accordion__summary">Computed torque control (details)</summary>
-  <div class="accordion__body">
-    <p>Explain inverse dynamics + PD error shaping here.</p>
-  </div>
-</details>
-
-<details class="accordion__item">
-  <summary class="accordion__summary">Trajectory generation (details)</summary>
-  <div class="accordion__body">
-    <p>Screw vs Cartesian, cubic vs quintic…</p>
-  </div>
-</details>
-{% endcapture %}
-
-{% include accordion.html body=accordion_body %}
+{% include accordion.html slug="robotic-manipulation" %}
 
 ## Tag Row:
-{% assign mytags = "Embedded Systems, Robotics, Control, Testing" | split: ", " %}
-{% include tag-row.html tags=mytags %}
+{% include tag-row.html slug="robotic-manipulation" %}
 
 <script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>

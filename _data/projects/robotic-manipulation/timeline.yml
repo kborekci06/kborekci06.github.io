@@ -1,0 +1,11 @@
+title: "Milestones"
+items:
+  - when: "Part 1"
+    what: "Trajectory generation in SE(3)"
+    detail: "Screw/Cartesian with cubic/quintic time scaling."
+  - when: "Part 2"
+    what: "Numerical IK reference generation"
+    detail: "IK solved at each timestep."
+  - when: "Part 3"
+    what: "Computed torque control + evaluation"
+    detail: "PD + inverse dynamics, logging, plots, and CoppeliaSim export."

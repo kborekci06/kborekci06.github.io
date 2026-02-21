@@ -1,3 +1,13 @@
+{% assign d = site.data.projects[include.slug].accordion %}
+
 <div class="accordion">
-  {{ include.body }}
+  {% if d.title %}<div class="timeline__title">{{ d.title }}</div>{% endif %}
+  {% for item in d.items %}
+    <details class="accordion__item" {% if item.open %}open{% endif %}>
+      <summary class="accordion__summary">{{ item.title }}</summary>
+      <div class="accordion__body">
+        {{ item.body }}
+      </div>
+    </details>
+  {% endfor %}
 </div>

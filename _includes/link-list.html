@@ -1,3 +1,8 @@
+{% assign d = site.data.projects[include.slug].links %}
+
+{% if d.title %}<h3>{{ d.title }}</h3>{% endif %}
 <ul class="link-list">
-    {{ include.body }}
-  </ul>
+  {% for item in d.items %}
+    <li><a href="{{ item.url | relative_url }}">{{ item.label }}</a></li>
+  {% endfor %}
+</ul>
