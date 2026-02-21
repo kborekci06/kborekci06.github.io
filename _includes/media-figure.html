@@ -1,10 +1,10 @@
-<figure class="{{ include.class | default: '' }}">
-    <img
-      src="{{ include.src | relative_url }}"
-      alt="{{ include.alt | default: '' }}"
-      loading="lazy"
-    />
-    {% if include.caption %}
-      <figcaption>{{ include.caption }}</figcaption>
-    {% endif %}
-  </figure>
+<figure class="media {{ include.class | default: '' }}">
+  <img
+    src="{{ include.src | relative_url }}"
+    alt="{{ include.alt | default: '' }}"
+    loading="lazy"
+  />
+  {% if include.caption %}
+    <figcaption>{{ include.caption }}</figcaption>
+  {% endif %}
+</figure>

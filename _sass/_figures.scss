@@ -42,10 +42,12 @@ figure {
 
   /* Base cap is 780px (matches your current figure rules) */
   figure.media.w-100 { max-width: 780px; }
+  figure.media.w-90 { max-width: calc(780px * 0.90); }
   figure.media.w-75  { max-width: calc(780px * 0.75); }
   figure.media.w-60  { max-width: calc(780px * 0.60); }
   figure.media.w-50  { max-width: calc(780px * 0.50); }
   figure.media.w-40  { max-width: calc(780px * 0.40); }
+  figure.media.w-10  { max-width: calc(780px * 0.10); }
 
   /* Let the media fill the figure’s new width */
   figure.media img,
@@ -55,11 +57,35 @@ figure {
 
   /* On phones: don’t shrink, always go full-width for readability */
   @media (max-width: 720px) {
+    figure.media.w-90,
     figure.media.w-75,
     figure.media.w-60,
     figure.media.w-50,
-    figure.media.w-40 {
+    figure.media.w-40,
+    figure.media.w-10 {
       max-width: 780px;
+    }
+  }
+
+  /* Optional: shrink whole media blocks (2-up / 3-up) */
+  .media-block {
+    margin: 1.25rem auto; /* center */
+  }
+
+  .media-block.w-100 { max-width: 780px; }
+  .media-block.w-90 { max-width: calc(780px * 0.90); }
+  .media-block.w-80  { max-width: calc(780px * 0.80); }
+  .media-block.w-70  { max-width: calc(780px * 0.70); }
+  .media-block.w-60  { max-width: calc(780px * 0.60); }
+  .media-block.w-50  { max-width: calc(780px * 0.50); }
+
+  @media (max-width: 720px) {
+    .media-block.w-90,
+    .media-block.w-80,
+    .media-block.w-70,
+    .media-block.w-60,
+    .media-block.w-50 {
+      max-width: 780px; /* full width on phone */
     }
   }
   
