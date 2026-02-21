@@ -18,13 +18,26 @@ permalink: /projects/robotic-manipulation/
 %}
 
 ### Split Layout Example
+
 <div class="split">
-  <div>
+  <div class="split__text">
     <h2>Problem</h2>
     <p>Describe constraints… By combining bioelectric signals (EMG, EKG, EEG), physiological measurements (e.g., exhaled CO2, pulse), inertial sensing (IMUs), and UWB-derived depth information — augmented with synchronous video-based pose estimation — the proposed system enables a comprehensive, multimodal representation of human state and behavior. This integrated sensing framework supports a wide range of biomedical applications, including fitness and health monitoring, clinical diagnostics, translational research, physics- and physiology-informed machine learning, adaptive therapy and implant regulation, robotic and prosthetic limb control, and even select applications in defense and human-performance systems</p>
   </div>
-  <div>
-    {% include media-block.html src="assets/img/projects/robot-manip.png" %}
+
+  <div class="split__media split__media--right">
+    {% include media-block.html class="w-50" src="assets/img/projects/robot-manip.png" caption="..." %}
+  </div>
+</div>
+
+<div class="split">
+  <div class="split__media split__media--left">
+    {% include media-block.html class="w-50" src="assets/img/projects/robot-manip.png" caption="..." %}
+  </div>
+
+  <div class="split__text">
+    <h2>Problem</h2>
+    <p>Describe constraints… By combining bioelectric signals (EMG, EKG, EEG), physiological measurements (e.g., exhaled CO2, pulse), inertial sensing (IMUs), and UWB-derived depth information — augmented with synchronous video-based pose estimation — the proposed system enables a comprehensive, multimodal representation of human state and behavior. This integrated sensing framework supports a wide range of biomedical applications, including fitness and health monitoring, clinical diagnostics, translational research, physics- and physiology-informed machine learning, adaptive therapy and implant regulation, robotic and prosthetic limb control, and even select applications in defense and human-performance systems</p>
   </div>
 </div>
 

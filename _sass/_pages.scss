@@ -31,16 +31,50 @@
     }
 
 //  Split layout for media and text side by side (e.g., for project pages) — use by wrapping content in a div with class="split"
+/* ===== Split layout (text + media) ===== */
+.split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;   /* top-align both columns */
+    margin: 2.5rem 0;
+  }
+  
+  .split > * {
+    min-width: 0;         /* prevents overflow in grid columns */
+  }
+  
+  @media (max-width: 900px) {
     .split {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-        align-items: center;
-        margin: 2.5rem 0;
-      }
-      
-      @media (max-width: 900px) {
-        .split {
-          grid-template-columns: 1fr;
-        }
-      }
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+  }
+  
+  /* Optional: keep text column narrower for readability */
+  .split__text {
+    max-width: 70ch;
+  }
+  
+  /* Media column alignment */
+  .split__media {
+    width: 100%;
+    display: flex;
+  }
+  
+  .split__media--right {
+    justify-content: flex-end;
+  }
+  
+  .split__media--left {
+    justify-content: flex-start;
+  }
+  
+  /* Figures inside split layouts should not add extra vertical spacing */
+  .split figure.media {
+    margin: 0;
+  }
+  
+  .split figure.media figcaption {
+    margin-top: 0.4rem;
+  }
