@@ -30,10 +30,8 @@ By combining bioelectric signals (EMG, EKG, EEG), physiological measurements (e.
 ## System Diagram
 The high level system architecture is as such: A spoke module will consist of an MCU, IMU, UWB, and a specific sensor, i.e. EMG, EKG, EEG, CO2, SpO2, Non-invasive CGM... The spoke module will be named by the sensor it has such as "EMG Spoke". The spoke may also have a BLE unit, µSD unit, USB port etc. in case of UWB communication failure as fallback. The important feature of the spoke architecture is that the specific sensor will be swappable, therefore I propose a multi-layer design; for instance for bioelectric sensors like EMG/EEG/EKG there may be 3 layers, the electrode, the analog front end (AFE) layer (consisting of amplifiers, analog filters, ADC), and the digital layer (IMU, UWB, MCU, Wireless Charging electronics). The AFE layer can be swapped based on whether an EMG/EEG/EKG is used. The data will primarily be sent to the hub module through UWB unless failure. The data sent will be the timestamp, IMU data (6 or 9 axis), distance measurement through time of flight, and spoke-specific sensor. The hub module will consist of an MCU, UWB, Raspberry Pi 5 Compute Module, Video Camera connected to the Pi 5, and perhaps even an AI accelerator (NPU) module for real-time pose estimation. The hub MCU will run RTOS and control all the spoke devices, maintaining sensor fusion through preventing many spokes from interfering while collecting near-simultaneous to simultaneous data from multiple spokes. The MCU will get the data from its own UWB sensor. Then after coordinating and receiving the data, it will send it to the Raspberry Pi 5 computer running Linux. The Pi 5 will also be collecting video data of the person, synched with the data from the spokes; furthermore, through the NPU, the Pi 5 may even perform real-time pose estimation which will allow for kinematic/dynamic models in combination with IMU and UWB distance data. Finally, the Raspberry Pi 5 will send all the data to a self-developed app for displaying. The app should be able to visualize the data clearly, and also store the data received locally as a .csv/.txt file. The app should also be able to see the system spoke modules pairing with the hub, notify the user of any errors, and even send commands like configurations (like limiting the IMU register to send only accelerometer data, change sensitivity of a sensor, start/stop data collection...) back that will reach the hub MCU.
 
-<figure>
-  <img src="{{ '/assets/img/bionexus/system-diagram.png' | relative_url }}"
-       alt="BioNexus System Diagram">
-  <figcaption>
-    <strong>Figure 1.</strong> System diagram of the BioNexus hub-and-spoke architecture.
-  </figcaption>
-</figure>
+{% include media-figure.html
+  class="w-50"
+  src="/Users/kaanborekci/Desktop/kborekci06.github.io/assets/img/projects/bionexus/system-diagram.png"
+  caption="BioNexus System Diagram."
+%}

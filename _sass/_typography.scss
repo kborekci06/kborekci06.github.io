@@ -1,83 +1,50 @@
 /* ===== Typography ===== */
 
 strong, b {
-  font-weight: 600;
-}
+    font-weight: 600;
+  }
+  
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: $font-sans;
+    font-weight: 300;        /* Montserrat Light */
+    line-height: 1.7;
+    letter-spacing: 0.01em;  /* subtle, clean */
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font-sans;
+    font-weight: 400;        /* Regular */
+    text-transform: uppercase;
+    letter-spacing: 0.28em;  /* wide tracking like the reference */
+  }
 
-body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: $font-sans;
-  font-weight: 300;        /* Montserrat Light */
-  line-height: 1.7;
-  letter-spacing: 0.01em;  /* subtle body tracking */
-}
+  /* ===== Explicit heading scale (stable sizes) ===== */
 
+  h1 { font-size: 2.4rem; }
+  h2 { font-size: 1.9rem; }
+  h3 { font-size: 1.4rem; }
+  h4 { font-size: 1.1rem; }
+  h5 { font-size: 0.95rem; }
+  h6 { font-size: 0.85rem; }
 
-/* ===== Heading Base Style ===== */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    margin: 1.6rem 0 0.8rem 0; /* consistent spacing */
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: $font-sans;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;  /* default tracking for content headings */
-  line-height: 1.2;
-  margin: 1.6rem 0 0.8rem 0;
-}
-
-
-/* ===== Explicit Heading Scale (stable sizing) ===== */
-
-h1 { 
-  font-size: 2.4rem;
-  letter-spacing: 0.28em;  /* keep wide tracking for main title */
-}
-
-h2 { 
-  font-size: 1.9rem;
-}
-
-h3 { 
-  font-size: 1.4rem;
-  letter-spacing: 0.14em;  /* slightly tighter */
-}
-
-h4 { 
-  font-size: 1.1rem;
-  letter-spacing: 0.12em;
-}
-
-h5 { 
-  font-size: 0.95rem;
-  letter-spacing: 0.10em;
-}
-
-h6 { 
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-}
-
-/* Allow extremely long words/strings in headings to wrap instead of overflowing */
-h1, h2, h3, h4, h5, h6 {
-  overflow-wrap: anywhere; /* best modern fix */
-  word-break: break-word;  /* fallback */
-}
-
-/* ===== Improve Wrapping Behavior ===== */
-/* Makes long headings wrap more elegantly in modern browsers */
-
-h2, h3 {
-  text-wrap: balance;
-}
-
-
-/* ===== Links ===== */
-
-a {
-  color: var(--text);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
+  /* Slightly reduce aggressive tracking on smaller headings */
+  h3, h4, h5, h6 {
+    letter-spacing: 0.18em;
+  }
+  
+  /* Body links */
+  a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
