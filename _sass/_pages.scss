@@ -1,2 +1,46 @@
-.text-narrow { max-width: 72ch; }
-.text-wide { max-width: none; }
+/* ================================== */
+/* Vertical text density utilities    */
+/* ================================== */
+
+/* Dense text — tighter lines */
+.text-narrow {
+    line-height: 1.4;
+  }
+  
+  /* Standard (inherits body 1.7) */
+  .text-normal {
+    line-height: 1.7;
+  }
+  
+  /* Spacious text — looser lines */
+  .text-wide {
+    line-height: 2.0;
+  }
+
+/* ================================== */
+/* Professional full justification    */
+/* ================================== */
+
+.page-content p,
+.page-content li {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    }
+
+//  Split layout for media and text side by side (e.g., for project pages) — use by wrapping content in a div with class="split"
+    .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+        margin: 2.5rem 0;
+      }
+      
+      @media (max-width: 900px) {
+        .split {
+          grid-template-columns: 1fr;
+        }
+      }
