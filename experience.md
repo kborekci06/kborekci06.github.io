@@ -21,10 +21,8 @@ layout: default
 <h2 class="projects-section-title">Ongoing Projects</h2>
 {% include project-grid.html items=site.data.experience_featured %}
 
-{% if site.data.experience_internships and site.data.experience_internships.size > 0 %}
 <h2 class="projects-section-title">Internships</h2>
 {% include project-grid.html items=site.data.experience_internships %}
-{% endif %}
 
 <h2 class="projects-section-title">Course Projects</h2>
 {% include project-grid.html items=site.data.experience_course %}

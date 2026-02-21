@@ -133,13 +133,7 @@ tech: "Tools/stack in a short phrase"
 </div>
 
 ## Spec Table:
-{% capture spec_rows %}
-<tr><th scope="row">Sampling rate</th><td>100 Hz (IMU), 20 Hz (CO₂)</td></tr>
-<tr><th scope="row">Latency</th><td>~12 ms end-to-end</td></tr>
-<tr><th scope="row">Power</th><td>~2.1 W average (dev setup)</td></tr>
-{% endcapture %}
-
-{% include spec-table.html title="Specs" body=spec_rows %}
+{% include spec-table.html slug="robotic-manipulation" %}
 
 ## Timeline:
 {% include timeline.html slug="robotic-manipulation" %}

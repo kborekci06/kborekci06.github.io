@@ -1,20 +1,18 @@
-# internships:
-#   - title: "Infant Motor Development Research"
-#     url: "/projects/infant-pose-pipeline/"
-#     image: "/assets/img/projects/infant-pose.mov"
-#     blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
-#     tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
+- title: "Infant Motor Development Research"
+  url: "/projects/infant-pose-pipeline/"
+  image: "/assets/img/projects/infant-pose.mov"
+  blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
+  tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
 
-#   - title: "International Institute for Nanotechnology"
-#     url: "/projects/iin-mirkin-lab/"
-#     image: "/assets/img/projects/iin-mirkin.png"
-#     blurb: "Patent-pending embedded device work for pediatric CCHS: first-step data-collection platform toward closed-loop diaphragm pacer regulation."
-#     tags: ["Crystal Engineering", "Nanotechnology"]
+- title: "International Institute for Nanotechnology"
+  url: "/projects/iin-mirkin-lab/"
+  image: "/assets/img/projects/iin-mirkin.png"
+  blurb: "Patent-pending embedded device work for pediatric CCHS: first-step data-collection platform toward closed-loop diaphragm pacer regulation."
+  tags: ["Crystal Engineering", "Nanotechnology"]
 
-#   - title: "Infant Motor Development Research"
-#     url: "/projects/infant-pose-pipeline/"
-#     image: "/assets/img/projects/infant-pose.mov"
-#     blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
-#     tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
+- title: "Infant Motor Development Research"
+  url: "/projects/infant-pose-pipeline/"
+  image: "/assets/img/projects/infant-pose.mov"
+  blurb: "Reproducible evaluation pipeline for 3D pose lifting on retrospective infant videos, including alignment, anatomical metrics, and CUDA acceleration."
+  tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
 
-[]
