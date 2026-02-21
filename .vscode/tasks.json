@@ -1,31 +1,27 @@
-// CMD+SHIFT+B to run the default build task, which will start the Jekyll server and open the browser.
-// http://127.0.0.1:4000 is ther server address for Jekyll
-
-
 {
-    "version": "2.0.0",
-    "tasks": [
+  "version": "2.0.0",
+  "tasks": [
     {
-        "label": "Jekyll Serve",
-        "type": "shell",
-        "command": "export PATH=\"$HOME/.rbenv/bin:$PATH\" && eval \"$(rbenv init - zsh)\" && rbenv local 3.2.4 && bundle exec jekyll serve --livereload --incremental",
-        "isBackground": true,
-        "problemMatcher": []
-        },
-      {
-        "label": "Open Browser",
-        "type": "shell",
-        "command": "sleep 2 && open http://127.0.0.1:4000",
-        "problemMatcher": []
-      },
-      {
-        "label": "Jekyll Dev",
-        "dependsOn": ["Jekyll Serve", "Open Browser"],
-        "dependsOrder": "sequence",
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
+      "label": "Jekyll Serve (Clean)",
+      "type": "shell",
+      "command": "export PATH=\"$HOME/.rbenv/bin:$PATH\" && eval \"$(rbenv init - zsh)\" && rbenv local 3.2.4 && bundle exec jekyll clean && rm -rf .jekyll-cache .sass-cache && bundle exec jekyll serve --livereload --watch --trace",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Open Browser",
+      "type": "shell",
+      "command": "sleep 3 && open http://127.0.0.1:4000",
+      "problemMatcher": []
+    },
+    {
+      "label": "Jekyll Dev",
+      "dependsOn": ["Jekyll Serve (Clean)", "Open Browser"],
+      "dependsOrder": "sequence",
+      "group": {
+        "kind": "build",
+        "isDefault": true
       }
-    ]
-  }
+    }
+  ]
+}
