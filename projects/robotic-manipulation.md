@@ -6,7 +6,12 @@ permalink: /projects/robotic-manipulation/
 
 <!-- Placeholder -->
 
-
+# Smaller figure 50%
+{% include media-figure.html
+  class="w-50"
+  src="/assets/img/projects/robot-manip.png"
+  caption="Smaller plot."
+%}
 
 # 2 Videos Side by Side
 {% include media-2up.html
