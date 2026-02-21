@@ -25,20 +25,44 @@ permalink: /projects/robotic-manipulation/
     <p>Describe constraints… By combining bioelectric signals (EMG, EKG, EEG), physiological measurements (e.g., exhaled CO2, pulse), inertial sensing (IMUs), and UWB-derived depth information — augmented with synchronous video-based pose estimation — the proposed system enables a comprehensive, multimodal representation of human state and behavior. This integrated sensing framework supports a wide range of biomedical applications, including fitness and health monitoring, clinical diagnostics, translational research, physics- and physiology-informed machine learning, adaptive therapy and implant regulation, robotic and prosthetic limb control, and even select applications in defense and human-performance systems</p>
   </div>
 
+  <div class="split__media split__media--right split__media--vcenter">
+    {% include media-block.html class="w-50" src="assets/img/projects/robot-manip.png" caption="Photo" %}
+  </div>
+</div>
+
+<div class="split">
+  <div class="split__media split__media--left split__media--vcenter">
+    {% include media-block.html class="w-50" src="assets/img/projects/robot-manip.png" caption="Photo" %}
+  </div>
+
+  <div class="split__text">
+    <h2>Problem</h2>
+    <div class="text-wide">
+      <p>Describe constraints… By combining bioelectric signals (EMG, EKG, EEG), physiological measurements (e.g., exhaled CO2, pulse), inertial sensing (IMUs), and UWB-derived depth information — augmented with synchronous video-based pose estimation — the proposed system enables a comprehensive, multimodal representation of human state and behavior. This integrated sensing framework supports a wide range of biomedical applications, including fitness and health monitoring, clinical diagnostics, translational research, physics- and physiology-informed machine learning, adaptive therapy and implant regulation, robotic and prosthetic limb control, and even select applications in defense and human-performance systems</p>
+    </div>
+  </div>
+</div>
+
+<div class="split">
+  <div class="split__text">
+    <h2>Timeline</h2>
+    {% include timeline.html slug="robotic-manipulation" %}
+  </div>
+
   <div class="split__media split__media--right">
-    {% include media-block.html class="w-50" src="assets/img/projects/robot-manip.png" caption="..." %}
+    {% include accordion.html slug="robotic-manipulation" %}
   </div>
 </div>
 
 <div class="split">
   <div class="split__media split__media--left">
-    {% include media-block.html class="w-50" src="assets/img/projects/robot-manip.png" caption="..." %}
+    {% include spec-table.html slug="robotic-manipulation" %}
+  </div>
+  <div class="split__text">
+    <h2>Timeline</h2>
+    {% include timeline.html slug="robotic-manipulation" %}
   </div>
 
-  <div class="split__text">
-    <h2>Problem</h2>
-    <p>Describe constraints… By combining bioelectric signals (EMG, EKG, EEG), physiological measurements (e.g., exhaled CO2, pulse), inertial sensing (IMUs), and UWB-derived depth information — augmented with synchronous video-based pose estimation — the proposed system enables a comprehensive, multimodal representation of human state and behavior. This integrated sensing framework supports a wide range of biomedical applications, including fitness and health monitoring, clinical diagnostics, translational research, physics- and physiology-informed machine learning, adaptive therapy and implant regulation, robotic and prosthetic limb control, and even select applications in defense and human-performance systems</p>
-  </div>
 </div>
 
 ### 2 Videos Side by Side (shrink the whole block if desireddddddddddddddddd)
@@ -103,13 +127,7 @@ permalink: /projects/robotic-manipulation/
 </div>
 
 ## Spec Table:
-{% capture spec_rows %}
-<tr><th scope="row">Sampling rate</th><td>100 Hz (IMU), 20 Hz (CO₂)</td></tr>
-<tr><th scope="row">Latency</th><td>~12 ms end-to-end</td></tr>
-<tr><th scope="row">Power</th><td>~2.1 W average (dev setup)</td></tr>
-{% endcapture %}
-
-{% include spec-table.html title="Specs" body=spec_rows %}
+{% include spec-table.html slug="robotic-manipulation" %}
 
 ## Timeline:
 {% include timeline.html slug="robotic-manipulation" %}
