@@ -86,7 +86,7 @@ permalink: /projects/robotic-manipulation/
 ## Accordion:
 {% include accordion.html slug="robotic-manipulation" %}
 
-## Tag Row:
+#### Tag Row:
 {% include tag-row.html slug="robotic-manipulation" %}
 
 <script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>
