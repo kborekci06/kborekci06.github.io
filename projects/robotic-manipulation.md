@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Robotic Manipulation"
-permalink: /robotic-manipulation/
+permalink: /projects/robotic-manipulation/
 ---
 
 <!-- Placeholder -->
