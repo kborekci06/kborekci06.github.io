@@ -1,18 +1,12 @@
-- title: "BioNexus"
-  url: "/projects/bionexus/"
-  image: "/assets/img/projects/bionexus.jpg"
-  blurb: "A modular, documentation-first medical embedded systems build with weekly milestones, verification, and open hardware/firmware releases."
-  tags: ["Embedded Systems", "MedTech"]
-
 - title: "Digital Diaphragm Platform"
   url: "/projects/diaphragm-control/"
-  image: "/assets/img/projects/diaphragm-control.png"
+  image: "/assets/img/projects/diaphragm-control/diaphragm-control.png"
   blurb: "Patent-pending embedded device work for pediatric CCHS: first-step data-collection platform toward closed-loop diaphragm pacer regulation."
   tags: ["Embedded Systems", "Clinical", "PCB"]
 
 - title: "Infant Motor Development Research"
   url: "/projects/infant-pose-pipeline/"
-  image: "/assets/img/projects/infant-pose.mp4"
-  poster: "/assets/img/projects/infant-pose.png"
-  blurb: "Reproducible evaluation pipeline..."
-  tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
+  image: "/assets/img/projects/infant-pose-pipeline/infant-pose.mp4"
+  poster: "/assets/img/projects/infant-pose-pipeline/infant-pose.png"
+  blurb: "Infant biomechanics analysis through video based pose estimation for early diagnosis of pathological motor development."
+  tags: ["Computer Vision", "Machine Learning", "Biomechanics", "Signal Processing"]

@@ -1,18 +1,24 @@
 - title: "Infant Motor Development Research"
   url: "/projects/infant-pose-pipeline/"
-  image: "/assets/img/projects/infant-pose.mp4"
-  poster: "/assets/img/projects/infant-pose.png"
-  blurb: "Reproducible evaluation pipeline..."
-  tags: ["Machine Learning", "Biomechanics", "Signal Processing"]
+  image: "/assets/img/projects/infant-pose-pipeline/infant-pose.mp4"
+  poster: "/assets/img/projects/infant-pose-pipeline/infant-pose.png"
+  blurb: "Infant biomechanics analysis through video based pose estimation for early diagnosis of pathological motor development."
+  tags: ["Computer Vision", "Machine Learning", "Biomechanics", "Signal Processing"]
+
+- title: "Digital Diaphragm Platform"
+  url: "/projects/diaphragm-control/"
+  image: "/assets/img/projects/diaphragm-control/diaphragm-control.png"
+  blurb: "Patent-pending embedded device work for pediatric CCHS: first-step data-collection platform toward closed-loop diaphragm pacer regulation."
+  tags: ["Embedded Systems", "Clinical", "PCB"]
 
 - title: "International Institute for Nanotechnology"
-  url: "/projects/iin-mirkin-lab/"
+  url: "/projects/iin-mirkin/"
   image: "/assets/img/projects/iin-mirkin/iin-mirkin.png"
   blurb: "Investigating the use of DNA-functionalized nanoparticles for applications in drug delivery and diagnostics."
   tags: ["Crystal Engineering", "Nanotechnology"]
 
 - title: "Innovation and New Ventures Office at Northwestern"
-  url: "/projects/invo/"
+  # url: "/projects/invo/"
   image: "/assets/img/projects/invo/invo.png"
   blurb: "Technology assessment and market research for Northwestern's tech transfer office, including due diligence for patent applications and invention disclosures across a range of biomedical fields."
   tags: ["Tech Transfer", "Market Research", "Intellectual Property"]

@@ -1,21 +1,24 @@
 - title: "Evolutionary Computation: NEAT Approach to EMG Classification"
-  url: "/projects/neat-vs-mlp/"
+  # url: "/projects/neat-vs-mlp/"
+  url: "https://github.com/kborekci06/Evolutionary-EMG-Classification/tree/main"
   image: "/assets/img/projects/neat-mlp.gif"
   blurb: "Compared evolved sparse topologies against dense baselines for classification, focusing on fitness dynamics and generalization."
-  tags: ["Evolutionary Computation", "Machine Learning"]
+  tags: ["Evolutionary Computation", "Machine Learning", "EMG Signal Processing"]
 
 - title: "Robot Controller Design and Trajectory Planning"
-  url: "/projects/robotic-manipulation/"
+  # url: "/projects/robotic-manipulation/"
+  url: "https://github.com/kborekci06/Robotic-Manipulation-Final-Project"
   image: "/assets/img/projects/robot-manip.mp4"
   poster: "/assets/img/projects/robot-manip.png"
   blurb: "Manipulation project covering kinematics/dynamics, planning, and closed-loop control with clear evaluation metrics."
-  tags: ["Robotics", "Control"]
+  tags: ["Robot Motion", "Control", "Trajectory Planning"]
 
 - title: "Electronic System Design: Live Video Streaming"
-  url: "/projects/live-video-streaming/"
+  # url: "/projects/live-video-streaming/"
+  url: "https://github.com/kborekci06/EE326-Firmware"
   image: "/assets/img/projects/video-stream.png"
   blurb: "Embedded system project emphasizing performance constraints, reliability, and system-level debugging."
-  tags: ["Embedded Systems", "PCB"]
+  tags: ["Embedded Systems", "PCB", "Firmware"]
 
 - title: "Analysis of Mevacor (Lovastatin) Clinical Development"
   url: "/projects/lovastatin/"
