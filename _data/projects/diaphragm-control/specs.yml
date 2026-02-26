@@ -1,0 +1,8 @@
+title: "Specs"
+rows:
+  - label: "Trajectory"
+    value: "Screw_Quintic (examples)"
+  - label: "Controller"
+    value: "PD + computed torque + joint damping"
+  - label: "Torque limits"
+    value: "None (Ex 1–2); τ_max = 10 Nm (Ex 3)"

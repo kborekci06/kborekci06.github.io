@@ -23,10 +23,10 @@ This experience sparked my passion for medical devices. Working in the Rogers La
 </div>
 
 <!-- Inline PDF embed (works across modern browsers) -->
-<object data="/assets/HYDROCEPHALUS-NATURE-2020.pdf#view=FitH" type="application/pdf" width="100%" height="900">
-  <iframe src="/assets/HYDROCEPHALUS-NATURE-2020.pdf#view=FitH" width="100%" height="900" style="border:0;">
+<object data="/assets/img/projects/hydrocephalus/HYDROCEPHALUS-NATURE-2020.pdf#view=FitH" type="application/pdf" width="100%" height="900">
+  <iframe src="/assets/img/projects/hydrocephalus/HYDROCEPHALUS-NATURE-2020.pdf#view=FitH" width="100%" height="900" style="border:0;">
     <p>Inline PDF viewer unavailable in this browser. 
-       <a href="/assets/HYDROCEPHALUS-NATURE-2020.pdf" target="_blank" rel="noopener">Open PDF in a new tab</a>.
+       <a href="/assets/img/projects/hydrocephalus/HYDROCEPHALUS-NATURE-2020.pdf" target="_blank" rel="noopener">Open PDF in a new tab</a>.
     </p>
   </iframe>
 </object>
