@@ -6,7 +6,7 @@
 
 - title: "Infant Motor Development Research"
   url: "/projects/infant-pose-pipeline/"
-  image: "/assets/img/projects/infant-pose.mp4"
-  poster: "/assets/img/projects/infant-pose.png"
+  image: "/assets/img/projects/infant-pose-pipeline/infant-pose.mp4"
+  poster: "/assets/img/projects/infant-pose-pipeline/infant-pose.png"
   blurb: "Infant biomechanics analysis through video based pose estimation for early diagnosis of pathological motor development."
   tags: ["Computer Vision", "Machine Learning", "Biomechanics", "Signal Processing"]

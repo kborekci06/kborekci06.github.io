@@ -1,0 +1,8 @@
+title: "Deep technical notes"
+items:
+  - title: "Computed torque control (details)"
+    body: "<p>PD + inverse dynamics compensation with joint damping; shows the effect of Kd on damping ratio.</p>"
+    open: false
+  - title: "Trajectory generation (details)"
+    body: "<p>Compared screw vs Cartesian trajectories; used quintic scaling for smooth velocity/acceleration.</p>"
+    open: false
