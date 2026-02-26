@@ -1,6 +1,7 @@
 ---
+layout: page
 title: Experience
-layout: default
+permalink: /projects/
 ---
 <!-- # Add/edit projects here. The page auto-renders the grid.
 # For each project:
