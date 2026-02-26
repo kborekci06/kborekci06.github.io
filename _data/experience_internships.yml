@@ -10,27 +10,24 @@
   image: "/assets/img/projects/iin-mirkin/iin-mirkin.png"
   blurb: "Investigating the use of DNA-functionalized nanoparticles for applications in drug delivery and diagnostics."
   tags: ["Crystal Engineering", "Nanotechnology"]
-  # fit: contain
-  # pad: 25
-  # bg: "#ffffff"
 
 - title: "Innovation and New Ventures Office at Northwestern"
   url: "/projects/invo/"
-  image: "/assets/img/projects/invo.png"
+  image: "/assets/img/projects/invo/invo.png"
   blurb: "Technology assessment and market research for Northwestern's tech transfer office, including due diligence for patent applications and invention disclosures across a range of biomedical fields."
   tags: ["Tech Transfer", "Market Research", "Intellectual Property"]
 
 - title: "Skin Flap Viability | John Rogers Lab 2020"
   url: "/projects/skin-flap/"
-  image: "/assets/img/projects/skin-flap.png"
-  blurb: "Development of a wireless, battery-free, flexible electronic system for continuous monitoring of skin flap viability in post-operative care."
+  image: "/assets/img/projects/skin-flap/skin-flap.png"
+  blurb: "Development of a medical device system for continuous monitoring of skin flap viability in post-operative care."
   tags: ["Wearable Electronics", "Biomedical Devices", "Surgical Monitoring"]
 
 - title: "Hydrocephalus Shunt Flow Monitoring | John Rogers Lab 2019"
-  url: "/projects/bme/"
-  image: "/assets/img/projects/bme.png"
-  blurb: "Undergraduate research assistantship in the lab of Dr. Bradley Evanoff, investigating the relationship between occupational exposures and neurological disease risk."
-  tags: ["Epidemiology", "Neurology", "Public Health"] 
+  url: "/projects/hydrocephalus/"
+  image: "/assets/img/projects/hydrocephalus/hydrocephalus.png"
+  blurb: "Development of a wireless, non-invasive, flexible electronic system for continuous monitoring of cerebrospinal fluid flow in hydrocephalus shunts."
+  tags: ["Wearable Electronics", "Biomedical Devices", "Neurological Monitoring"] 
 
 
 
