@@ -22,7 +22,7 @@
 
 - title: "Skin Flap Viability | John Rogers Lab 2020"
   url: "/projects/skin-flap/"
-  image: "/assets/img/projects/skin-flap.png"
+  image: "/assets/img/projects/skin-flap/skin-flap.png"
   blurb: "Development of a wireless, battery-free, flexible electronic system for continuous monitoring of skin flap viability in post-operative care."
   tags: ["Wearable Electronics", "Biomedical Devices", "Surgical Monitoring"]
 
