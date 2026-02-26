@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Experience
+# title: Experience
 permalink: /projects/
 ---
 <!-- # Add/edit projects here. The page auto-renders the grid.
