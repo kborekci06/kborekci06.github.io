@@ -119,10 +119,7 @@ tech: "Tools/stack in a short phrase"
 %}
 
 ## Clean links section:
-{% assign links = "" | split: "" %}
-{% assign links = links | push: {"label":"GitHub Repo","url":"https://github.com/..."} %}
-{% assign links = links | push: {"label":"Report","url":"/assets/pdf/..."} %}
-{% include section-links.html items=links %}
+{% include link-list.html slug="robotic-manipulation" %}
 
 ## Text formatting:
 ### Narrow:
@@ -136,28 +133,16 @@ tech: "Tools/stack in a short phrase"
 </div>
 
 ## Spec Table:
-{% assign rows = "" | split: "" %}
-{% assign rows = rows | push: {"label":"Sampling rate","value":"100 Hz (IMU), 20 Hz (CO₂)"} %}
-{% assign rows = rows | push: {"label":"Latency","value":"~12 ms end-to-end"} %}
-{% assign rows = rows | push: {"label":"Power","value":"~2.1 W average (dev setup)"} %}
-{% include spec-table.html title="Specs" rows=rows %}
+{% include spec-table.html slug="robotic-manipulation" %}
 
 ## Timeline:
-{% assign t = "" | split: "" %}
-{% assign t = t | push: {"when":"Week 1","what":"Architecture + requirements","detail":"Defined interfaces, success criteria, test plan."} %}
-{% assign t = t | push: {"when":"Week 2","what":"Firmware bring-up","detail":"I2C/SPI/UART drivers + logging skeleton."} %}
-{% assign t = t | push: {"when":"Week 3","what":"Validation","detail":"End-to-end test with metrics + plots."} %}
-{% include timeline.html title="Milestones" items=t %}
+{% include timeline.html slug="robotic-manipulation" %}
 
 ## Accordion:
-{% assign acc = "" | split: "" %}
-{% assign acc = acc | push: {"title":"Computed torque control (details)","body":"<p>Explain inverse dynamics + PD error shaping here.</p>"} %}
-{% assign acc = acc | push: {"title":"Trajectory generation (details)","body":"<p>Screw vs Cartesian, cubic vs quintic…</p>"} %}
-{% include accordion.html items=acc %}
+{% include accordion.html slug="robotic-manipulation" %}
 
 ## Tag Row:
-{% assign mytags = "Embedded Systems, Robotics, Control, Testing" | split: ", " %}
-{% include tag-row.html tags=mytags %}
+{% include tag-row.html slug="robotic-manipulation" %}
 
 ## Must add the following to the bottom of the page for autoplay of videos in page:
 <script src="{{ '/assets/js/viewport-autoplay.js' | relative_url }}"></script>

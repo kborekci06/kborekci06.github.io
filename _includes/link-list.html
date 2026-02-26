@@ -1,0 +1,20 @@
+{% assign proj = site.data.projects[include.slug] %}
+{% assign d = proj.links %}
+
+{% if d and d.items %}
+{% if d.title %}<h3>{{ d.title }}</h3>{% endif %}
+<ul class="link-list">
+  {% for item in d.items %}
+    {% assign u = item.url %}
+    <li>
+      {% if u contains 'http://' or u contains 'https://' %}
+        <a href="{{ u }}">{{ item.label }}</a>
+      {% else %}
+        <a href="{{ u | relative_url }}">{{ item.label }}</a>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+<!-- links: missing data for slug={{ include.slug }} -->
+{% endif %}

@@ -1,6 +1,12 @@
-{% assign tags = include.tags %}
+{% assign proj = site.data.projects[include.slug] %}
+{% assign d = proj.tags %}
+
+{% if d and d.tags %}
 <div class="tag-row">
-  {% for t in tags %}
+  {% for t in d.tags %}
     <span class="tag-pill">{{ t }}</span>
   {% endfor %}
 </div>
+{% else %}
+<!-- tag-row: missing data for slug={{ include.slug }} -->
+{% endif %}

@@ -1,4 +1,5 @@
-<div class="media-grid media-grid--3 {{ include.class | default: '' }}">
+<div class="media-block {{ include.class | default: '' }}">
+  <div class="media-grid media-grid--3">
     <div>
       {% include media-block.html
          src=include.a_src
@@ -6,7 +7,7 @@
          poster=include.a_poster
          caption=include.a_caption %}
     </div>
-  
+
     <div>
       {% include media-block.html
          src=include.b_src
@@ -14,7 +15,7 @@
          poster=include.b_poster
          caption=include.b_caption %}
     </div>
-  
+
     <div>
       {% include media-block.html
          src=include.c_src
@@ -23,3 +24,4 @@
          caption=include.c_caption %}
     </div>
   </div>
+</div>
