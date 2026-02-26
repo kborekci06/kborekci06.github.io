@@ -10,9 +10,9 @@
   image: "/assets/img/projects/iin-mirkin/iin-mirkin.png"
   blurb: "Investigating the use of DNA-functionalized nanoparticles for applications in drug delivery and diagnostics."
   tags: ["Crystal Engineering", "Nanotechnology"]
-  fit: contain
-  pad: 15
-  bg: "#ffffff"
+  # fit: contain
+  # pad: 15
+  # bg: "#ffffff"
 
 - title: "Innovation and New Ventures Office at Northwestern"
   url: "/projects/invo/"
