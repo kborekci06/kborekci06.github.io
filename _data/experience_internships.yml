@@ -23,14 +23,14 @@
 - title: "Skin Flap Viability | John Rogers Lab 2020"
   url: "/projects/skin-flap/"
   image: "/assets/img/projects/skin-flap/skin-flap.png"
-  blurb: "Development of a wireless, battery-free, flexible electronic system for continuous monitoring of skin flap viability in post-operative care."
+  blurb: "Development of a medical device system for continuous monitoring of skin flap viability in post-operative care."
   tags: ["Wearable Electronics", "Biomedical Devices", "Surgical Monitoring"]
 
 - title: "Hydrocephalus Shunt Flow Monitoring | John Rogers Lab 2019"
-  url: "/projects/bme/"
-  image: "/assets/img/projects/bme.png"
-  blurb: "Undergraduate research assistantship in the lab of Dr. Bradley Evanoff, investigating the relationship between occupational exposures and neurological disease risk."
-  tags: ["Epidemiology", "Neurology", "Public Health"] 
+  url: "/projects/hydrocephalus/"
+  image: "/assets/img/projects/hydrocephalus/hydrocephalus.png"
+  blurb: "Development of a wireless, non-invasive, flexible electronic system for continuous monitoring of cerebrospinal fluid flow in hydrocephalus shunts."
+  tags: ["Wearable Electronics", "Biomedical Devices", "Neurological Monitoring"] 
 
 
 
