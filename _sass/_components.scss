@@ -222,6 +222,20 @@
       grid-template-columns: 1fr;
     }
   }
+
+  /* Prevent padding from making tiles overflow */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Grid overflow safety */
+  .proj-card,
+  .proj-link,
+  .proj-media {
+    min-width: 0;
+  }
   
   .proj-card {
     margin: 0;
@@ -231,6 +245,7 @@
     display: block;
   }
   
+  /* Base tile container */
   .proj-media {
     position: relative;
     width: 100%;
@@ -238,70 +253,38 @@
     overflow: hidden;
     background: #ffffff;
     border: 1px solid var(--border);
+    border-radius: 12px;
   }
-  
-  .proj-img {
+
+  /* Default: photos/videos fill the tile */
+  .proj-media img,
+  .proj-media video {
     width: 100%;
     height: 100%;
+    display: block;
     object-fit: cover;
+    object-position: center;
     transform: scale(1.01);
     transition: transform 240ms ease;
   }
-  
-  /* For autoplay previews (Option 2) */
-  .proj-video {
-    display: block;
-    pointer-events: none; /* keep the <a> clickable across browsers */
+
+  /* Contain mode: show full graphic with padding (no cropping) */
+  .proj-media--contain {
+    padding: var(--tile-pad, 16px);
+    background: #fff;
   }
-  
-  .proj-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.92);
-    opacity: 0;
-    transition: opacity 200ms ease;
+
+  .proj-media--contain img,
+  .proj-media--contain video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: none;            /* don't zoom contain graphics */
   }
-  
-  .proj-overlay__inner {
-    position: absolute;
-    inset: 0;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-  
-  .proj-desc {
-    margin: 0;
-    color: var(--text);
-    font-size: 0.95rem;
-    line-height: 1.35;
-  }
-  
-  .proj-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-  }
-  
-  .proj-tag {
-    display: inline-flex;
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: rgba(255,255,255,0.75);
-    color: var(--text);
-    font-size: 0.82rem;
-    font-weight: 700;
-  }
-  
-  .proj-media:hover .proj-overlay,
-  .proj-link:focus-visible .proj-overlay {
-    opacity: 1;
-  }
-  
-  .proj-media:hover .proj-img {
+
+  /* Hover zoom only for cover tiles */
+  .proj-media:not(.proj-media--contain):hover img,
+  .proj-media:not(.proj-media--contain):hover video {
     transform: scale(1.06);
   }
   

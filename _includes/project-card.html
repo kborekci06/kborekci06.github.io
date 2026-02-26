@@ -1,38 +1,63 @@
 <article class="proj-card">
-    <a class="proj-link" href="{{ include.p.url }}" aria-label="{{ include.p.title }}">
-      <div class="proj-media">
-        {% assign src = include.p.image | downcase %}
+  <a class="proj-link" href="{{ include.p.url }}" aria-label="{{ include.p.title }}">
 
-        {% if src contains '.mp4' or src contains '.webm' or src contains '.mov' %}
+    {% comment %}
+    Build dynamic inline style only if needed
+    {% endcomment %}
+    {% assign style_bits = "" %}
+    {% if include.p.bg %}
+      {% assign style_bits = style_bits | append: "background: " | append: include.p.bg | append: ";" %}
+    {% endif %}
+    {% if include.p.pad %}
+      {% assign style_bits = style_bits | append: "--tile-pad: " | append: include.p.pad | append: "px;" %}
+    {% endif %}
+
+    <div class="proj-media {% if include.p.fit %}proj-media--{{ include.p.fit }}{% endif %}"
+         {% if style_bits != "" %}style="{{ style_bits }}"{% endif %}>
+
+      {% assign src = include.p.image | downcase %}
+
+      {% if src contains '.mp4' or src contains '.webm' or src contains '.mov' %}
         <video
-            class="proj-img proj-video"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            {% if include.p.poster %}poster="{{ include.p.poster }}"{% endif %}
-            aria-label="{{ include.p.title }}"
+          class="proj-img proj-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          {% if include.p.poster %}poster="{{ include.p.poster }}"{% endif %}
+          aria-label="{{ include.p.title }}"
         >
-            <source src="{{ include.p.image }}" />
+          <source src="{{ include.p.image }}" type="video/mp4" />
         </video>
-        {% else %}
-        <img class="proj-img" src="{{ include.p.image }}" alt="{{ include.p.title }}" loading="lazy" />
-        {% endif %}
-        <div class="proj-overlay">
-          <div class="proj-overlay__inner">
-            <p class="proj-desc">{{ include.p.blurb }}</p>
-            {% if include.p.tags %}
+      {% else %}
+        <img
+          class="proj-img"
+          src="{{ include.p.image }}"
+          alt="{{ include.p.title }}"
+          loading="lazy"
+        />
+      {% endif %}
+
+      <div class="proj-overlay">
+        <div class="proj-overlay__inner">
+          <p class="proj-desc">{{ include.p.blurb }}</p>
+
+          {% if include.p.tags %}
             <div class="proj-tags">
               {% for t in include.p.tags %}
                 <span class="proj-tag">{{ t }}</span>
               {% endfor %}
             </div>
-            {% endif %}
-          </div>
+          {% endif %}
+
         </div>
       </div>
-    </a>
-  
-    <h3 class="proj-title"><a href="{{ include.p.url }}">{{ include.p.title }}</a></h3>
-  </article>
+
+    </div>
+  </a>
+
+  <h3 class="proj-title">
+    <a href="{{ include.p.url }}">{{ include.p.title }}</a>
+  </h3>
+</article>
