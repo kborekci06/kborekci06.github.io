@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Mevacor (Lovastatin) Drug and New Drug Application Analysis
-permalink: /projects/lovastatin
+permalink: /projects/lovastatin/
 ---
 
 {% include tag-row.html slug="lovastatin" %}
