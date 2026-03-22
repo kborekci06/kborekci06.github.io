@@ -1,0 +1,13 @@
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('video.proj-video').forEach(video => {
+      video.muted = true;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          document.addEventListener('click', () => video.play(), { once: true });
+        });
+      }
+    });
+  });
+</script>
