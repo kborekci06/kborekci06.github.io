@@ -20,9 +20,9 @@ permalink: /experience/
   My engineering work focuses on medical devices, robotics, and machine learning for healthcare.
 </p>
 
-<p class="projects-lede">
+<!-- <p class="projects-lede">
   This page and its contents are currently being refined. In the meantime, I am sharing final deliverables from each experience while full project case studies are in development.
-</p>
+</p> -->
 
 <!-- <h2 class="projects-section-title">Ongoing Projects</h2>
 {% include project-grid.html items=site.data.experience_featured %} -->

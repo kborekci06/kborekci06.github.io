@@ -19,13 +19,29 @@
       </video>
     {% else %}
       <a class="proj-link" href="{{ include.p.url }}" aria-label="{{ include.p.title }}">
-        <img class="proj-img" src="{{ include.p.image }}" alt="{{ include.p.title }}" loading="lazy" />
+        <img
+          class="proj-img"
+          src="{{ include.p.image }}"
+          alt="{{ include.p.title }}"
+          loading="lazy"
+          {% if include.p.poster %}data-poster="{{ include.p.poster }}"{% endif %}
+        />
       </a>
     {% endif %}
 
     <div class="proj-overlay" onclick="window.location='{{ include.p.url }}'" style="cursor: pointer;">
-      ...overlay content...
+      <div class="proj-overlay__inner">
+        <p class="proj-desc">{{ include.p.blurb }}</p>
+        {% if include.p.tags %}
+          <div class="proj-tags">
+            {% for t in include.p.tags %}
+              <span class="proj-tag">{{ t }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
     </div>
+
   </div>
 
   <h3 class="proj-title">

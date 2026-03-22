@@ -12,3 +12,7 @@ header_pages:
   # - internships.md
   - resume.md
   - contact.md
+
+webrick:
+  mime_types:
+    mp4: video/mp4

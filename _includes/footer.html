@@ -1,13 +1,25 @@
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('video.proj-video').forEach(video => {
-      video.muted = true;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          document.addEventListener('click', () => video.play(), { once: true });
-        });
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  if (!isSafari) {
+    document.querySelectorAll('.proj-media img.proj-img').forEach(img => {
+      const srcLower = img.src.toLowerCase();
+      if (srcLower.endsWith('.mp4') || srcLower.endsWith('.webm') || srcLower.endsWith('.mov')) {
+        const anchor = img.parentElement;
+        const href = anchor.href;
+        const video = document.createElement('video');
+        video.className = img.className + ' proj-video';
+        video.src = img.src;
+        video.autoplay = true;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.setAttribute('preload', 'auto');
+        video.style.cursor = 'pointer';
+        video.onclick = () => window.location = href;
+        if (img.dataset.poster) video.poster = img.dataset.poster;
+        anchor.parentElement.replaceChild(video, anchor);
+        video.play().catch(() => {});
       }
     });
-  });
+  }
 </script>
