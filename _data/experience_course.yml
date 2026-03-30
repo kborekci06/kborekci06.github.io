@@ -1,3 +1,10 @@
+- title: "Computational Fluid Dynamics of Lung Aerosol Deposition"
+  url: "/projects/cfd-lung/"
+  image: "/assets/img/projects/cfd-lung/cfd-lung.mp4"
+  poster: "/assets/img/projects/cfd-lung/cfd-lung.png"
+  blurb: "Ansys/Fluent CFD simulations of aerosol particle deposition in the lungs, analyzing the impact of particle size on deposition fraction."
+  tags: ["Ansys/Fluent", "CFD", "Aerosol Transport", "Lung Physiology"]
+
 - title: "Evolutionary Computation: NEAT Approach to EMG Classification"
   # url: "/projects/neat-vs-mlp/"
   url: "https://github.com/kborekci06/Evolutionary-EMG-Classification/tree/main"

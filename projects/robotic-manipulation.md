@@ -17,6 +17,20 @@ permalink: /projects/robotic-manipulation/
   caption="Smaller plot."
 %}
 
+##
+<div class="split">
+  <div class="split__text">
+    <p>PARAGRAPHS</p>
+  </div>
+  <div class="split__media split__media--right split__media--vcenter">
+    <div class="media-block {{ include.class | default: '' }}">
+      {% include media-block.html class="w-75" src="assets/img/projects/diaphragm-control/cchs10.png" caption="<strong>Image ??:</strong>  CO₂ Gas Capture Subsystem" %}
+      <br><br>
+      {% include media-block.html class="w-75" src="assets/img/projects/diaphragm-control/cchs11.png" caption="<strong>Image ??:</strong> Full System on Healthy Subject <br> <i>Teammate Akash wearing the system for final tests prior to IRB approved data collection</i>" %}
+    </div>
+  </div>
+</div>
+
 ### Split Layout Example
 
 <div class="split">
@@ -80,6 +94,7 @@ permalink: /projects/robotic-manipulation/
 {% include media-2up.html
   class="w-100"
   left_src="/assets/img/projects/robot-manip.png"
+  left_poster="/assets/img/projects/robot-manip.png"
   left_caption="Architecture"
   right_src="/assets/img/projects/robot-manip.mp4"
   right_poster="/assets/img/projects/robot-manip.png"
