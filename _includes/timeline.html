@@ -2,8 +2,8 @@
 {% assign d = proj.timeline %}
 
 {% if d and d.items %}
-<div class="timeline">
-  {% if d.title %}<div class="timeline__title">{{ d.title }}</div>{% endif %}
+<div class="timeline" style="font-size: 0.8rem;">
+  {% if d.title %}<div class="timeline__title" style="font-size: 0.9rem;">{{ d.title }}</div>{% endif %}
   <ol class="timeline__list">
     {% for item in d.items %}
       <li class="timeline__item">
@@ -11,7 +11,7 @@
         <div class="timeline__content">
           <div class="timeline__when">{{ item.when }}</div>
           <div class="timeline__what">{{ item.what }}</div>
-          {% if item.detail %}<div class="timeline__detail">{{ item.detail }}</div>{% endif %}
+          {% if item.detail %}<div class="timeline__detail" style="font-size: 0.7rem;">{{ item.detail }}</div>{% endif %}
         </div>
       </li>
     {% endfor %}

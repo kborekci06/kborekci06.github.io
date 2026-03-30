@@ -6,18 +6,60 @@ permalink: /projects/diaphragm-control/
 ### Building the foundation for closed-loop diaphragm pacing through a portable IMU-CO₂ platform for pediatric CCHS
 {% include tag-row.html slug="diaphragm-control" %}
 
+
+
 <div class="split">
   <div class="split__text">
-    <h3>Project Overview</h3>
-    <p>I led a four-person engineering team as both <strong>technical and project lead</strong>, owning the hardware, firmware, post-processing and analysis software, and enclosure CAD while directing critical decisions and team prioritization. Our system simultaneously captures motion data through a 6-axis IMU and expired CO₂ through an NDIR gas sensor, and is intended as the foundational step toward achieving a closed-loop diaphragm pacing system, a <strong>"Digital Phrenic Nerve"</strong>, for patients with the rare autonomic nervous system disorder Congenital Central Hypoventilation Syndrome (CCHS). While my responsibilities spanned primarily the full hardware and software stack, my teammates led the data collection protocol, clinical IRB and provisional patent applications, CPAP mask side-sampling and moisture trap design, and conference submissions.
-    <br><br>
-    CCHS patients who qualify for diaphragm pacing currently rely on the only FDA-approved pacers on the market, which were developed for spinal cord injury patients and assume a sedentary user. Children with CCHS, by contrast, are able to run, jump, and play like any other child; but prior to each physical activity, their pacer settings must be manually adjusted by caregivers based on physician recommendations and clinical experience. Incorrect settings place these children at risk for hypoxia (low-O₂), hypercapnia (high-CO₂), and other severe complications, preventing them from leading normal, high-activity lives.</p>
+  <div>
+    <strong><h4>Table of contents</h4></strong>
+    <ul>
+      <li><a href="#project-overview">Project Overview</a></li>
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#constraints">Constraints</a></li>
+      <li><a href="#approach-and-methodology">Approach and Methodology</a>
+        <ul>
+          <li><a href="#system-architecture-and-component-selection">System Architecture and Component Selection</a></li>
+          <li><a href="#firmware-architecture">Firmware Architecture</a></li>
+          <li><a href="#patient-interface-and-enclosure">Patient Interface and Enclosure</a></li>
+          <li><a href="#data-pipeline-and-output">Data Pipeline and Output</a></li>
+        </ul>
+      </li>
+      <li><a href="#hardware-subsystem-iterations-and-prototyping">Hardware Subsystem Iterations and Prototyping</a>
+        <ul>
+          <li><a href="#v1---circuit-playground-express-proof-of-concept">v1 - Circuit Playground Express: Proof of Concept</a></li>
+          <li><a href="#v2---component-selection-and-breadboard-firmware-development">v2 - Component Selection and Breadboard Firmware Development</a></li>
+          <li><a href="#v3---solder-board-interim-save">v3 - Solder Board Interim Save</a></li>
+          <li><a href="#v4---through-hole-pcb-current-device-in-use">v4 - Through-Hole PCB: Current Device in Use</a></li>
+        </ul>
+      </li>
+      <li><a href="#current-status">Current Status</a>
+        <ul>
+          <li><a href="#formal-irb-approved-data-collection-for-prospective-publication">Formal, IRB Approved Data Collection for Prospective Publication</a></li>
+        </ul>
+      </li>
+      <li><a href="#biomedical-engineering-society-2025-san-diego-ca-poster-presentation">BMES 2025 Poster Presentation</a></li>
+    </ul>
+  </div>
   </div>
   <div class="split__media split__media--right split__media--vcenter">
     {% include media-block.html class="w-75" src="assets/img/projects/diaphragm-control/cchs1.png" caption="<strong>Image 1:</strong> Front and Back View of The Through-Hole PCB: <br> <i>Developed after the failed high-fidelity PCB iteration developed by one of my teammates, to keep data collection and IRB + Patent application processes continuing</i>" %}
   </div>
 </div>
-  My team's device is designed to collect synchronized respiratory and motion data from healthy populations, enabling downstream predictive model development. The resulting model would serve as a control signal for a closed-loop diaphragm pacer capable of operating independently of constant caregiver intervention.
+
+<div class="split">
+  <div class="split__text">
+    <h3>Project Overview</h3>
+    <p>I led a four-person engineering team as both <strong>technical and project lead</strong>, owning the hardware, firmware, post-processing and analysis software, and enclosure CAD while directing critical decisions and team prioritization. Our system simultaneously captures motion data through a 6-axis IMU and expired CO₂ through an NDIR gas sensor, and is intended as the foundational step toward achieving a closed-loop diaphragm pacing system, a <strong>"Digital Phrenic Nerve"</strong>, for patients with the rare autonomic nervous system disorder Congenital Central Hypoventilation Syndrome (CCHS). While my responsibilities spanned primarily the full hardware and software stack, my teammates led the data collection protocol, clinical IRB and provisional patent applications, CPAP mask side-sampling and moisture trap design, and conference submissions.
+    <br><br>
+    CCHS patients who qualify for diaphragm pacing currently rely on the only FDA-approved pacers on the market, which were developed for spinal cord injury patients and assume a sedentary user. Children with CCHS, by contrast, are able to run, jump, and play like any other child; but prior to each physical activity, their pacer settings must be manually adjusted by caregivers based on physician recommendations and clinical experience. Incorrect settings place these children at risk for hypoxia (low-O₂), hypercapnia (high-CO₂), and other severe complications, preventing them from leading normal, high-activity lives.
+    <br><br>
+    My team's device is designed to collect synchronized respiratory and motion data from healthy populations, enabling downstream predictive model development. The resulting model would serve as a control signal for a closed-loop diaphragm pacer capable of operating independently of constant caregiver intervention.
+    </p>
+  </div>
+  <div class="split__media split__media--right split__media--vcenter">
+    {% include timeline.html slug="diaphragm-control" %}
+  </div>
+</div>
 
 
 <div class="split">
@@ -214,12 +256,12 @@ The PCB and components arrived just days before our 2nd Quarter BME capstone fin
   </div>
 </div>
 
-### Current Status: 
+### Current Status:
 #### Formal, IRB Approved Data Collection for Prospective Publication
 The device is now being used in IRB-approved formal data collection on healthy college-age individuals <i>without</i> CCHS. These subjects serve as the baseline population for establishing the motion-to-CO₂ relationship in individuals with normally functioning phrenic nerves and autonomic regulation. The resulting dataset is intended for use by downstream research groups/BME Capstone teams in developing the predictive model that would ultimately serve as the control signal for a closed-loop diaphragm pacer. Our forthcoming publication will focus on the device platform itself, its clinical data collection capabilities, and the roadmap toward closed-loop pacing, rather than on the predictive model, which represents a subsequent phase of the research with a larger population.
 
 <div class="media-block {{ include.class | default: '' }}">
-    {% include media-block.html class="w-75" src="assets/img/projects/diaphragm-control/cchs12.png" caption="<strong>Image 9:</strong> Our team's custom treadmill protocol <br> <i>(Pre-Rest, 2mph, 4mph, 6mph, 8mph, Post-Rest)</i> <br> Respectively: <i>CO₂ Response, Accelerometer, and Gyroscope Subplots</i>"%}
+    {% include media-block.html class="w-100" src="assets/img/projects/diaphragm-control/cchs12.png" caption="<strong>Image 9:</strong> Results from final treadmill run prior to IRB approved data collection <br> <i>Pre-Rest, 2mph, 4mph, 6mph, 8mph, Post-Rest</i> <br> Respectively: <i>CO₂ Response, Accelerometer, and Gyroscope Subplots</i>"%}
 </div>
 
 ### Biomedical Engineering Society 2025 (San Diego, CA) Poster Presentation
