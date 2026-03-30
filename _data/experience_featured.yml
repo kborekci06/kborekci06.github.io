@@ -11,10 +11,10 @@
   blurb: "Infant biomechanics analysis through video based pose estimation for early diagnosis of pathological motor development."
   tags: ["Computer Vision", "Machine Learning", "Biomechanics", "Signal Processing"]
 
-- title: "Biomedical Engineering Undergraduate Curriculum Development"
-  url: "/projects/biomedical-curriculum/"
-  image: "/assets/img/projects/biomedical-curriculum/northwestern-bme.png"
-  fit: contain
-  pad: 24  
-  blurb: "Leading development of the undergraduate biomedical curriculum at Northwestern University upon departmental request."
-  tags: ["Education", "Curriculum Development", "Biomedical Engineering"]
+# - title: "Biomedical Engineering Undergraduate Curriculum Development"
+#   url: "/projects/biomedical-curriculum/"
+#   image: "/assets/img/projects/biomedical-curriculum/northwestern-bme.png"
+#   fit: contain
+#   pad: 24  
+#   blurb: "Leading development of the undergraduate biomedical curriculum at Northwestern University upon departmental request."
+#   tags: ["Education", "Curriculum Development", "Biomedical Engineering"]
