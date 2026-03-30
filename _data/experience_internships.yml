@@ -11,6 +11,14 @@
   blurb: "Patent-pending embedded device work for pediatric CCHS: first-step data-collection platform toward closed-loop diaphragm pacer regulation."
   tags: ["Embedded Systems", "Clinical", "PCB"]
 
+- title: "Biomedical Engineering Undergraduate Curriculum Development"
+  url: "/projects/biomedical-curriculum/"
+  image: "/assets/img/projects/biomedical-curriculum/northwestern-bme.png"
+  fit: contain
+  pad: 24  
+  blurb: "Leading development of the undergraduate biomedical curriculum at Northwestern University upon departmental request."
+  tags: ["Education", "Curriculum Development", "Biomedical Engineering"]
+
 - title: "International Institute for Nanotechnology"
   url: "/projects/iin-mirkin/"
   image: "/assets/img/projects/iin-mirkin/iin-mirkin.png"
