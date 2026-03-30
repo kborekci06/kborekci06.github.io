@@ -24,7 +24,7 @@
   # url: "/projects/live-video-streaming/"
   url: "https://github.com/kborekci06/EE326-Firmware"
   image: "/assets/img/projects/video-stream.png"
-  blurb: "Embedded system project emphasizing performance constraints, reliability, and system-level debugging."
+  blurb: "Electronic system design project implementing live video streaming with a custom PCB and firmware, demonstrating real-time data transmission."
   tags: ["Embedded Systems", "PCB", "Firmware"]
 
 - title: "Analysis of Mevacor (Lovastatin) Clinical Development"
