@@ -24,6 +24,11 @@
   @include slab-inverse;
 }
 
+// Night: dark in both themes (the hero). Everything else still inverts with the theme.
+.slab--night {
+  @include slab-night;
+}
+
 // Grain: SVG noise at low opacity over every slab, under its content.
 .slab::before {
   content: "";

@@ -1,5 +1,5 @@
 // Site header (_includes/site-header.html): primary nav and theme toggle.
-// Default: a base-slab bar. On Home (body.has-hero) it lies over the inverse hero and scrolls away with it.
+// Default: a base-slab bar. On Home (body.has-hero) it lies over the night hero, dark in both themes like the hero.
 
 .site-header {
   @include slab-base;
@@ -10,7 +10,7 @@
 }
 
 .has-hero .site-header {
-  @include slab-inverse;
+  @include slab-night;
   position: absolute;
   inset: 0 0 auto;
   border-bottom-color: transparent;

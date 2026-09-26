@@ -1,9 +1,9 @@
 {%- comment -%}
-  Home hero: full-viewport inverse slab. One display line (the name, the page's h1), the positioning line, a scroll cue.
+  Home hero: full-viewport night slab (dark in both themes, owner decision 2026-09-26). One display line (the name, the page's h1), the positioning line, a scroll cue.
   The vein field is a canvas painted by assets/js/home.js; without JS the slab keeps its gradient and grain.
   Copy from index.md front matter; name from _config.yml author. Styles: _sass/marble/_hero.scss.
 {%- endcomment -%}
-<section class="hero slab slab--inverse" aria-labelledby="hero-name">
+<section class="hero slab slab--night" aria-labelledby="hero-name">
   <div class="hero__field" aria-hidden="true">
     <canvas class="hero__canvas" data-vein-field></canvas>
   </div>

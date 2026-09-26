@@ -1,5 +1,5 @@
 // Design tokens: the only file allowed to hold raw values (CLAUDE.md §4).
-// Three layers: primitive (--p-*) -> semantic (--color-*, per theme)
+// Three layers: primitive (--p-*) -> semantic (--color-*, per theme; --color-night-*, theme-invariant)
 // -> component (--s-*, --hero-*, --tile-*, --glass-*, --signal-*).
 // Theme switch rewrites the semantic layer only; components read semantic or component tokens, never primitives.
 // Contrast of every pair is measured on rendered pixels in PILOT_REPORT.md §3.
@@ -200,6 +200,24 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   @include theme-dark;
 }
 
+// Night: the hero's ink slab and the header over it stay dark in both themes (owner decision 2026-09-26).
+// Theme-invariant on purpose: defined once on :root, never inside theme-light/theme-dark.
+:root {
+  --color-night-surface: var(--p-ink-950);
+  --color-night-surface-2: var(--p-ink-900);
+  --color-night-text: var(--p-ink-50);
+  --color-night-text-muted: var(--p-ink-200);
+  --color-night-vein: var(--p-ink-700);
+  --color-night-vein-strong: var(--p-ink-400);
+  --color-night-accent: var(--p-lapis-300);
+  --night-grain-opacity: 0.1;
+  --color-night-glass: color-mix(in srgb, var(--p-ink-950) 64%, transparent);
+  --color-night-glass-strong: color-mix(in srgb, var(--p-ink-950) 82%, transparent);
+  --color-night-glass-solid: var(--p-ink-900);
+  --color-night-glass-border: color-mix(in srgb, var(--p-ink-50) 16%, transparent);
+  --color-night-glass-edge: color-mix(in srgb, var(--p-ink-950) 50%, transparent);
+}
+
 // ---- Component layer ----
 // Slab context: every component inside a slab reads --s-*, so one class flips a whole section.
 @mixin slab-base {
@@ -244,6 +262,28 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --glass-border: var(--color-inverse-glass-border);
   --glass-shadow: 0 0 0 var(--vein-width) var(--color-inverse-glass-edge), 0 1rem 2.5rem -1rem color-mix(in srgb, var(--p-ink-950) 55%, transparent);
   --shadow-2: 0 2rem 4rem -1.5rem color-mix(in srgb, var(--p-ink-950) 60%, transparent), 0 0 0 var(--vein-width) color-mix(in srgb, var(--color-inverse-text) 8%, transparent);
+}
+
+// Night context: the hero and the header over it. Same shape as slab-inverse, fed by the theme-invariant night set.
+@mixin slab-night {
+  --s-surface: var(--color-night-surface);
+  --s-surface-2: var(--color-night-surface-2);
+  --s-text: var(--color-night-text);
+  --s-muted: var(--color-night-text-muted);
+  --s-vein: var(--color-night-vein);
+  --s-vein-strong: var(--color-night-vein-strong);
+  --s-accent: var(--color-night-accent);
+  --s-on-accent: var(--color-night-surface);
+  --s-grain-opacity: var(--night-grain-opacity);
+  --s-gradient:
+    radial-gradient(50rem 40rem at 85% 0%, color-mix(in srgb, var(--color-night-accent) 12%, transparent), transparent 60%),
+    radial-gradient(40rem 30rem at 0% 100%, color-mix(in srgb, var(--color-night-text) 5%, transparent), transparent 70%);
+  --glass-surface: var(--color-night-glass);
+  --glass-surface-strong: var(--color-night-glass-strong);
+  --glass-fallback: var(--color-night-glass-solid);
+  --glass-border: var(--color-night-glass-border);
+  --glass-shadow: 0 0 0 var(--vein-width) var(--color-night-glass-edge), 0 1rem 2.5rem -1rem color-mix(in srgb, var(--p-ink-950) 55%, transparent);
+  --shadow-2: 0 2rem 4rem -1.5rem color-mix(in srgb, var(--p-ink-950) 60%, transparent), 0 0 0 var(--vein-width) color-mix(in srgb, var(--color-night-text) 8%, transparent);
 }
 
 
