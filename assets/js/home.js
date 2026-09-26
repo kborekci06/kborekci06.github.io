@@ -1,5 +1,5 @@
 // Home runtime, loaded with defer (index.md front matter: scripts). Motion map: PILOT_REPORT.md §0.3.
-// 1. Vein field: a generated canvas behind the hero name (draw-on at load, slow drift, depth parallax on scroll).
+// 1. Band field: generated honey-onyx bands behind the hero name (draw-on at load, slow flow, depth parallax on scroll).
 // 2. Reveal fallback: IntersectionObserver classes where CSS scroll-driven animations are unsupported.
 // 3. Tile video: hover/focus-to-play on hover devices, in-view autoplay on touch, a play/pause button everywhere.
 // 4. Signal bubble: redraws the Liquid-rendered traces each frame from their data attributes; rest -> active on tile hover/focus.
@@ -32,20 +32,24 @@
     return v < lo ? lo : v > hi ? hi : v;
   }
 
-  // ---- 1. Vein field ----
+  // ---- 1. Band field (honey onyx) ----
+  // Onyx bands, not cracks: each family is a smooth wave with offset copies. One wide ribbon per family is lit from
+  // behind (additive, accent -> glow gradient, three passes for a soft falloff); hairline contours follow its edges.
   var SEED = 1906;
-  var DRAW_MS = 1800;
+  var DRAW_MS = 2200;
+  var STEP = 24; // px between wave samples
   var DEPTH = [
-    { width: 0.5, alpha: 0.4, parallax: 0.12, amp: 2 }, // far
-    { width: 1, alpha: 0.55, parallax: 0.28, amp: 3.5 }, // mid
-    { width: 2.4, alpha: 0.8, parallax: 0.5, amp: 5 } // near
+    { parallax: 0.1, speed: 0.00005 }, // far
+    { parallax: 0.24, speed: 0.00008 }, // mid
+    { parallax: 0.42, speed: 0.00011 } // near
   ];
+  var GLOW = [[1.4, 0.06], [0.8, 0.1], [0.35, 0.18], [0.08, 0.35]]; // ribbon passes: width factor, alpha
 
   function veinField(canvas) {
     var host = canvas.closest(".slab");
     var ctx = canvas.getContext("2d");
     if (!host || !ctx) return;
-    var w = 0, h = 0, dpr = 1, veins = [], col = {}, accentFill = null;
+    var w = 0, h = 0, dpr = 1, fams = [], col = {}, lit = null;
     var start = 0, raf = 0, visible = true;
 
     function readColors() {
@@ -53,38 +57,30 @@
       var get = function (n) { return cs.getPropertyValue(n).trim(); };
       col = { strong: get("--s-text"), mid: get("--s-vein-strong"), far: get("--s-vein"), surface: get("--s-surface"),
         accent: get("--s-accent"), accentTo: get("--hero-vein-accent-to") };
-      accentFill = ctx.createLinearGradient(0, 0, w, h);
-      accentFill.addColorStop(0, col.accent);
-      accentFill.addColorStop(1, col.accentTo);
+      lit = ctx.createLinearGradient(0, h, w, 0);
+      lit.addColorStop(0, col.accent);
+      lit.addColorStop(0.55, col.accentTo);
+      lit.addColorStop(1, col.accent);
     }
 
-    // One vein: a jagged polyline running diagonally, with rare sharp kinks that relax back to the base angle.
-    function makeVein(r, x, y, base, len, depth, accent, list) {
-      var pts = [x, y], theta = base, step, i;
-      for (i = 0; i < len; i++) {
-        theta += (r() - 0.5) * 0.3 + (base - theta) * 0.12;
-        if (r() < 0.09) theta += (r() < 0.5 ? -1 : 1) * (0.5 + r() * 0.6);
-        step = 16 + r() * 26;
-        x += Math.cos(theta) * step;
-        y += Math.sin(theta) * step;
-        pts.push(x, y);
-        if (list.length < 60 && r() < 0.035) {
-          makeVein(r, x, y, base + (r() < 0.5 ? -0.8 : 0.8), Math.floor(len * 0.3), depth, false, list);
-        }
-      }
-      list.push({ pts: pts, depth: depth, accent: accent, delay: r() * 0.35 + depth * 0.08, phase: r() * 6.28, speed: 0.6 + r() * 0.8 });
-    }
-
+    // One family: base line through (0, y0) with a gentle tilt, two summed sines; contours at cumulative offsets.
     function generate() {
-      var r = mulberry32(SEED), list = [], count = Math.round(clamp(w / 55, 14, 28)), i, depth, onLeft;
-      var reach = Math.ceil(Math.hypot(w, h) / 28);
-      for (i = 0; i < count; i++) {
-        depth = i % 3;
-        onLeft = r() < 0.6;
-        makeVein(r, onLeft ? -40 : r() * w, onLeft ? r() * h * 1.1 - h * 0.2 : -40,
-          0.28 + (r() - 0.5) * 0.7, reach, depth, i % 8 === 5, list);
+      var r = mulberry32(SEED), list = [], n = w > 900 ? 5 : 4, i, j, off, offs;
+      for (i = 0; i < n; i++) {
+        offs = [];
+        off = 0;
+        for (j = 0; j < 4; j++) {
+          off += 3 + r() * 11; // growth-ring spacing outward from the ribbon edge
+          offs.push(off);
+        }
+        list.push({
+          y0: h * (-0.15 + (i + r() * 0.6) / n * 1.3), tilt: -0.18 - r() * 0.2, depth: i % 3,
+          a1: h * (0.06 + r() * 0.08), f1: (0.35 + r() * 0.5) / w * 6.28, p1: r() * 6.28,
+          a2: h * (0.01 + r() * 0.015), f2: (1.2 + r() * 1.2) / w * 6.28, p2: r() * 6.28,
+          offs: offs, ribbon: 40 + r() * 90, delay: r() * 0.3, lit: i % 2 === 0
+        });
       }
-      veins = list;
+      fams = list;
     }
 
     function resize() {
@@ -99,12 +95,13 @@
       paint(performance.now());
     }
 
-    function stroke(v, k, t, drift, oy) {
-      var p = v.pts, i, d;
+    // Stroke one contour of family f at offset o, across the first fraction reach of the width.
+    function contour(f, o, reach, t, oy) {
+      var x, y, end = w * reach + STEP, ph = t * DEPTH[f.depth].speed;
       ctx.beginPath();
-      for (i = 0; i < k; i++) {
-        d = drift ? Math.sin(t * 0.0004 * v.speed + i * 0.4 + v.phase) * DEPTH[v.depth].amp : 0;
-        ctx.lineTo(p[2 * i] + d * 0.4, p[2 * i + 1] + d + oy);
+      for (x = -STEP; x <= end; x += STEP) {
+        y = f.y0 + x * f.tilt + f.a1 * Math.sin(x * f.f1 + f.p1 + ph) + f.a2 * Math.sin(x * f.f2 + f.p2 - ph * 1.7) + o + oy;
+        if (x === -STEP) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
       ctx.stroke();
     }
@@ -114,44 +111,55 @@
       var prog = still ? 1 : clamp((t - start) / DRAW_MS, 0, 1);
       var eased = 1 - Math.pow(1 - prog, 3);
       var sy = still ? 0 : window.scrollY;
-      var i, v, n, k, d, oy;
+      var tt = still ? 0 : t;
+      var i, j, k, f, reach, oy, g;
       if (!col.surface) return; // not sized yet: the first ResizeObserver callback reads tokens and paints
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      ctx.lineJoin = "miter";
-      ctx.lineCap = "butt";
-      for (i = 0; i < veins.length; i++) {
-        v = veins[i];
-        d = DEPTH[v.depth];
-        n = v.pts.length / 2;
-        k = Math.floor(n * clamp(eased * 1.4 - v.delay, 0, 1));
-        if (k < 2) continue;
-        oy = -sy * d.parallax;
-        if (v.accent) {
-          ctx.strokeStyle = accentFill;
-          ctx.globalAlpha = 0.18;
-          ctx.lineWidth = d.width * 6; // glow pass
-          stroke(v, k, t, !still, oy);
-          ctx.globalAlpha = 0.95;
-          ctx.lineWidth = d.width * 1.2;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      for (i = 0; i < fams.length; i++) {
+        f = fams[i];
+        reach = clamp(eased * 1.3 - f.delay, 0, 1);
+        if (reach <= 0) continue;
+        oy = -sy * DEPTH[f.depth].parallax;
+        // Lit ribbon: additive light through the stone.
+        if (f.lit) {
+          ctx.globalCompositeOperation = "lighter";
+          ctx.strokeStyle = lit;
+          for (g = 0; g < GLOW.length; g++) {
+            ctx.globalAlpha = GLOW[g][1] * (f.depth === 2 ? 1.2 : 1);
+            ctx.lineWidth = f.ribbon * GLOW[g][0];
+            contour(f, 0, reach, tt, oy);
+          }
+          ctx.globalCompositeOperation = "source-over";
         } else {
-          ctx.strokeStyle = v.depth === 2 ? col.strong : v.depth === 1 ? col.mid : col.far;
-          ctx.globalAlpha = d.alpha * (v.depth === 2 ? 0.6 : 1);
-          ctx.lineWidth = d.width;
+          ctx.strokeStyle = col.far;
+          ctx.globalAlpha = 0.35;
+          ctx.lineWidth = f.ribbon * 0.6;
+          contour(f, 0, reach, tt, oy);
         }
-        stroke(v, k, t, !still, oy);
+        // Hairline contours: growth rings along the band edges.
+        for (j = 0; j < 7; j++) { // four rings below the ribbon (j 0-3), three above (j 4-6)
+          k = j % 4;
+          ctx.strokeStyle = k === 0 ? (f.lit ? col.accent : col.mid) : k % 2 ? col.mid : col.far;
+          ctx.globalAlpha = k === 0 ? 0.6 : 0.7;
+          ctx.lineWidth = k === 0 ? 1.2 : 0.8;
+          contour(f, (j > 3 ? -1 : 1) * (f.ribbon * 0.5 + f.offs[k]), reach, tt, oy);
+        }
       }
-      // Elliptical scrim behind the centred copy: keeps the name and positioning line at full contrast over the veins.
+      // Elliptical scrim behind the centred copy: quiets the bands so the name and positioning line keep full contrast;
+      // the warm backlight on top of it is CSS (.hero__glow).
       ctx.save();
       ctx.translate(w / 2, h * 0.5);
-      ctx.scale(1, 0.7);
-      var rx = Math.max(w * 0.42, 220);
-      var g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-      g.addColorStop(0, rgba(col.surface, 0.9));
-      g.addColorStop(0.6, rgba(col.surface, 0.6));
-      g.addColorStop(1, rgba(col.surface, 0));
+      ctx.scale(1, 0.62);
+      var rx = Math.max(w * 0.4, 220);
+      var sc = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+      sc.addColorStop(0, rgba(col.surface, 0.88));
+      sc.addColorStop(0.6, rgba(col.surface, 0.55));
+      sc.addColorStop(1, rgba(col.surface, 0));
       ctx.globalAlpha = 1;
-      ctx.fillStyle = g;
+      ctx.fillStyle = sc;
       ctx.fillRect(-rx, -rx, rx * 2, rx * 2);
       ctx.restore();
       ctx.globalAlpha = 1;

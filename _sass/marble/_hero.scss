@@ -1,5 +1,6 @@
-// Home hero (_includes/home-hero.html): full-viewport night slab (dark in both themes), canvas vein field, one centred display line,
-// the positioning line, a scroll cue. The bottom edge is cut on the diagonal. Motion: _motion.scss (hero block).
+// Home hero (_includes/home-hero.html): full-viewport night slab (dark in both themes), canvas band field, a warm backlight
+// behind one centred display line, the positioning line, a scroll cue. The bottom edge is cut on the diagonal and lit along
+// the cut like a polished onyx edge. Motion: _motion.scss (hero block).
 
 .hero {
   display: grid;
@@ -22,6 +23,30 @@
   height: 100%;
 }
 
+// Backlight: light through the stone behind the name. Over the canvas scrim, under the copy.
+.hero__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(72rem, 130vw);
+  aspect-ratio: 2 / 1;
+  background-image: var(--hero-backlight);
+  translate: -50% -50%;
+}
+
+// Lit edge on the diagonal cut; the slab's clip-path trims the outer half of the stroke, the glow bleeds inward.
+.hero__edge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--cut);
+  overflow: visible;
+  stroke: var(--s-accent);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 0.5rem var(--color-night-glow));
+}
+
 .hero__copy {
   position: relative;
   text-align: center;
@@ -32,6 +57,7 @@
   font-stretch: calc(var(--width-display) * 1%);
   line-height: var(--leading-display);
   letter-spacing: var(--tracking-display);
+  text-shadow: var(--hero-name-glow); // glyphs lit from behind
 }
 
 .hero__positioning {
