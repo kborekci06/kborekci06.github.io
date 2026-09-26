@@ -1,4 +1,4 @@
-// Site footer (_includes/site-footer.html): base slab. Email as display-size text, profile links on a structural vein.
+// Site footer (_includes/site-footer.html): base slab with the band layer. Email as display-size text, profile links on a lit band.
 
 .site-footer {
   padding-block: var(--slab-pad) var(--space-7);
@@ -43,6 +43,7 @@
   gap: var(--space-2) var(--space-6);
   padding: var(--space-5) 0 0;
   border-top: var(--vein-width) solid var(--s-vein-strong);
+  border-image: linear-gradient(90deg, var(--s-vein-strong), var(--s-accent) 30%, var(--s-vein) 85%) 1; // a caramel band lit toward the left
   list-style: none;
 }
 
