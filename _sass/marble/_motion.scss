@@ -27,9 +27,15 @@
   }
 }
 
+// Both ends are insets so the clip interpolates (against the implicit "none" it would flip at 50 %); the negative
+// insets leave room for glows and shadows.
 @keyframes wipe-in {
   from {
-    clip-path: inset(0 100% 0 0);
+    clip-path: inset(-2rem 100% -2rem -2rem);
+  }
+
+  to {
+    clip-path: inset(-2rem);
   }
 }
 
