@@ -198,10 +198,12 @@
         view-timeline: --tile block;
       }
 
+      // min-height, not height: a stage taller than the viewport (small screens) grows inside its track instead of
+      // overflowing into the next slab, and its lower part scrolls into view as the pin releases.
       .js .tile__stage {
         position: sticky;
         top: 0;
-        height: 100svh;
+        min-height: 100svh;
       }
 
       .js .tile__frame {
