@@ -1,0 +1,20 @@
+<!doctype html>
+{%- comment -%}
+  Repo-owned base layout: skip link, header, main landmark, footer, toggle script.
+  Named base.html (not default.html) so the minima pages, which chain page -> default, keep rendering during the pilot.
+  After sign-off and minima retirement: rename to default.html and update layout: keys.
+{%- endcomment %}
+<html lang="en">
+<head>
+{% include head-meta.html %}
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+{% include site-header.html %}
+<main id="main" tabindex="-1">
+{{ content }}
+</main>
+{% include site-footer.html %}
+{% include theme-toggle-script.html %}
+</body>
+</html>

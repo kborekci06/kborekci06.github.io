@@ -1,0 +1,23 @@
+{%- comment -%}
+  Theme toggle behaviour for the button in site-header.html. Flips data-theme, stores the choice,
+  mirrors the effective theme in aria-pressed. The button stays hidden without JavaScript.
+{%- endcomment -%}
+<script>
+(function () {
+  var btn = document.querySelector(".theme-toggle");
+  if (!btn) return;
+  var root = document.documentElement;
+  var media = window.matchMedia("(prefers-color-scheme: dark)");
+  function current() { return root.getAttribute("data-theme") || (media.matches ? "dark" : "light"); }
+  function sync() { btn.setAttribute("aria-pressed", String(current() === "dark")); }
+  btn.addEventListener("click", function () {
+    var next = current() === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    sync();
+  });
+  media.addEventListener("change", sync);
+  sync();
+  btn.hidden = false;
+})();
+</script>

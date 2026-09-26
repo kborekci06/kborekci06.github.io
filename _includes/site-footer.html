@@ -1,0 +1,18 @@
+{%- comment -%}
+  Site footer: name, email shown as text, profiles and resume from _data/social.yml.
+  Styles: _sass/marble/_footer.scss.
+{%- endcomment -%}
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p class="site-footer__name">{{ site.author.name }}</p>
+    <address class="site-footer__address">
+      <ul class="site-footer__list">
+        <li><span class="site-footer__key label">Email</span><a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a></li>
+        {%- for profile in site.data.social.profiles %}
+        <li><a href="{{ profile.url }}">{{ profile.label }}</a></li>
+        {%- endfor %}
+        <li><a href="{{ site.data.social.resume.url | relative_url }}" download>{{ site.data.social.resume.label }}</a></li>
+      </ul>
+    </address>
+  </div>
+</footer>

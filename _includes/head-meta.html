@@ -1,0 +1,26 @@
+{%- comment -%}
+  <head> contents for _layouts/base.html, in load order: meta, pre-paint theme, font preloads (both faces paint above the fold), inline CSS, JSON-LD.
+  Title: site title alone on Home, "Page · Site" elsewhere. Description: page, then site.
+{%- endcomment -%}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{%- if page.url == "/" -%}
+  {%- assign doc_title = site.title -%}
+{%- else -%}
+  {%- assign doc_title = page.title | append: " · " | append: site.title -%}
+{%- endif -%}
+{%- assign doc_description = page.description | default: site.description %}
+<title>{{ doc_title | escape }}</title>
+<meta name="description" content="{{ doc_description | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ doc_title | escape }}">
+<meta property="og:description" content="{{ doc_description | escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+{% include theme-init.html %}
+<link rel="preload" href="{{ '/assets/fonts/schibsted-grotesk-600-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/source-serif-4-var-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+{% include styles.html %}
+{%- if page.url == "/" %}
+{% include schema-person.html %}
+{%- endif %}
