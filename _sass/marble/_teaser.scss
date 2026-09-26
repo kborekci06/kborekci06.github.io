@@ -1,5 +1,5 @@
-// Story teaser (_includes/story-teaser.html): inverse slab with an angled top cut, an accent vein along the cut,
-// portrait in a cut frame (parallax in _motion.scss), one sentence and one link.
+// Story teaser (_includes/story-teaser.html): inverse slab with an angled top cut, a lit accent band along the cut,
+// portrait in an arched niche lit from behind (parallax in _motion.scss), one sentence and one link.
 
 .teaser {
   padding-bottom: var(--slab-pad);
@@ -15,6 +15,7 @@
   overflow: visible;
   stroke: var(--s-accent);
   stroke-width: 3;
+  filter: drop-shadow(0 0 0.4rem var(--s-glow));
 }
 
 .teaser__inner {
@@ -23,12 +24,38 @@
   padding-top: var(--space-8);
 }
 
-.teaser__portrait {
+// Niche: the backlight is a warm halo behind the arch, like an onyx panel lit from the wall behind it.
+.teaser__niche {
+  position: relative;
   width: var(--portrait-width);
+}
+
+.teaser__niche::before {
+  content: "";
+  position: absolute;
+  inset: -14% -22%;
+  z-index: -1;
+  background-image: var(--niche-glow);
+}
+
+// Arch: a full semicircle on top (radius = half the width), square base.
+.teaser__portrait {
+  --arch-shape: var(--arch) var(--arch) 0 0;
+  position: relative;
   overflow: clip;
   aspect-ratio: var(--aspect-portrait);
+  border-radius: var(--arch-shape);
   background-color: var(--s-surface-2);
-  clip-path: polygon(0 0, 100% 0, 100% 88%, 84% 100%, 0 100%);
+  clip-path: inset(0 round var(--arch-shape));
+}
+
+.teaser__portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--arch-shape);
+  box-shadow: var(--rim);
+  pointer-events: none;
 }
 
 // Oversized so the parallax travel never shows an edge.
