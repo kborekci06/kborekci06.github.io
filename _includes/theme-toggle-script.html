@@ -9,7 +9,12 @@
   var root = document.documentElement;
   var media = window.matchMedia("(prefers-color-scheme: dark)");
   function current() { return root.getAttribute("data-theme") || (media.matches ? "dark" : "light"); }
-  function sync() { btn.setAttribute("aria-pressed", String(current() === "dark")); }
+  var label = btn.querySelector(".theme-toggle__text");
+  function sync() {
+    var dark = current() === "dark";
+    btn.setAttribute("aria-pressed", String(dark));
+    if (label) label.textContent = dark ? "Light theme" : "Dark theme";
+  }
   btn.addEventListener("click", function () {
     var next = current() === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
