@@ -33,11 +33,10 @@ $bp-lg: 64em; // 1024px: wider gutters, larger portrait
   --space-8: 4rem;
   --space-9: 6rem;
 
-  // Type: one display face (grotesk 600), one text face (serif 400/600). Three weights total.
+  // Type: one display face (grotesk 600), one text face (serif 400; its variable file also carries 600 for future emphasis). Two weights used.
   --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
   --font-text: "Source Serif 4", Georgia, "Times New Roman", serif;
   --weight-regular: 400;
-  --weight-semibold: 600;
   --weight-display: 600;
 
   // Scale: ratio 1.25 from a 1.125rem body; the display step is the page's one bold element.
