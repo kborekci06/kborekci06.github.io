@@ -1,18 +1,28 @@
-// Self-hosted Latin subsets (assets/fonts/, OFL). Three weights in use: display 600, text 400 and 600.
-// The display file is preloaded in _includes/head-meta.html because it paints the hero name.
+// Self-hosted Latin subsets (assets/fonts/, OFL), three weights in use:
+// Archivo 700 (display; width axis 100-125 kept for the expanded cut) and IBM Plex Sans 400/500 (text).
+// Archivo 700 and Plex 400 are preloaded in _includes/head-meta.html (hero name and positioning line).
 
 @font-face {
-  font-family: "Schibsted Grotesk";
+  font-family: "Archivo";
   font-style: normal;
-  font-weight: 600;
+  font-weight: 700;
+  font-stretch: 100% 125%;
   font-display: swap;
-  src: url("/assets/fonts/schibsted-grotesk-600-latin.woff2") format("woff2");
+  src: url("/assets/fonts/archivo-700-wdth-latin.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Source Serif 4";
+  font-family: "IBM Plex Sans";
   font-style: normal;
-  font-weight: 400 600; // variable wght axis: one file serves both weights, so no faux bold
+  font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/source-serif-4-var-latin.woff2") format("woff2");
+  src: url("/assets/fonts/ibm-plex-sans-400-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-sans-500-latin.woff2") format("woff2");
 }

@@ -1,28 +1,38 @@
 // Design tokens: the only file allowed to hold raw values (CLAUDE.md §4).
-// Layers: primitives (--p-*) -> semantic (--color-*, --space-*, ...) -> components (_sass/marble/*).
-// Theme switch swaps the semantic color layer only; components never branch on theme.
-// Contrast of every semantic pair is recorded in PILOT_REPORT.md §3 (marble-ui formula).
+// Three layers: primitive (--p-*) -> semantic (--color-*, per theme) -> component (--s-*, --hero-*, --tile-*, --glass-*).
+// Theme switch rewrites the semantic layer only; components read semantic or component tokens, never primitives.
+// Contrast of every pair is measured on rendered pixels in PILOT_REPORT.md §3.
 
 // Breakpoints: SCSS variables because media queries cannot read custom properties. Mobile-first, min-width only.
-$bp-md: 48em; // 768px: two-column hero and card grid
-$bp-lg: 64em; // 1024px: wider gutters, larger portrait
+$bp-md: 48em;        // 768px: two-column tile stage
+$bp-lg: 64em;        // 1024px: wide gutters
+$bp-tall: 40em;      // min-height for the pinned sequence (landscape phones scroll normally)
+
+// Grain: SVG feTurbulence, no bitmap. Sass string because Ruby Sass cannot parse a raw data URI in a custom property.
+$grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix values=%270 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")');
 
 :root {
-  // Primitives: marble neutrals (light) and night neutrals (dark), one verde accent per theme.
-  --p-marble-0: #fcfcfa;   // light surface, near-white, L >= 98%
-  --p-marble-200: #c8c8c2; // decorative vein on light
-  --p-marble-500: #74746e; // meaningful vein on light (>= 3:1)
-  --p-marble-700: #4a4a46; // muted text on light
-  --p-marble-900: #1b1b1a; // charcoal text on light
-  --p-night-0: #121211;    // dark surface, near-black
-  --p-night-200: #3a3a37;  // decorative vein on dark
-  --p-night-500: #85857f;  // meaningful vein on dark (>= 3:1)
-  --p-night-700: #b5b5af;  // muted text on dark
-  --p-night-900: #ededea;  // off-white text on dark
-  --p-verde-700: #1d5b4c;  // accent on light
-  --p-verde-200: #8ccfb8;  // accent on dark
+  // ---- Primitive layer ----
+  // Marble neutrals (bright stone) and ink neutrals (near-black slab), one lapis accent, pyrite as gradient stop only.
+  --p-marble-0: #fbfbfa;
+  --p-marble-100: #efefec;
+  --p-stone-300: #c4c4be;   // decorative vein on marble
+  --p-stone-500: #6e6e68;   // structural vein on marble (>= 3:1)
+  --p-stone-700: #55554f;   // muted text on marble
+  --p-ink-950: #0c0c0e;
+  --p-ink-900: #16161a;
+  --p-ink-700: #34343b;     // decorative vein on ink
+  --p-ink-400: #8b8b93;     // structural vein on ink (>= 3:1)
+  --p-ink-200: #bcbcc3;     // muted text on ink
+  --p-ink-50: #f3f3f1;
+  --p-lapis-600: #2b44c4;   // accent on marble
+  --p-lapis-300: #9eb0ff;   // accent on ink
+  --p-pyrite-400: #d2ae55;  // gradient stop only (hero accent veins)
 
-  // Space: 4px base scale (marble-ui §2). Section rhythm uses 7-9 only.
+  // Grain: SVG feTurbulence, no bitmap. Numeric filter values only.
+  --p-grain: #{$grain-url};
+
+  // Space: 4px base (marble-ui §2).
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -32,75 +42,115 @@ $bp-lg: 64em; // 1024px: wider gutters, larger portrait
   --space-7: 3rem;
   --space-8: 4rem;
   --space-9: 6rem;
+  --space-10: 10rem;
+  --slab-pad: clamp(var(--space-8), 10vw, var(--space-10));
 
-  // Type: one display face (grotesk 600), one text face (serif 400; its variable file also carries 600 for future emphasis). Two weights used.
-  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --font-text: "Source Serif 4", Georgia, "Times New Roman", serif;
+  // Type: Archivo 700 (display, width axis 100-125) + IBM Plex Sans 400/500 (text).
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-text: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
   --weight-regular: 400;
-  --weight-display: 600;
+  --weight-medium: 500;
+  --weight-display: 700;
+  --width-display: 125;     // font-stretch percent for the expanded cut
+  --width-heading: 108;
 
-  // Scale: ratio 1.25 from a 1.125rem body; the display step is the page's one bold element.
-  --step--1: 0.875rem;  // labels, meta, tags
-  --step-0: 1.125rem;   // body
-  --step-1: 1.40625rem; // lead, card title
-  --step-2: 1.75rem;    // section heading
-  --step-3: 2.1875rem;  // positioning line at lg
-  --step-display: clamp(3rem, 14vw, 12rem); // hero name
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: clamp(1.1875rem, 1.05rem + 0.5vw, 1.375rem);
+  --step-2: clamp(1.375rem, 1.1rem + 1.1vw, 1.875rem);
+  --step-3: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+  --step-4: clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem);
+  --step-display: clamp(3.5rem, 0.6rem + 9.6vw, 9rem); // hero name: 9rem at 1440; two lines below ~500px
 
   --leading-body: 1.6;
   --leading-snug: 1.3;
-  --leading-display: 1.1;
-  --leading-name: 0.92; // hero name only: single-line slab, cap-to-baseline tight
-  --tracking-display: -0.01em;
-  --tracking-name: -0.035em; // optical tightening at 10rem
-  --tracking-label: 0.08em;  // all-caps labels of <= 3 words only
+  --leading-tight: 1.08;
+  --leading-display: 0.92;
+  --tracking-display: -0.03em;
+  --tracking-heading: -0.02em;
+  --tracking-label: 0.1em;
 
   // Layout
-  --measure: 65ch;
-  --container: 80rem;
+  --measure: 62ch;
+  --container: 84rem;
   --gutter: var(--space-4);
-  --portrait-width: 15rem;
-  --header-gap: var(--space-3);
-
-  // Geometry: crisp edges, hairline veins, no shadows.
-  --radius: 0;
-  --vein-width: 1px;
-  --focus-width: 2px;
-  --focus-offset: 3px;
-  --underline-width: 1px;
-  --underline-width-hover: 2px;
-  --underline-offset: 0.2em;
-  --tap-min: 2.75rem; // 44px targets (rubric A2)
+  --header-height: 4.5rem;
+  --tap-min: 2.75rem;
   --aspect-card: 3 / 2;
   --aspect-portrait: 4 / 5;
+  --portrait-width: clamp(14rem, 78vw, 22rem);
 
-  // Motion: user-initiated only, removed under prefers-reduced-motion (_sass/marble/_base.scss).
-  --duration: 150ms;
-  --ease: cubic-bezier(0.2, 0, 0, 1);
+  // Geometry: sharp cuts, thin veins, one small radius for controls only.
+  --radius-none: 0;
+  --radius-control: 0.125rem;
+  --vein-width: 1px;
+  --vein-width-strong: 2px;
+  --cut: clamp(2.5rem, 7vw, 7rem);   // height of an angled slab edge
+  --focus-width: 2px;
+  --focus-offset: 3px;
+  --underline-offset: 0.22em;
+  --blur-md: 18px;
 
-  // Stacking
+  // Motion
+  --dur-fast: 240ms;
+  --dur-base: 600ms;
+  --dur-slow: 900ms;
+  --dur-loop: 2400ms;
+  --dur-reduced: 120ms;
+  --stagger: 80ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --rise: 2.5rem;              // entrance travel
+  --pin-track: 220svh;         // scroll length of one pinned flagship
+  --parallax: 8%;              // portrait travel (<= 10 % of height)
+  --hover-lift: -0.25rem;
+  --hover-scale: 1.03;
+
+  --z-base: 1;
+  --z-header: 5;
   --z-skip: 10;
 }
 
-// Semantic color layer. Light is the default; dark is applied by OS preference until the user toggles.
+// ---- Semantic layer ----
+// Light default: marble base, ink slabs. Dark: ink base, marble slabs (§4: dark inverts the ratio).
 @mixin theme-light {
   color-scheme: light;
   --color-surface: var(--p-marble-0);
-  --color-text: var(--p-marble-900);
-  --color-text-muted: var(--p-marble-700);
-  --color-vein: var(--p-marble-200);
-  --color-vein-strong: var(--p-marble-500);
-  --color-accent: var(--p-verde-700);
+  --color-surface-2: var(--p-marble-100);
+  --color-text: var(--p-ink-950);
+  --color-text-muted: var(--p-stone-700);
+  --color-vein: var(--p-stone-300);
+  --color-vein-strong: var(--p-stone-500);
+  --color-accent: var(--p-lapis-600);
+  --color-inverse-surface: var(--p-ink-950);
+  --color-inverse-surface-2: var(--p-ink-900);
+  --color-inverse-text: var(--p-ink-50);
+  --color-inverse-text-muted: var(--p-ink-200);
+  --color-inverse-vein: var(--p-ink-700);
+  --color-inverse-vein-strong: var(--p-ink-400);
+  --color-inverse-accent: var(--p-lapis-300);
+  --grain-opacity: 0.06;
+  --inverse-grain-opacity: 0.1;
 }
 
 @mixin theme-dark {
   color-scheme: dark;
-  --color-surface: var(--p-night-0);
-  --color-text: var(--p-night-900);
-  --color-text-muted: var(--p-night-700);
-  --color-vein: var(--p-night-200);
-  --color-vein-strong: var(--p-night-500);
-  --color-accent: var(--p-verde-200);
+  --color-surface: var(--p-ink-950);
+  --color-surface-2: var(--p-ink-900);
+  --color-text: var(--p-ink-50);
+  --color-text-muted: var(--p-ink-200);
+  --color-vein: var(--p-ink-700);
+  --color-vein-strong: var(--p-ink-400);
+  --color-accent: var(--p-lapis-300);
+  --color-inverse-surface: var(--p-marble-0);
+  --color-inverse-surface-2: var(--p-marble-100);
+  --color-inverse-text: var(--p-ink-950);
+  --color-inverse-text-muted: var(--p-stone-700);
+  --color-inverse-vein: var(--p-stone-300);
+  --color-inverse-vein-strong: var(--p-stone-500);
+  --color-inverse-accent: var(--p-lapis-600);
+  --grain-opacity: 0.1;
+  --inverse-grain-opacity: 0.06;
 }
 
 :root {
@@ -117,17 +167,64 @@ $bp-lg: 64em; // 1024px: wider gutters, larger portrait
   @include theme-dark;
 }
 
+// ---- Component layer ----
+// Slab context: every component inside a slab reads --s-*, so one class flips a whole section.
+@mixin slab-base {
+  --s-surface: var(--color-surface);
+  --s-surface-2: var(--color-surface-2);
+  --s-text: var(--color-text);
+  --s-muted: var(--color-text-muted);
+  --s-vein: var(--color-vein);
+  --s-vein-strong: var(--color-vein-strong);
+  --s-accent: var(--color-accent);
+  --s-on-accent: var(--color-surface);
+  --s-grain-opacity: var(--grain-opacity);
+  // Soft gradient kept from the live site, tinted with the accent; stops stay under 5 % so text pairs hold.
+  --s-gradient:
+    radial-gradient(60rem 36rem at 12% 8%, color-mix(in srgb, var(--color-accent) 5%, transparent), transparent 62%),
+    radial-gradient(56rem 34rem at 90% 30%, color-mix(in srgb, var(--color-text) 4%, transparent), transparent 64%);
+  // Glass over media: translucent slab surface, 1px light border, solid fallback without backdrop-filter.
+  --glass-surface: color-mix(in srgb, var(--color-surface) 78%, transparent);
+  --glass-fallback: var(--color-surface);
+  --glass-border: color-mix(in srgb, var(--color-text) 14%, transparent);
+  --shadow-2: 0 1.5rem 3rem -1.5rem color-mix(in srgb, var(--p-ink-950) 35%, transparent), 0 0.25rem 0.75rem -0.25rem color-mix(in srgb, var(--p-ink-950) 20%, transparent);
+}
+
+@mixin slab-inverse {
+  --s-surface: var(--color-inverse-surface);
+  --s-surface-2: var(--color-inverse-surface-2);
+  --s-text: var(--color-inverse-text);
+  --s-muted: var(--color-inverse-text-muted);
+  --s-vein: var(--color-inverse-vein);
+  --s-vein-strong: var(--color-inverse-vein-strong);
+  --s-accent: var(--color-inverse-accent);
+  --s-on-accent: var(--color-inverse-surface);
+  --s-grain-opacity: var(--inverse-grain-opacity);
+  --s-gradient:
+    radial-gradient(50rem 40rem at 85% 0%, color-mix(in srgb, var(--color-inverse-accent) 12%, transparent), transparent 60%),
+    radial-gradient(40rem 30rem at 0% 100%, color-mix(in srgb, var(--color-inverse-text) 5%, transparent), transparent 70%);
+  --glass-surface: color-mix(in srgb, var(--color-inverse-surface) 72%, transparent);
+  --glass-fallback: var(--color-inverse-surface);
+  --glass-border: color-mix(in srgb, var(--color-inverse-text) 18%, transparent);
+  --shadow-2: 0 2rem 4rem -1.5rem color-mix(in srgb, var(--p-ink-950) 60%, transparent), 0 0 0 var(--vein-width) color-mix(in srgb, var(--color-inverse-text) 8%, transparent);
+}
+
+:root {
+  // Hero vein field: accent veins run from the slab accent to pyrite (gradient stop only).
+  // assets/js/home.js reads --s-* and this token from the hero's computed style.
+  --hero-vein-accent-to: var(--p-pyrite-400);
+}
+
 @media (min-width: $bp-md) {
   :root {
     --gutter: var(--space-6);
-    --portrait-width: 17rem;
+    --portrait-width: 22rem;
   }
 }
 
 @media (min-width: $bp-lg) {
   :root {
     --gutter: var(--space-8);
-    --portrait-width: 21rem;
-    --header-gap: var(--space-6);
+    --portrait-width: 26rem;
   }
 }
