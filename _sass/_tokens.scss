@@ -1,5 +1,6 @@
 // Design tokens: the only file allowed to hold raw values (CLAUDE.md §4).
-// Three layers: primitive (--p-*) -> semantic (--color-*, per theme) -> component (--s-*, --hero-*, --tile-*, --glass-*).
+// Three layers: primitive (--p-*) -> semantic (--color-*, per theme)
+// -> component (--s-*, --hero-*, --tile-*, --glass-*, --signal-*).
 // Theme switch rewrites the semantic layer only; components read semantic or component tokens, never primitives.
 // Contrast of every pair is measured on rendered pixels in PILOT_REPORT.md §3.
 
@@ -90,6 +91,7 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --focus-offset: 3px;
   --underline-offset: 0.22em;
   --blur-md: 18px;
+  --radius-glass: 0.5rem;   // glass bubbles and chips only; slabs and frames stay sharp
 
   // Motion
   --dur-fast: 240ms;
@@ -105,6 +107,10 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --parallax: 8%;              // portrait travel (<= 10 % of height)
   --hover-lift: -0.25rem;
   --hover-scale: 1.03;
+
+  // Glass: blur and saturation behind every translucent panel (colours are per slab context, component layer).
+  --glass-blur: var(--blur-md);
+  --glass-saturate: 1.4;
 
   --z-base: 1;
   --z-header: 5;
@@ -131,6 +137,17 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --color-inverse-accent: var(--p-lapis-300);
   --grain-opacity: 0.06;
   --inverse-grain-opacity: 0.1;
+  // Glass on marble: milky white, white rim, faint ink edge. Glass on ink: smoked, light rim, dark edge.
+  --color-glass: color-mix(in srgb, var(--p-marble-0) 72%, transparent);
+  --color-glass-strong: color-mix(in srgb, var(--p-marble-0) 86%, transparent);
+  --color-glass-solid: var(--p-marble-0);
+  --color-glass-border: color-mix(in srgb, var(--p-marble-0) 85%, transparent);
+  --color-glass-edge: color-mix(in srgb, var(--p-ink-950) 12%, transparent);
+  --color-inverse-glass: color-mix(in srgb, var(--p-ink-950) 64%, transparent);
+  --color-inverse-glass-strong: color-mix(in srgb, var(--p-ink-950) 82%, transparent);
+  --color-inverse-glass-solid: var(--p-ink-900);
+  --color-inverse-glass-border: color-mix(in srgb, var(--p-ink-50) 16%, transparent);
+  --color-inverse-glass-edge: color-mix(in srgb, var(--p-ink-950) 50%, transparent);
 }
 
 @mixin theme-dark {
@@ -151,6 +168,16 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --color-inverse-accent: var(--p-lapis-600);
   --grain-opacity: 0.1;
   --inverse-grain-opacity: 0.06;
+  --color-glass: color-mix(in srgb, var(--p-ink-950) 64%, transparent);
+  --color-glass-strong: color-mix(in srgb, var(--p-ink-950) 82%, transparent);
+  --color-glass-solid: var(--p-ink-900);
+  --color-glass-border: color-mix(in srgb, var(--p-ink-50) 16%, transparent);
+  --color-glass-edge: color-mix(in srgb, var(--p-ink-950) 50%, transparent);
+  --color-inverse-glass: color-mix(in srgb, var(--p-marble-0) 72%, transparent);
+  --color-inverse-glass-strong: color-mix(in srgb, var(--p-marble-0) 86%, transparent);
+  --color-inverse-glass-solid: var(--p-marble-0);
+  --color-inverse-glass-border: color-mix(in srgb, var(--p-marble-0) 85%, transparent);
+  --color-inverse-glass-edge: color-mix(in srgb, var(--p-ink-950) 12%, transparent);
 }
 
 :root {
@@ -183,10 +210,12 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --s-gradient:
     radial-gradient(60rem 36rem at 12% 8%, color-mix(in srgb, var(--color-accent) 5%, transparent), transparent 62%),
     radial-gradient(56rem 34rem at 90% 30%, color-mix(in srgb, var(--color-text) 4%, transparent), transparent 64%);
-  // Glass over media: translucent slab surface, 1px light border, solid fallback without backdrop-filter.
-  --glass-surface: color-mix(in srgb, var(--color-surface) 78%, transparent);
-  --glass-fallback: var(--color-surface);
-  --glass-border: color-mix(in srgb, var(--color-text) 14%, transparent);
+  // Glass: translucent surface, 1px light rim, edge ring + drop shadow; solid fallback without backdrop-filter.
+  --glass-surface: var(--color-glass);
+  --glass-surface-strong: var(--color-glass-strong);
+  --glass-fallback: var(--color-glass-solid);
+  --glass-border: var(--color-glass-border);
+  --glass-shadow: 0 0 0 var(--vein-width) var(--color-glass-edge), 0 0.75rem 2rem -1rem color-mix(in srgb, var(--p-ink-950) 30%, transparent);
   --shadow-2: 0 1.5rem 3rem -1.5rem color-mix(in srgb, var(--p-ink-950) 35%, transparent), 0 0.25rem 0.75rem -0.25rem color-mix(in srgb, var(--p-ink-950) 20%, transparent);
 }
 
@@ -203,11 +232,14 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --s-gradient:
     radial-gradient(50rem 40rem at 85% 0%, color-mix(in srgb, var(--color-inverse-accent) 12%, transparent), transparent 60%),
     radial-gradient(40rem 30rem at 0% 100%, color-mix(in srgb, var(--color-inverse-text) 5%, transparent), transparent 70%);
-  --glass-surface: color-mix(in srgb, var(--color-inverse-surface) 72%, transparent);
-  --glass-fallback: var(--color-inverse-surface);
-  --glass-border: color-mix(in srgb, var(--color-inverse-text) 18%, transparent);
+  --glass-surface: var(--color-inverse-glass);
+  --glass-surface-strong: var(--color-inverse-glass-strong);
+  --glass-fallback: var(--color-inverse-glass-solid);
+  --glass-border: var(--color-inverse-glass-border);
+  --glass-shadow: 0 0 0 var(--vein-width) var(--color-inverse-glass-edge), 0 1rem 2.5rem -1rem color-mix(in srgb, var(--p-ink-950) 55%, transparent);
   --shadow-2: 0 2rem 4rem -1.5rem color-mix(in srgb, var(--p-ink-950) 60%, transparent), 0 0 0 var(--vein-width) color-mix(in srgb, var(--color-inverse-text) 8%, transparent);
 }
+
 
 :root {
   // Hero vein field: accent veins run from the slab accent to pyrite (gradient stop only).

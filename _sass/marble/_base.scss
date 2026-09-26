@@ -148,3 +148,23 @@ main:focus {
 .btn[hidden] {
   display: none;
 }
+
+// Glass: translucent tokenized surface, 1px light rim, edge ring plus drop shadow (--glass-* per slab context, _tokens.scss).
+// The solid fallback is the default and the translucent surface applies only where backdrop-filter is supported,
+// so text contrast never depends on blur. $surface picks the density: --glass-surface or --glass-surface-strong.
+@mixin glass($surface: var(--glass-surface)) {
+  border: var(--vein-width) solid var(--glass-border);
+  background-color: var(--glass-fallback);
+  box-shadow: var(--glass-shadow);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: $surface;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+// Utility for markup that only needs the panel treatment (includes prefer the mixin inside their own class).
+.glass {
+  @include glass;
+}
