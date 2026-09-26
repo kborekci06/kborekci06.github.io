@@ -1,0 +1,42 @@
+// Home intro (_includes/home-intro.html) and the work heading that follows it on the same base slab.
+
+.intro {
+  padding-block: var(--slab-pad) var(--space-8);
+}
+
+.intro__inner {
+  display: grid;
+  gap: var(--space-6);
+}
+
+// Structural vein: a strong hairline that draws on as the intro enters (_motion.scss).
+.intro__vein {
+  display: block;
+  height: var(--vein-width-strong);
+  background-color: var(--s-vein-strong);
+  transform-origin: left;
+}
+
+.intro__text {
+  max-width: 34ch;
+  font-size: var(--step-3);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-heading);
+}
+
+.work__head {
+  padding-block: var(--space-7) var(--slab-pad);
+}
+
+.work__title {
+  font-size: var(--step-4);
+  font-stretch: calc(var(--width-display) * 1%);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+@media (min-width: $bp-md) {
+  .intro__text {
+    margin-left: auto;
+  }
+}

@@ -1,4 +1,4 @@
-// Element defaults, links, focus, skip link and motion policy. Components live in sibling partials.
+// Element defaults, links, focus, skip link, buttons. Components live in sibling partials; all motion lives in _motion.scss.
 
 *,
 *::before,
@@ -7,6 +7,7 @@
 }
 
 html {
+  @include slab-base;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -21,7 +22,7 @@ body {
   line-height: var(--leading-body);
   text-align: left;
   font-kerning: normal;
-  font-optical-sizing: auto;
+  overflow-x: clip;
 }
 
 h1,
@@ -30,46 +31,55 @@ h3 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: var(--weight-display);
-  line-height: var(--leading-display);
-  letter-spacing: var(--tracking-display);
+  font-stretch: calc(var(--width-heading) * 1%);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-heading);
   text-wrap: balance;
 }
 
 p,
 ul,
-figure {
+figure,
+address {
   margin: 0;
+  font-style: normal;
 }
 
 p {
   text-wrap: pretty;
 }
 
-img {
+img,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
+}
+
+img,
+video {
   height: auto;
 }
 
-// Links are underlined at rest; hover thickens the underline (CLAUDE.md §4).
+// Links are underlined at rest in the slab's accent (CLAUDE.md §4); hover thickens the line.
 a {
-  color: var(--color-accent);
+  color: var(--s-accent);
   text-decoration-line: underline;
-  text-decoration-thickness: var(--underline-width);
+  text-decoration-thickness: var(--vein-width);
   text-underline-offset: var(--underline-offset);
 }
 
 a:hover {
-  text-decoration-thickness: var(--underline-width-hover);
+  text-decoration-thickness: var(--vein-width-strong);
 }
 
-// One focus ring for every interactive element, accent on surface (>= 7:1 in both themes).
+// One focus ring for every interactive element: the slab accent, >= 3:1 on both slab surfaces in both themes.
 :focus-visible {
-  outline: var(--focus-width) solid var(--color-accent);
+  outline: var(--focus-width) solid var(--s-accent);
   outline-offset: var(--focus-offset);
 }
 
-// The skip target is focused programmatically; it is not a control, so no ring.
 main:focus {
   outline: none;
 }
@@ -82,8 +92,7 @@ main:focus {
   padding: var(--space-2) var(--space-4);
   background-color: var(--color-text);
   color: var(--color-surface);
-  font-family: var(--font-display);
-  font-weight: var(--weight-display);
+  font-weight: var(--weight-medium);
   transform: translateY(-200%);
 }
 
@@ -103,22 +112,39 @@ main:focus {
   border: 0;
 }
 
-// Short all-caps labels (<= 3 words): nav, eyebrows, meta keys. Never headings.
-.label {
-  font-family: var(--font-display);
+// Buttons: two shapes shared by every slab. Solid = slab text colour as fill; line = hairline vein border.
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-5);
+  border: var(--vein-width) solid var(--s-text);
+  border-radius: var(--radius-control);
+  font: inherit;
   font-size: var(--step--1);
-  font-weight: var(--weight-display);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-weight: var(--weight-medium);
   line-height: var(--leading-snug);
+  text-decoration: none;
+  cursor: pointer;
 }
 
-// Motion exists only for users who have not asked to reduce it.
-@media (prefers-reduced-motion: no-preference) {
-  a,
-  .theme-toggle {
-    transition-property: text-decoration-thickness, color, background-color;
-    transition-duration: var(--duration);
-    transition-timing-function: var(--ease);
-  }
+.btn--solid {
+  background-color: var(--s-text);
+  color: var(--s-surface);
+}
+
+.btn--line {
+  background-color: transparent;
+  color: var(--s-text);
+  border-color: var(--s-vein-strong);
+}
+
+.btn--line:hover,
+.btn--line[aria-pressed="true"] {
+  border-color: var(--s-text);
+}
+
+.btn[hidden] {
+  display: none;
 }

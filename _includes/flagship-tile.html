@@ -1,0 +1,45 @@
+{%- comment -%}
+  One flagship tile: a mini-hero on its own slab. The track is the scroll length of the pinned, scrubbed sequence;
+  the stage is what pins (CSS sticky + view-timeline, _sass/marble/_motion.scss). Without scroll-driven animation support
+  or with reduced motion the track collapses and the tile is a plain section.
+  Params: project = page with _data/schema/project.yml front matter; tone = "inverse" | "base".
+  Media: project.tile.video (hover/in-view loop, poster required) or project.thumbnail (image).
+  Actions: case study link, then project.tile.secondary {label, url} or, for video tiles, a play/pause button.
+{%- endcomment -%}
+{%- assign p = include.project -%}
+{%- assign t = p.tile -%}
+<article class="tile slab slab--{{ include.tone }}" aria-labelledby="tile-{{ p.slug }}">
+  <div class="tile__track">
+    <div class="tile__stage container">
+      <div class="tile__media">
+        <div class="tile__frame">
+          {%- if t.video %}
+          <video class="tile__video" src="{{ t.video | relative_url }}" poster="{{ t.poster.src | relative_url }}" width="{{ t.poster.width }}" height="{{ t.poster.height }}" muted loop playsinline preload="none" controls aria-label="{{ t.poster.alt | escape }}"></video>
+          {%- else %}
+          {% include responsive-image.html image=p.thumbnail class="tile__img" sizes="(min-width: 48em) 58vw, 92vw" %}
+          {%- endif %}
+        </div>
+        {%- if p.tags and p.tags.size > 0 %}
+        <ul class="tile__tags" aria-label="Tags">
+          {%- for tag in p.tags limit: 3 %}
+          <li>{{ tag }}</li>
+          {%- endfor %}
+        </ul>
+        {%- endif %}
+      </div>
+      <div class="tile__copy">
+        <p class="tile__org">{{ p.org }}</p>
+        <h3 class="tile__title" id="tile-{{ p.slug }}">{{ p.title }}</h3>
+        <p class="tile__blurb">{{ p.description }}</p>
+        <div class="tile__actions">
+          <a class="btn btn--solid" href="{{ p.url | relative_url }}">Read the case study<span class="visually-hidden">: {{ p.title }}</span></a>
+          {%- if t.secondary %}
+          <a class="btn btn--line" href="{{ t.secondary.url | relative_url }}">{{ t.secondary.label }}</a>
+          {%- elsif t.video %}
+          <button class="btn btn--line tile__play" type="button" hidden>Play the clip</button>
+          {%- endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

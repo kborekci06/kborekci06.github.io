@@ -2,10 +2,12 @@
 layout: base
 ---
 {%- comment -%}
-  Home: hero, featured flagships, story teaser. All copy comes from index.md front matter;
-  cards come from project front matter. Overrides minima's unused home layout.
+  Home, slab by slab: hero (inverse), intro (base), flagship tiles (alternating), story teaser (inverse); footer from base.
+  Copy comes from index.md front matter; tiles from project front matter (_data/schema/project.yml).
+  Motion map: PILOT_REPORT.md §0.3, implemented in _sass/marble/_motion.scss and assets/js/home.js.
 {%- endcomment -%}
 {% include home-hero.html %}
+{% include home-intro.html intro=page.intro %}
 {% include featured-work.html title=page.work_heading %}
-{% include story-teaser.html teaser=page.story_teaser %}
+{% include story-teaser.html teaser=page.story_teaser portrait=page.portrait %}
 {{ content }}

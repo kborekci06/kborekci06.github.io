@@ -1,16 +1,69 @@
-// Story teaser (_includes/story-teaser.html): one sentence and one link.
+// Story teaser (_includes/story-teaser.html): inverse slab with an angled top cut, an accent vein along the cut,
+// portrait in a cut frame (parallax in _motion.scss), one sentence and one link.
+
+.teaser {
+  padding-bottom: var(--slab-pad);
+}
+
+// The vein sits on the cut line: same diagonal as .slab--cut, drawn in SVG so it stays crisp at any width.
+.teaser__vein {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--cut);
+  overflow: visible;
+  stroke: var(--s-accent);
+  stroke-width: 3;
+}
+
+.teaser__inner {
+  display: grid;
+  gap: var(--space-7);
+  padding-top: var(--space-8);
+}
+
+.teaser__portrait {
+  width: var(--portrait-width);
+  overflow: clip;
+  aspect-ratio: var(--aspect-portrait);
+  background-color: var(--s-surface-2);
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 84% 100%, 0 100%);
+}
+
+// Oversized so the parallax travel never shows an edge.
+.teaser__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scale: 1.16;
+}
+
+.teaser__copy {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  align-content: center;
+}
+
+.teaser__title {
+  font-size: var(--step-4);
+  font-stretch: calc(var(--width-display) * 1%);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
 
 .teaser__text {
   max-width: 40ch;
-  font-size: var(--step-1);
+  color: var(--s-muted);
+  font-size: var(--step-2);
   line-height: var(--leading-snug);
 }
 
-.teaser__link {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap-min);
-  margin-top: var(--space-4);
-  font-family: var(--font-display);
-  font-weight: var(--weight-display);
+@media (min-width: $bp-md) {
+  .teaser__inner {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-9);
+  }
 }

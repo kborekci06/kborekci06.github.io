@@ -1,4 +1,5 @@
-// Page frame: one container, one left edge, section rhythm from the top three space steps.
+// Page frame and slabs. A slab is a full-width section whose context (--s-*) is base or inverse;
+// every component inside reads --s-*, so one class flips a whole section (tokens: _sass/_tokens.scss component layer).
 
 .container {
   width: 100%;
@@ -7,32 +8,44 @@
   padding-inline: var(--gutter);
 }
 
-.section {
-  padding-block: var(--space-8);
+.slab {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--s-surface);
+  background-image: var(--s-gradient);
+  color: var(--s-text);
 }
 
-.section + .section {
-  padding-top: 0;
+.slab--base {
+  @include slab-base;
 }
 
-// Section heading sits on a meaningful vein: the rule separates two kinds of content.
-.section__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding-top: var(--space-3);
-  margin-bottom: var(--space-6);
-  border-top: var(--vein-width) solid var(--color-vein-strong);
+.slab--inverse {
+  @include slab-inverse;
 }
 
-// Headings stay sentence case (marble-ui §2): all-caps is for labels only.
-.section__title {
-  font-size: var(--step-2);
+// Grain: SVG noise at low opacity over every slab, under its content.
+.slab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--p-grain);
+  opacity: var(--s-grain-opacity);
+  pointer-events: none;
 }
 
-@media (min-width: $bp-lg) {
-  .section {
-    padding-block: var(--space-9);
-  }
+// Angled top edge: the slab cuts diagonally into the one above it (marble veined geometry).
+.slab--cut {
+  margin-top: calc(var(--cut) * -1);
+  padding-top: var(--cut);
+  clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+}
+
+// Eyebrow-sized labels (<= 3 words): nav, org names. Sentence case; letterspacing only.
+.label {
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  line-height: var(--leading-snug);
 }

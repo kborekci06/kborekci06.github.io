@@ -1,15 +1,27 @@
-// Site header (_includes/site-header.html): primary nav and theme toggle on one decorative vein.
+// Site header (_includes/site-header.html): primary nav and theme toggle.
+// Default: a base-slab bar. On Home (body.has-hero) it lies over the inverse hero and scrolls away with it.
 
 .site-header {
-  border-bottom: var(--vein-width) solid var(--color-vein);
+  @include slab-base;
+  position: relative;
+  z-index: var(--z-header);
+  color: var(--s-text);
+  border-bottom: var(--vein-width) solid var(--s-vein);
+}
+
+.has-hero .site-header {
+  @include slab-inverse;
+  position: absolute;
+  inset: 0 0 auto;
+  border-bottom-color: transparent;
 }
 
 .site-header__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--header-gap);
-  padding-block: var(--space-2);
+  gap: var(--space-3);
+  min-height: var(--header-height);
 }
 
 .site-nav__list {
@@ -20,26 +32,36 @@
   list-style: none;
 }
 
-// Nav links: accent color marks them as links at rest; underline marks the current page and hover.
+// Nav links: a hairline underline at rest (distinguishable without hover); hover and focus draw an accent line over it.
 .site-nav__link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-min);
-  padding-inline: var(--space-1);
-  text-decoration-line: none;
+  padding-inline: var(--space-2);
+  color: var(--s-text);
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-decoration-color: var(--s-vein-strong);
 }
 
-.site-nav__link:hover,
-.site-nav__link[aria-current="page"] {
-  text-decoration-line: underline;
-  text-decoration-thickness: var(--underline-width-hover);
+.site-nav__link::after {
+  content: "";
+  position: absolute;
+  inset: auto var(--space-2) var(--space-2);
+  height: var(--vein-width-strong);
+  background-color: var(--s-accent);
+  transform: scaleX(0);
+  transform-origin: left;
 }
 
-.site-nav__link[aria-current="page"] {
-  color: var(--color-text);
+.site-nav__link:hover::after,
+.site-nav__link:focus-visible::after,
+.site-nav__link[aria-current="page"]::after {
+  transform: scaleX(1);
 }
 
-// Theme toggle: square, hairline-bordered, 44px target; text label from md up.
 .theme-toggle {
   display: inline-flex;
   flex-shrink: 0;
@@ -49,10 +71,13 @@
   min-width: var(--tap-min);
   min-height: var(--tap-min);
   padding-inline: var(--space-3);
-  border: var(--vein-width) solid var(--color-vein-strong);
-  border-radius: var(--radius);
+  border: var(--vein-width) solid var(--s-vein-strong);
+  border-radius: var(--radius-control);
   background-color: transparent;
-  color: var(--color-text);
+  color: var(--s-text);
+  font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
   cursor: pointer;
 }
 
@@ -61,7 +86,7 @@
 }
 
 .theme-toggle:hover {
-  border-color: var(--color-text);
+  border-color: var(--s-text);
 }
 
 .theme-toggle__icon {
@@ -79,10 +104,6 @@
 }
 
 @media (min-width: $bp-md) {
-  .site-nav__link {
-    padding-inline: var(--space-2);
-  }
-
   .theme-toggle__text {
     position: static;
     width: auto;

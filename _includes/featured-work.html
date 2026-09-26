@@ -1,16 +1,18 @@
 {%- comment -%}
   Featured work: every page with featured: true, sorted by order (contract: _data/schema/project.yml).
-  Adding a card = front matter on a project page; this file never changes. Styles: _sass/marble/_card.scss.
-  Param: title = section heading.
+  Tiles alternate slabs, starting inverse after the base intro. Adding a tile = front matter on a project page; this file never changes.
+  Param: title = section heading. Styles: _sass/marble/_tile.scss; motion: _sass/marble/_motion.scss.
 {%- endcomment -%}
 {%- assign flagships = site.pages | where_exp: "p", "p.featured == true" | sort: "order" -%}
-<section class="section container" aria-labelledby="work-title">
-  <div class="section__head">
-    <h2 class="section__title" id="work-title">{{ include.title }}</h2>
+<section class="work" aria-labelledby="work-title">
+  <div class="work__head slab slab--base">
+    <div class="container">
+      <h2 class="work__title" id="work-title" data-reveal>{{ include.title }}</h2>
+    </div>
   </div>
-  <div class="card-grid">
-    {%- for project in flagships %}
-    {% include flagship-card.html project=project %}
-    {%- endfor %}
-  </div>
+  {%- for project in flagships %}
+  {%- assign odd = forloop.index | modulo: 2 -%}
+  {%- if odd == 1 %}{% assign tone = "inverse" %}{% else %}{% assign tone = "base" %}{% endif %}
+  {% include flagship-tile.html project=project tone=tone %}
+  {%- endfor %}
 </section>

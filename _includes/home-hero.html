@@ -1,18 +1,18 @@
 {%- comment -%}
-  Home hero: name (the page's one bold element), positioning line, intro, portrait.
-  Copy and portrait from index.md front matter; name from _config.yml author. Styles: _sass/marble/_hero.scss.
+  Home hero: full-viewport inverse slab. One display line (the name, the page's h1), the positioning line, a scroll cue.
+  The vein field is a canvas painted by assets/js/home.js; without JS the slab keeps its gradient and grain.
+  Copy from index.md front matter; name from _config.yml author. Styles: _sass/marble/_hero.scss.
 {%- endcomment -%}
-<section class="hero container" aria-labelledby="hero-name">
-  <h1 class="hero__name" id="hero-name">{{ site.author.name }}</h1>
-  <div class="hero__body">
-    <div>
-      <p class="hero__positioning">{{ page.positioning }}</p>
-      <p class="hero__intro">{{ page.intro }}</p>
-    </div>
-    {%- if page.portrait %}
-    <div class="hero__portrait">
-      {% include responsive-image.html image=page.portrait sizes=page.portrait.sizes priority="high" %}
-    </div>
-    {%- endif %}
+<section class="hero slab slab--inverse" aria-labelledby="hero-name">
+  <div class="hero__field" aria-hidden="true">
+    <canvas class="hero__canvas" data-vein-field></canvas>
   </div>
+  <div class="hero__copy container">
+    <h1 class="hero__name" id="hero-name">{{ site.author.name }}</h1>
+    <p class="hero__positioning">{{ page.positioning }}</p>
+  </div>
+  <a class="hero__cue" href="#intro">
+    <span class="hero__cue-text">Scroll to explore</span>
+    <span class="hero__cue-line" aria-hidden="true"></span>
+  </a>
 </section>

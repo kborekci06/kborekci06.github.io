@@ -1,0 +1,10 @@
+{%- comment -%}
+  Home intro: one paragraph (<= 60 words) on the base slab, under a vein that draws on with scroll.
+  Param: intro = string from index.md front matter. Styles: _sass/marble/_intro.scss.
+{%- endcomment -%}
+<section class="intro slab slab--base" id="intro" aria-label="Introduction">
+  <div class="container intro__inner">
+    <span class="intro__vein" aria-hidden="true"></span>
+    <p class="intro__text" data-reveal>{{ include.intro }}</p>
+  </div>
+</section>

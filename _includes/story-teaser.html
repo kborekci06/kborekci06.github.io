@@ -1,12 +1,21 @@
 {%- comment -%}
-  Story teaser: one sentence and one link. Param: teaser = { title, text, link_label, url } from index.md front matter.
-  Styles: _sass/marble/_teaser.scss.
+  Story teaser: inverse slab with an angled top cut and a vein drawn along it; portrait with scroll parallax, one sentence, one link.
+  Params: teaser = { title, text, link_label, url }, portrait = { src, widths, width, height, sizes, alt } (index.md front matter).
+  Styles: _sass/marble/_teaser.scss; motion: _sass/marble/_motion.scss.
 {%- endcomment -%}
 {%- assign t = include.teaser -%}
-<section class="section container" aria-labelledby="story-title">
-  <div class="section__head">
-    <h2 class="section__title" id="story-title">{{ t.title }}</h2>
+<section class="teaser slab slab--inverse slab--cut" aria-labelledby="story-title">
+  <svg class="teaser__vein" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><line x1="0" y1="10" x2="100" y2="0" vector-effect="non-scaling-stroke"/></svg>
+  <div class="container teaser__inner">
+    {%- if include.portrait %}
+    <figure class="teaser__portrait">
+      {% include responsive-image.html image=include.portrait class="teaser__img" sizes=include.portrait.sizes %}
+    </figure>
+    {%- endif %}
+    <div class="teaser__copy" data-reveal>
+      <h2 class="teaser__title" id="story-title">{{ t.title }}</h2>
+      <p class="teaser__text">{{ t.text }}</p>
+      <a class="btn btn--solid" href="{{ t.url | relative_url }}">{{ t.link_label }}</a>
+    </div>
   </div>
-  <p class="teaser__text">{{ t.text }}</p>
-  <a class="teaser__link" href="{{ t.url | relative_url }}">{{ t.link_label }}<span aria-hidden="true">&nbsp;→</span></a>
 </section>
