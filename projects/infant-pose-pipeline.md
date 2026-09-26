@@ -1,7 +1,25 @@
 ---
 layout: page
-title: Video-Based Infant Biomechanics
+title: "Infant motion pipeline"
 permalink: /projects/infant-pose-pipeline/
+# Project contract: _data/schema/project.yml
+slug: infant-pose-pipeline
+description: "Screening infant motor development from ordinary video, and a proposal to put the physics of infant motion into the model."
+role: "R&D engineer (student intern)"
+team: ["Dr. Arun Jayaraman's lab"]
+dates: { start: "2024", end: "present" }
+org: "Shirley Ryan AbilityLab"
+tags: ["Computer Vision", "Pose Estimation and Lifting", "Python"]
+thumbnail:
+  src: /assets/img/infant-pose-pipeline/card-1100.webp
+  widths: [600, 1100]
+  width: 1100
+  height: 733
+  alt: "Video frame of an infant lying on its back, with pose-estimation keypoints, a skeleton and a bounding box drawn over it"
+figures: []
+outcome: "[confirm: sanitized Phase 1 finding, pending Kaan's project resources]"
+featured: true
+order: 2
 ---
 
 {% include tag-row.html slug="infant-pose-pipeline" %}

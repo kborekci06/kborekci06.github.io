@@ -1,7 +1,25 @@
 ---
 layout: page
-title: ""
+title: "Diaphragm pacing data platform"
 permalink: /projects/diaphragm-control/
+# Project contract: _data/schema/project.yml
+slug: diaphragm-control
+description: "A wearable that logs exhaled CO₂ and motion for children with CCHS, the first step toward a diaphragm pacer that adjusts itself."
+role: "Technical and project lead"
+team: ["Shael", "Akash", "Jay"]
+dates: { start: "2024", end: "present" }
+org: "Lurie Children's Hospital"
+tags: ["Medical Device", "Embedded Systems", "PCB Design"]
+thumbnail:
+  src: /assets/img/diaphragm-control/card-1100.webp
+  widths: [600, 1100]
+  width: 1100
+  height: 733
+  alt: "Front and back of the custom data-logger board, labelled CO₂ sensor, LEDs and start/stop buttons, microSD card reader, RP2040 microcontroller and IMU"
+figures: []
+outcome: "Provisional patent filed, IRB-approved data collection on healthy volunteers, BMES 2025 poster"
+featured: true
+order: 1
 ---
 ### Building the foundation for closed-loop diaphragm pacing through a portable IMU-CO₂ platform for pediatric CCHS
 {% include tag-row.html slug="diaphragm-control" %}
