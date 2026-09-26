@@ -30,6 +30,11 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --p-onyx-burnt-700: #7c3b0e;   // accent on cream
   --p-onyx-honey-400: #f0b35a;   // accent on umber
   --p-onyx-glow-300: #ffc868;    // luminous highlight: gradient stops, glows, canvas bands only
+  // Strata (hero canvas only): the three bed families of banded onyx, each as ground / translucent core / rim.
+  --p-onyx-umber-990: #090604;   // deepest ground, vignette
+  --p-onyx-cream-200: #dfcfae;   // cream bed ground
+  --p-onyx-amber-600: #8f5f27;   // amber bed ground
+  --p-onyx-amber-400: #cf9440;   // amber bed core
 
   // Grain: SVG feTurbulence, no bitmap. Numeric filter values only.
   --p-grain: #{$grain-url};
@@ -317,6 +322,19 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   // Hero band field: the luminous bands run from the slab accent to the onyx glow (gradient stop only).
   // assets/js/home.js reads --s-* and these tokens from the hero's computed style.
   --hero-vein-accent-to: var(--color-night-glow);
+  // Strata field (assets/js/home.js): beds of banded onyx following one meandering contour, lit from behind.
+  --hero-strata-dark: var(--p-onyx-umber-950);
+  --hero-strata-dark-core: var(--p-onyx-umber-900);
+  --hero-strata-dark-rim: var(--p-onyx-umber-990);
+  --hero-strata-cream: var(--p-onyx-cream-200);
+  --hero-strata-cream-core: var(--p-onyx-cream-100);
+  --hero-strata-cream-rim: var(--p-onyx-caramel-500);
+  --hero-strata-amber: var(--p-onyx-amber-600);
+  --hero-strata-amber-core: var(--p-onyx-amber-400);
+  --hero-strata-amber-rim: var(--p-onyx-burnt-700);
+  --hero-strata-light: var(--p-onyx-glow-300);
+  --hero-strata-crack: var(--p-onyx-cream-50);
+  --hero-strata-vignette: var(--p-onyx-umber-990);
   // Backlight behind the name: a warm halo (hero__glow) and a glyph glow; both theme-invariant like the night slab.
   --hero-backlight:
     radial-gradient(closest-side, color-mix(in srgb, var(--color-night-glow) 22%, transparent), color-mix(in srgb, var(--color-night-glow) 8%, transparent) 55%, transparent);

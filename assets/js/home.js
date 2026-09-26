@@ -1,7 +1,6 @@
 // Home runtime, loaded with defer (index.md front matter: scripts). Motion map: PILOT_REPORT.md §0.3.
-// 1. Band field: generated honey-onyx bands behind the hero name (draw-on at load, slow flow, depth parallax on scroll);
-//    each band is a stream that sheds side streams as it crosses the screen, drawn live every frame; gold veins (cracks
-//    filled with light, with branches and dust) cut across the bands, drawn on after them and cached once complete.
+// 1. Strata field: banded onyx generated once (beds on a meandering contour, laminae, cracks) and cached; a backlight
+//    sweeps across on load, then drifts and follows the scroll; only translucent beds pick it up. Static under reduced motion.
 // 2. Reveal fallback: IntersectionObserver classes where CSS scroll-driven animations are unsupported.
 // 3. Tile video: hover/focus-to-play on hover devices, in-view autoplay on touch, a play/pause button everywhere.
 // 4. Signal bubble: redraws the Liquid-rendered traces each frame from their data attributes; rest -> active on tile hover/focus.
@@ -34,294 +33,131 @@
     return v < lo ? lo : v > hi ? hi : v;
   }
 
-  // ---- 1. Band field (honey onyx) ----
-  // Onyx bands, not cracks: each family is a smooth wave. It crosses the screen as a stream that divides at a few fork
-  // points into narrower streams (a braided river seen from above). Lit streams glow additively (accent -> glow gradient,
-  // four passes for a soft falloff); unlit ones are umber; hairline growth rings follow every stream's edges.
-  var SEED = 1906;
-  var DRAW_MS = 2200;
-  var STEP = 24; // px between wave samples
-  var TAPER = 6; // samples over which a drawing-on front narrows to a point
-  var DEPTH = [
-    { parallax: 0.1, speed: 0.00005 }, // far
-    { parallax: 0.24, speed: 0.00008 }, // mid
-    { parallax: 0.42, speed: 0.00011 } // near
-  ];
-  var GLOW = [[1.4, 0.06], [0.8, 0.1], [0.35, 0.18], [0.08, 0.35]]; // ribbon passes: width factor, alpha
-  // Forks (PILOT_REPORT.md §3): where a stream divides, both children start on the parent's centre line at the parent's
-  // width, share its tangent, then turn apart, narrow to their share and keep going to the edge (or rejoin: a braid).
-  var FORK = {
-    unlit: [0, 1, 1, 2], // side streams per unlit trunk, drawn at random
-    litForks: [2, 3], // side streams per lit trunk, each leaving the main stream at its own point
-    angle: [14, 38], // degrees a side stream turns away from the main stream (up or down, picked per fork)
-    spread: [0.25, 0.45], // a side stream's separation saturates at this fraction of the height, so it fans out then runs on
-    share: [0.66, 0.76], // width share the main stream keeps at each fork; the side stream takes the rest
-    rings: [4, 1, 1], // growth rings per side on the trunk and on each child (fewer lines downstream)
-    lag: 0.1 // the side stream's draw-on front trails the main one's by this fraction of the width: the fork opens
-  };
-
-  // Gold veins (the second system in real onyx: cracks filled with light that cut across the wave bands). Jagged
-  // polylines with side branches that taper out, a bright core with a warm glow, and gold dust along them. They are
-  // fixed in the stone: no flow, only depth parallax; drawn on after the bands, then cached to an offscreen layer.
-  var VEIN = {
-    count: [2, 1], // main veins at >= 900px, below
-    heading: [0.55, 1.05], // radians below the +x axis: veins cut down across the bands
-    step: [10, 26], // px per jag
-    wobble: 0.24, // heading noise per jag (mean-reverting)
-    branches: [3, 6], // side branches per main vein
-    turn: [0.5, 1.2], // radians a branch turns off its parent (either side)
-    length: [0.16, 0.42], // branch length as a fraction of the parent's
-    dust: 0.11, // gold specks per px of vein
-    delay: 0.55, // veins start drawing when the band draw-on reaches this
-    ms: 1700 // draw-on time of a main vein; branches follow their spawn point
-  };
+  // ---- 1. Strata field (banded onyx) ----
+  // Imitates the real stone first: one meandering master contour (broad wave, lobes, faint crenulation, a tilt) and a
+  // stack of beds that follow it - wide dark beds, translucent cream and amber beds, clusters of thin laminae - each
+  // bed pinching and swelling along its run, with fine sub-layers inside thick beds and a few short cross cracks.
+  // The strata are generated once per size and cached. The motion is light, not stone: a backlight behind the slab
+  // sweeps across on load, then drifts slowly and follows the scroll; only the translucent beds pick it up.
+  var SEED = 7;
+  var STEP = 5; // px between contour samples
+  var SWEEP_MS = 2600; // load: the backlight crosses the slab once
+  var DRIFT = { rx: 0.16, ry: 0.1, period: 26000 }; // then it wanders on a slow ellipse (fractions of w, h; ms)
+  var LIGHT = { x: 0.7, y: 0.32, r: 0.55, alpha: 0.6 }; // rest position and radius (fractions of w), strength
+  var PARALLAX = 0.18; // slab shift per px scrolled
 
   function smooth(u) {
     u = clamp(u, 0, 1);
     return u * u * (3 - 2 * u);
   }
 
+  // 1-D value noise with cosine interpolation, seeded; f(x) in [-1, 1].
+  function noise(seed, period) {
+    var r = mulberry32(seed), g = [], i;
+    for (i = 0; i < 400; i++) g.push(r() * 2 - 1);
+    return function (x) {
+      var u = x / period + 200, k = Math.floor(u), f = u - k, t = (1 - Math.cos(f * Math.PI)) / 2;
+      return g[(k % 400 + 400) % 400] * (1 - t) + g[((k + 1) % 400 + 400) % 400] * t;
+    };
+  }
+
   function veinField(canvas) {
     var host = canvas.closest(".slab");
     var ctx = canvas.getContext("2d");
     if (!host || !ctx) return;
-    var w = 0, h = 0, dpr = 1, fams = [], col = {}, lit = null, N = 0, yb = null;
-    var veins = [], dust = [], vcache = null;
+    var w = 0, h = 0, dpr = 1, col = {}, beds = [], xs = [], N = 0, base = null;
+    var stone = null, mask = null, lightLayer = null; // cached layers: the slab, the translucent-bed mask, scratch for the light
     var start = 0, raf = 0, visible = true;
 
     function readColors() {
       var cs = getComputedStyle(host);
       var get = function (n) { return cs.getPropertyValue(n).trim(); };
-      col = { strong: get("--s-text"), mid: get("--s-vein-strong"), far: get("--s-vein"), surface: get("--s-surface"),
-        accent: get("--s-accent"), accentTo: get("--hero-vein-accent-to") };
-      lit = ctx.createLinearGradient(0, h, w, 0);
-      lit.addColorStop(0, col.accent);
-      lit.addColorStop(0.55, col.accentTo);
-      lit.addColorStop(1, col.accent);
+      col = {
+        dark: [get("--hero-strata-dark"), get("--hero-strata-dark-core"), get("--hero-strata-dark-rim")],
+        cream: [get("--hero-strata-cream"), get("--hero-strata-cream-core"), get("--hero-strata-cream-rim")],
+        amber: [get("--hero-strata-amber"), get("--hero-strata-amber-core"), get("--hero-strata-amber-rim")],
+        light: get("--hero-strata-light"), crack: get("--hero-strata-crack"), vignette: get("--hero-strata-vignette"),
+        surface: get("--s-surface")
+      };
     }
 
-    // One family: base line through (0, y0) with a gentle tilt, two summed sines; growth rings at cumulative offsets.
-    // Families are spaced by where they cross mid-screen; the ones far from the copy are lit, the ones behind it unlit.
+    // Master contour and the bed stack. Bed boundaries accumulate, so beds never cross; each bed's thickness swells
+    // along x and its lower edge carries its own faint crenulation.
     function generate() {
-      var r = mulberry32(SEED), list = [], n = w > 900 ? 6 : 5, s = Math.min(h, w * 0.7), i, j, off, offs, tilt, ym;
-      N = Math.ceil((w + 2 * STEP) / STEP) + 1; // sample grid x_j = -STEP + j * STEP, past both edges
-      yb = new Float32Array(N);
-      for (i = 0; i < n; i++) {
-        offs = [];
-        off = 0;
-        for (j = 0; j < 4; j++) {
-          off += 3 + r() * 11; // growth-ring spacing outward from the ribbon edge
-          offs.push(off);
+      var R = mulberry32(SEED), o1 = noise(SEED + 1, 620), o2 = noise(SEED + 2, 170), o3 = noise(SEED + 3, 46), o4 = noise(SEED + 4, 14);
+      var tilt = -0.22, sc = clamp(w / 1440, 0.55, 1), prev = "dark", y = -h * 0.55, k = 0, t, th, q, lt, lth, j, acc, b, i;
+      base = function (x) { return tilt * (x - w / 2) + (o1(x) * 110 + o2(x) * 44 + o3(x) * 5 + o4(x) * 1.2) * sc; };
+      function pick(pv) { var r = R(); if (pv === "dark") return r < 0.55 ? "cream" : "amber"; if (pv === "cream") return r < 0.6 ? "dark" : "amber"; return r < 0.65 ? "dark" : "cream"; }
+      function thick(tp) { var r = R(); if (tp === "dark") return r < 0.35 ? 14 + r * 40 : 40 + r * r * 230; if (tp === "cream") return 8 + r * r * 90; return 5 + r * r * 40; }
+      function bed(tp, tk, hair) { return { type: tp, t: tk * sc, y0: y, cren: noise(SEED + 100 + k, 38), swell: noise(SEED + 300 + k, 420), sub: Math.floor(R() * 4) + 1, seed: SEED + 500 + k, hair: !!hair }; }
+      beds = [];
+      while (y < h * 1.65) {
+        t = pick(prev); th = thick(t);
+        beds.push(bed(t, th)); y += th * sc; prev = t; k++;
+        if (th < 30 && R() < 0.5) { // a cluster of thin laminae after a thin bed
+          for (q = 0; q < 2 + Math.floor(R() * 4); q++) { lt = q % 2 ? "dark" : (R() < 0.5 ? "cream" : "amber"); lth = 2 + R() * 9; beds.push(bed(lt, lth)); y += lth * sc; k++; }
         }
-        tilt = -0.3 + r() * 0.48; // main streams rise, fall or run level: no shared direction
-        ym = h * (-0.05 + (i + 0.2 + r() * 0.6) / n * 1.1);
-        list.push({
-          y0: ym - tilt * w / 2, tilt: tilt, depth: i % 3,
-          a1: s * (0.06 + r() * 0.08), f1: (0.35 + r() * 0.5) / w * 6.28, p1: r() * 6.28,
-          a2: s * (0.01 + r() * 0.015), f2: (1.2 + r() * 1.2) / w * 6.28, p2: r() * 6.28,
-          offs: offs, ribbon: (40 + r() * 90) * clamp(w / 1200, 0.5, 1), delay: r() * 0.3,
-          lit: Math.abs(ym / h - 0.5) > 0.15 // lit above and below the copy, never behind it (phones and desktop)
-        });
+        if (R() < 0.6) { beds.push(bed(t === "dark" ? "cream" : "dark", 1.5 + R() * 3, true)); y += 3 * sc; k++; }
       }
-      fams = list;
-      generateVeins();
-      var rf = mulberry32(SEED + 11);
-      // Side streams leave the main stream at separate points along its run (a river shedding creeks), each turning
-      // up or down on its own; about half of them shed one creek of their own further on.
-      fams.forEach(function (f) {
-        var main = { off: new Float32Array(N), wf: new Float32Array(N).fill(1), j0: 0, j1: N - 1, xs: -STEP, lag: 0, lvl: 0 };
-        var forks = f.lit ? FORK.litForks[0] + Math.floor(rf() * (FORK.litForks[1] - FORK.litForks[0] + 1)) : FORK.unlit[Math.floor(rf() * 4)];
-        var x = w * (0.04 + rf() * 0.1), gap = w * 0.62 / Math.max(forks, 1), kids, k;
-        f.streams = [main];
-        for (k = 0; k < forks; k++) {
-          kids = fork(f, main, snap(x + rf() * gap * 0.6), 1, rf);
-          if (kids[0] === main) break;
-          main = kids[0];
-          if (rf() < 0.5) fork(f, kids[1], snap(kids[1].xs + w * (0.12 + rf() * 0.2)), 2, rf);
-          x += gap;
+      N = Math.ceil(w / STEP) + 3; xs = [];
+      for (j = 0; j < N; j++) xs.push(-STEP + j * STEP);
+      // Slide the whole stack so the copy sits on dark stone: score each vertical offset by how much of the copy
+      // zone (an ellipse around the name and positioning line) lands in dark beds, and take the best.
+      var best = 0, bestScore = -1, off, score, px, py, yy, bi, cum, cx = w / 2, cy = h * 0.5, ex = Math.min(w * 0.34, 520), ey = h * 0.16;
+      for (off = -h; off <= h; off += 12) {
+        score = 0;
+        for (px = -1; px <= 1; px += 0.25) for (py = -1; py <= 1; py += 0.5) {
+          if (px * px + py * py > 1) continue;
+          yy = cy + py * ey - base(cx + px * ex) - off - beds[0].y0; cum = 0;
+          for (bi = 0; bi < beds.length; bi++) { cum += beds[bi].t; if (cum >= yy) { score += beds[bi].type === "dark" && !beds[bi].hair ? 1 : (beds[bi].type === "amber" ? 0.2 : 0); break; } }
         }
-      });
-    }
-
-    // One vein: a jagged walk from a start point along a heading, with mean-reverting noise, until it leaves the canvas
-    // (mains) or runs out its length (branches). Each point carries its cumulative length; branches taper to nothing.
-    function walk(r, x, y, th0, maxLen, wd, lvl) {
-      var pts = [[x, y, 0]], th = th0, len = 0, st, ang;
-      var cx = w / 2, cy = h / 2, rx = Math.max(w * 0.4, Math.min(w * 0.75, 340)) * 0.9, ry = rx * 0.62, dx, dy, dn, away;
-      while (len < maxLen && x > -40 && x < w + 40 && y > -40 && y < h + 40) {
-        st = VEIN.step[0] + r() * (VEIN.step[1] - VEIN.step[0]);
-        th += (r() - 0.5) * 2 * VEIN.wobble + (th0 - th) * 0.35;
-        dx = (x - cx) / rx; dy = (y - cy) / ry; dn = Math.sqrt(dx * dx + dy * dy);
-        if (dn < 1.35) { // inside the copy's keep-out ellipse: blend the heading toward the outward normal, harder the deeper in
-          away = Math.atan2(dy * ry, dx * rx);
-          th += (((away - th) % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI) - Math.PI; // wrapped difference
-          th -= (((away - th) % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI) - Math.PI; // (restore; use blend below)
-          var dif = (((away - th) % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
-          th += dif * Math.min(1, (1.35 - dn) * 1.6);
-        }
-        x += Math.cos(th) * st;
-        y += Math.sin(th) * st;
-        len += st;
-        pts.push([x, y, len]);
+        if (score > bestScore) { bestScore = score; best = off; }
       }
-      return { pts: pts, len: len, wd: wd, lvl: lvl, at: 0, kids: [] };
-    }
-
-    function generateVeins() {
-      var r = mulberry32(SEED + 23), n = VEIN.count[w > 900 ? 0 : 1], i, k, v, b, c, ang, p, q, m, dir;
-      veins = [];
-      dust = [];
-      vcache = null;
-      for (i = 0; i < n; i++) {
-        // Start on the top edge (or the left edge for the second), heading down and across; keep clear of the copy's centre.
-        ang = VEIN.heading[0] + r() * (VEIN.heading[1] - VEIN.heading[0]);
-        v = i % 2 === 0 ? walk(r, w * (0.05 + r() * 0.35), -20, ang, 1e9, 1.8, 0) : walk(r, -20, h * (0.35 + r() * 0.5), ang * 0.6, 1e9, 1.6, 0);
-        m = VEIN.branches[0] + Math.floor(r() * (VEIN.branches[1] - VEIN.branches[0] + 1));
-        for (k = 0; k < m; k++) {
-          p = v.pts[Math.floor(v.pts.length * (0.12 + r() * 0.76))];
-          dir = r() < 0.5 ? -1 : 1;
-          b = walk(r, p[0], p[1], ang + dir * (VEIN.turn[0] + r() * (VEIN.turn[1] - VEIN.turn[0])), v.len * (VEIN.length[0] + r() * (VEIN.length[1] - VEIN.length[0])), v.wd * 0.55, 1);
-          b.at = p[2];
-          v.kids.push(b);
-          if (r() < 0.5 && b.pts.length > 4) { // one finer branch off the branch
-            q = b.pts[Math.floor(b.pts.length * (0.3 + r() * 0.5))];
-            c = walk(r, q[0], q[1], ang + dir * (r() - 0.2) * 1.4, b.len * 0.5, b.wd * 0.55, 2);
-            c.at = q[2];
-            b.kids.push(c);
-          }
-        }
-        veins.push(v);
-      }
-      // Gold dust: specks scattered a few px either side of every vein, denser near the mains.
-      veins.forEach(function (vn) { sprinkle(r, vn); });
-      function sprinkle(rr, vn) {
-        var j, t, a, d, pa, pb, u;
-        for (j = 1; j < vn.pts.length; j++) {
-          pa = vn.pts[j - 1]; pb = vn.pts[j];
-          for (t = 0; t < (pb[2] - pa[2]) * VEIN.dust * (vn.lvl ? 0.5 : 1); t++) {
-            u = rr(); a = rr() * 6.28; d = 3 + rr() * rr() * 16;
-            dust.push([pa[0] + (pb[0] - pa[0]) * u + Math.cos(a) * d, pa[1] + (pb[1] - pa[1]) * u + Math.sin(a) * d, 0.4 + rr() * 0.9, 0.25 + rr() * 0.6, pa[2] + (pb[2] - pa[2]) * u, vn]);
-          }
-        }
-        vn.kids.forEach(function (kd) { sprinkle(rr, kd); });
+      acc = xs.map(function (x) { return base(x) + beds[0].y0 + best; });
+      for (i = 0; i < beds.length; i++) {
+        b = beds[i]; b.top = acc.slice();
+        b.bot = acc.map(function (v, jj) { return v + b.t * (1 + (b.t > 40 ? 0.55 : 0.3) * b.swell(xs[jj])) + (b.hair ? 0 : b.cren(xs[jj]) * Math.min(4, b.t * 0.2)); });
+        acc = b.bot;
       }
     }
 
-    // Stroke one vein up to length front (px along it); the last 30% of a branch tapers, so cracks die out, not stop.
-    function strokeVein(c, vn, front, width, alpha, style) {
-      var j, p, q, f0, pts = vn.pts, lim = Math.min(front, vn.len), taper = vn.lvl ? 0.3 : 0.12;
-      if (lim <= 0 || pts.length < 2) return;
-      c.strokeStyle = style;
-      c.lineJoin = "round";
-      c.lineCap = "round";
-      for (j = 1; j < pts.length && pts[j - 1][2] < lim; j++) {
-        p = pts[j - 1]; q = pts[j];
-        f0 = 1 - Math.max(0, (q[2] / vn.len - (1 - taper)) / taper); // taper factor along the tail
-        c.globalAlpha = alpha * (0.35 + 0.65 * f0);
-        c.lineWidth = Math.max(0.4, width * vn.wd * (0.5 + 0.5 * f0));
-        c.beginPath();
-        c.moveTo(p[0], p[1]);
-        if (q[2] > lim) { // partial last segment while drawing on
-          var u = (lim - p[2]) / (q[2] - p[2]);
-          c.lineTo(p[0] + (q[0] - p[0]) * u, p[1] + (q[1] - p[1]) * u);
-        } else c.lineTo(q[0], q[1]);
-        c.stroke();
-      }
-    }
+    function path(c, a, bb) { var j; c.beginPath(); for (j = 0; j < N; j++) c.lineTo(xs[j], a[j]); for (j = N - 1; j >= 0; j--) c.lineTo(xs[j], bb[j]); c.closePath(); }
+    function line(c, a) { var j; c.beginPath(); for (j = 0; j < N; j++) c.lineTo(xs[j], a[j]); c.stroke(); }
+    function mix(a, bb, u) { return a.map(function (v, j) { return v + (bb[j] - v) * u; }); }
 
-    // Draw every vein (and its branches, once the front has passed their spawn point) at draw-on progress u in 0..1.
-    function drawVeins(c, u) {
-      var passes = [[7, 0.06, col.accent], [2.6, 0.24, col.accentTo], [0.9, 0.85, col.accentTo]];
-      var i;
-      c.globalCompositeOperation = "lighter";
-      passes.forEach(function (ps) { veins.forEach(function (vn) { veinTree(c, vn, u * vn.len * 1.35, ps[0], ps[1], ps[2]); }); });
-      c.globalCompositeOperation = "source-over";
-      c.fillStyle = col.accentTo;
-      for (i = 0; i < dust.length; i++) {
-        if (dust[i][4] > u * dust[i][5].len * 1.35) continue;
-        c.globalAlpha = dust[i][3];
-        c.beginPath();
-        c.arc(dust[i][0], dust[i][1], dust[i][2], 0, 6.28);
-        c.fill();
-      }
-      c.globalAlpha = 1;
-    }
+    function layer() { var c = document.createElement("canvas"); c.width = canvas.width; c.height = canvas.height; var x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); return [c, x]; }
 
-    function veinTree(c, vn, front, width, alpha, style) {
-      strokeVein(c, vn, front, width, alpha, style);
-      vn.kids.forEach(function (kd) { if (front > kd.at) veinTree(c, kd, (front - kd.at) * 1.2, width, alpha, style); });
-    }
-
-    // Veins are static in the stone: after the draw-on, render them once to an offscreen layer and reuse it each frame.
-    function paintVeins(prog, sy) {
-      var u = clamp((prog - VEIN.delay) / (1 - VEIN.delay), 0, 1), oy = -sy * DEPTH[2].parallax * 1.3;
-      if (u <= 0) return;
-      if (u >= 1) {
-        if (!vcache) {
-          vcache = document.createElement("canvas");
-          vcache.width = canvas.width;
-          vcache.height = canvas.height;
-          var vc = vcache.getContext("2d");
-          vc.setTransform(dpr, 0, 0, dpr, 0, 0);
-          drawVeins(vc, 1);
-        }
-        ctx.globalAlpha = 1;
-        ctx.drawImage(vcache, 0, oy, w, h);
-        return;
-      }
-      ctx.save();
-      ctx.translate(0, oy);
-      drawVeins(ctx, u);
-      ctx.restore();
-    }
-
-    function snap(x) {
-      return Math.round((x + STEP) / STEP);
-    }
-
-    // Divide stream p at grid index js into two children. O(x) is the separation of their centre lines: zero with zero
-    // slope at the fork (shared tangent), then "apart" (keeps diverging at the fork angle), "parallel" (turns, then runs
-    // alongside) or, on second-level forks only, "rejoin" (opens and closes again: a braid). Each child narrows from the
-    // parent's width to its share as it separates (and widens back on a rejoin), so the pair always sums to the parent.
-    function fork(f, p, js, lvl, r) {
-      if (js >= p.j1 - 4) return [p, p];
-      var th = Math.tan((FORK.angle[0] + r() * (FORK.angle[1] - FORK.angle[0])) * Math.PI / 180);
-      var k = FORK.share[0] + r() * (FORK.share[1] - FORK.share[0]), side = r() < 0.5 ? -1 : 1;
-      var mode = lvl > 1 && r() < 0.3 ? "rejoin" : r() < 0.75 ? "apart" : "parallel";
-      var sep = Math.max(f.ribbon * p.wf[js], 24), len = mode === "apart" ? w * 0.12 : 1.5 * sep / th;
-      var cap = h * (FORK.spread[0] + r() * (FORK.spread[1] - FORK.spread[0])); // where an "apart" pair stops widening
-      var hold = r() * w * 0.15, kids = [mk(k, side * (1 - k)), mk(1 - k, -side * k)], j, d, O, g, c, q;
-      // The wider child carries on from the parent at full width and narrows to its share; the narrower one grows out of
-      // the parent's centre line from zero width to its share. Widths always sum to the parent's, nothing doubles at the
-      // fork, and both glow as brightly per pixel as the parent: total light scales with width.
-      function mk(sh, dir) {
-        return { off: new Float32Array(N), wf: new Float32Array(N), g: new Float32Array(N), jt: N - 1, j0: js, j1: N - 1,
-          xs: -STEP + js * STEP, lag: (sh >= 0.5 ? 0 : FORK.lag) + p.lag, sh: sh, dir: dir, mode: mode, lvl: lvl };
-      }
-      for (j = js; j < N; j++) {
-        d = (j - js) * STEP;
-        if (mode === "apart") {
-          O = th * (d < len ? d * d / (2 * len) : d - len / 2);
-          O = cap * Math.tanh(O / cap); // same tangent at the fork, then the separation saturates so the pair fans out and runs on
-          g = smooth(d / len);
-        } else if (mode === "parallel") {
-          O = sep * smooth(d / len);
-          g = O / sep;
-        } else {
-          O = sep * (smooth(d / len) - smooth((d - len - hold) / len));
-          g = O / sep;
-        }
-        for (q = 0; q < 2; q++) {
-          c = kids[q];
-          c.off[j] = p.off[j] + c.dir * O;
-          c.wf[j] = p.wf[j] * (c.sh >= 0.5 ? 1 - (1 - c.sh) * g : c.sh * g);
-          c.g[j] = g;
-          if (g >= 0.98 && c.jt === N - 1) c.jt = j;
+    // The slab: every bed as ground, a lighter translucent core, darker rims, sub-laminae; then cross cracks. Once.
+    function renderStone() {
+      var L = layer(), c = L[1], i, b, cc, r, s, u, cr, x, y, j, slope, a, len, d, st;
+      c.fillStyle = col.dark[0]; c.fillRect(0, 0, w, h);
+      c.lineJoin = "round"; c.lineCap = "round";
+      for (i = 0; i < beds.length; i++) {
+        b = beds[i]; cc = col[b.type];
+        c.globalAlpha = 1; c.fillStyle = cc[0]; path(c, b.top, b.bot); c.fill();
+        if (b.hair) { c.globalAlpha = 0.7; c.strokeStyle = cc[1]; c.lineWidth = 1; line(c, mix(b.top, b.bot, 0.5)); continue; }
+        c.globalAlpha = 0.72; c.fillStyle = cc[1]; path(c, mix(b.top, b.bot, 0.28), mix(b.top, b.bot, 0.72)); c.fill();
+        c.globalAlpha = 0.5; c.strokeStyle = cc[2]; c.lineWidth = 1.2; line(c, b.top); line(c, b.bot);
+        if (b.t > 20) {
+          r = mulberry32(b.seed);
+          for (s = 0; s < b.sub + Math.floor(b.t / 30); s++) { u = 0.08 + r() * 0.84; c.globalAlpha = 0.16 + r() * 0.22; c.strokeStyle = r() < 0.5 ? cc[2] : cc[1]; c.lineWidth = 0.6 + r() * 0.8; line(c, mix(b.top, b.bot, u)); }
         }
       }
-      p.j1 = js;
-      f.streams.push(kids[0], kids[1]);
-      return kids;
+      cr = mulberry32(SEED + 9);
+      for (i = 0; i < 9; i++) { // short bright fractures roughly normal to the bedding
+        x = cr() * w; j = Math.floor((x + STEP) / STEP); y = beds[Math.floor(cr() * beds.length)].top[j];
+        if (y < 0 || y > h) continue;
+        slope = (base(x + 6) - base(x - 6)) / 12; a = Math.atan(slope) + Math.PI / 2 * (cr() < 0.5 ? 1 : -1) + (cr() - 0.5) * 0.5; len = 30 + cr() * 110;
+        c.beginPath(); c.moveTo(x, y); d = 0;
+        while (d < len) { st = 6 + cr() * 8; x += Math.cos(a + (cr() - 0.5) * 0.5) * st; y += Math.sin(a + (cr() - 0.5) * 0.5) * st; d += st; c.lineTo(x, y); }
+        c.globalAlpha = 0.55; c.strokeStyle = col.crack; c.lineWidth = 0.9; c.stroke(); c.globalAlpha = 0.18; c.lineWidth = 3; c.stroke();
+      }
+      stone = L[0];
+      // Mask of the translucent beds: what the backlight can pass through.
+      L = layer(); c = L[1]; c.fillStyle = "#fff";
+      for (i = 0; i < beds.length; i++) { b = beds[i]; if (b.type === "dark" || b.hair) continue; c.globalAlpha = b.type === "cream" ? 1 : 0.7; path(c, b.top, b.bot); c.fill(); }
+      mask = L[0];
+      lightLayer = layer();
     }
 
     function resize() {
@@ -333,114 +169,48 @@
       canvas.height = Math.round(h * dpr);
       generate();
       readColors();
+      stone = null;
       paint(performance.now());
     }
 
-    // Trunk centre line of family f at time t (flow phase) and scroll offset oy, sampled on the grid into yb.
-    function trunk(f, t, oy) {
-      var j, x, ph = t * DEPTH[f.depth].speed;
-      for (j = 0; j < N; j++) {
-        x = -STEP + j * STEP;
-        yb[j] = f.y0 + x * f.tilt + f.a1 * Math.sin(x * f.f1 + f.p1 + ph) + f.a2 * Math.sin(x * f.f2 + f.p2 - ph * 1.7) + oy;
-      }
-    }
-
-    // A stream's ribbon as a filled band of half-width hw * wf (vertical offsets, like the rings), grid indices j0..j1.
-    // While a stream is still drawing on, its last TAPER samples narrow to a point, so the front is soft, not a cut.
-    function band(st, j0, j1, hw) {
-      var j, e = j1 < st.j1 ? j1 : Infinity, q;
-      ctx.beginPath();
-      for (j = j0; j <= j1; j++) {
-        q = hw * st.wf[j] * Math.min(1, (e - j) / TAPER);
-        ctx.lineTo(-STEP + j * STEP, yb[j] + st.off[j] - q);
-      }
-      for (j = j1; j >= j0; j--) {
-        q = hw * st.wf[j] * Math.min(1, (e - j) / TAPER);
-        ctx.lineTo(-STEP + j * STEP, yb[j] + st.off[j] + q);
-      }
-      ctx.closePath();
-      ctx.fill();
-    }
-
-    // One growth ring at o outside the stream's edge (sign picks the side).
-    // A child keeps its parent's outer rings only through the fork: they close onto its first ring (o -> offs[0] as the child
-    // separates) and stop once they coincide with it, so no ring ends in open space.
-    function ring(f, st, j0, j1, sign, o, merge) {
-      var j;
-      ctx.beginPath();
-      for (j = j0; j <= j1; j++) ctx.lineTo(-STEP + j * STEP, yb[j] + st.off[j] + sign * (f.ribbon * 0.5 * st.wf[j] + (merge ? o + (f.offs[0] - o) * st.g[j] : o)));
-      ctx.stroke();
+    // Backlight position: a sweep across the slab on load, then a slow ellipse around the rest point, plus the scroll.
+    function lightAt(t, sy) {
+      var u = clamp((t - start) / SWEEP_MS, 0, 1), e = smooth(u), ph = (t - start - SWEEP_MS) / DRIFT.period * 6.283;
+      var lx = u < 1 ? -0.3 + (LIGHT.x + 0.3) * e : LIGHT.x + Math.sin(ph) * DRIFT.rx;
+      var ly = u < 1 ? LIGHT.y + (1 - e) * 0.25 : LIGHT.y + Math.cos(ph * 0.7) * DRIFT.ry;
+      return { x: lx * w, y: ly * h + sy * PARALLAX * 0.6, a: LIGHT.alpha * (u < 1 ? 0.75 + 0.25 * e : 1) };
     }
 
     function paint(t) {
-      var still = reduce.matches;
-      var prog = still ? 1 : clamp((t - start) / DRAW_MS, 0, 1);
-      var eased = 1 - Math.pow(1 - prog, 3);
-      var sy = still ? 0 : window.scrollY;
-      var tt = still ? 0 : t;
-      var i, j, k, n, f, st, reach, front, j1, g, merge;
-      if (!col.surface) return; // not sized yet: the first ResizeObserver callback reads tokens and paints
+      var still = reduce.matches, sy = still ? 0 : window.scrollY, oy = -sy * PARALLAX, L, c, g, vg, rx;
+      if (!col.surface) return;
+      if (!stone) renderStone();
+      L = still ? { x: LIGHT.x * w, y: LIGHT.y * h, a: LIGHT.alpha } : lightAt(t, sy);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
-      for (i = 0; i < fams.length; i++) {
-        f = fams[i];
-        reach = eased * 1.5 - f.delay; // > 1 leaves time for trailing children (delay <= 0.3, trail <= 0.2)
-        if (reach <= 0) continue;
-        trunk(f, tt, -sy * DEPTH[f.depth].parallax);
-        for (n = 0; n < f.streams.length; n++) {
-          st = f.streams[n];
-          // Draw-on front for this stream; a child starts drawing when its front passes the fork.
-          front = -STEP + (w + 2 * STEP) * clamp(reach - st.lag, 0, 1);
-          j1 = Math.min(st.j1, Math.floor((front + STEP) / STEP));
-          if (j1 <= st.j0) continue;
-          // Lit ribbon: additive light through the stone.
-          if (f.lit) {
-            ctx.globalCompositeOperation = "lighter";
-            ctx.fillStyle = lit;
-            for (g = 0; g < GLOW.length; g++) {
-              ctx.globalAlpha = GLOW[g][1] * (f.depth === 2 ? 1.2 : 1);
-              band(st, st.j0, j1, f.ribbon * GLOW[g][0] / 2);
-            }
-            ctx.globalCompositeOperation = "source-over";
-          } else {
-            ctx.fillStyle = col.far;
-            ctx.globalAlpha = 0.35;
-            band(st, st.j0, j1, f.ribbon * 0.3);
-          }
-          // Hairline growth rings along the stream's edges.
-          // Rings: the main stream keeps its rings through a fork (extra ones close onto its first ring); a side stream's
-          // rings begin only once it has separated (st.jt), so no bundle of lines starts at the fork point.
-          var rj0 = st.lvl && st.sh < 0.5 ? Math.max(st.j0, st.jt) : st.j0;
-          for (j = 0; j < 8; j++) { // rings below the ribbon (j 0-3), above (j 4-7); fewer on children
-            k = j % 4;
-            if (j === 7 || (k >= FORK.rings[Math.min(st.lvl, 2)] && (!st.lvl || st.sh < 0.5 || k >= FORK.rings[Math.min(st.lvl, 2) - 1]))) continue;
-            if (rj0 >= j1) continue;
-            ctx.strokeStyle = k === 0 ? (f.lit ? col.accent : col.mid) : k % 2 ? col.mid : col.far;
-            ctx.globalAlpha = k === 0 ? 0.6 : 0.7;
-            ctx.lineWidth = k === 0 ? 1.2 : 0.8;
-            merge = k >= FORK.rings[Math.min(st.lvl, 2)];
-            ring(f, st, rj0, merge ? Math.min(j1, st.jt) : j1, j > 3 ? -1 : 1, f.offs[k], merge);
-          }
-        }
-      }
-      paintVeins(still ? 1 : prog, sy);
-      // Elliptical scrim behind the centred copy: quiets the bands so the name and positioning line keep full contrast;
-      // the warm backlight on top of it is CSS (.hero__glow).
+      ctx.globalAlpha = 1;
+      ctx.drawImage(stone, 0, oy, w, h);
+      // Light through the translucent beds: mask x radial glow, added on top; then a vignette away from the light.
+      c = lightLayer[1];
+      c.globalCompositeOperation = "source-over"; c.globalAlpha = 1; c.clearRect(0, 0, w, h);
+      c.drawImage(mask, 0, oy, w, h);
+      g = c.createRadialGradient(L.x, L.y, 0, L.x, L.y, w * LIGHT.r);
+      g.addColorStop(0, rgba(col.light, 1)); g.addColorStop(0.5, rgba(col.light, 0.45)); g.addColorStop(1, rgba(col.light, 0));
+      c.globalCompositeOperation = "source-in"; c.fillStyle = g; c.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = L.a; ctx.drawImage(lightLayer[0], 0, 0, w, h);
+      ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
+      vg = ctx.createRadialGradient(L.x, L.y, w * 0.15, L.x, L.y, w * 0.95);
+      vg.addColorStop(0, rgba(col.vignette, 0)); vg.addColorStop(1, rgba(col.vignette, 0.62));
+      ctx.fillStyle = vg; ctx.fillRect(0, 0, w, h);
+      // Elliptical scrim behind the centred copy so the name and positioning line keep their contrast.
       ctx.save();
       ctx.translate(w / 2, h * 0.5);
       ctx.scale(1, 0.62);
-      var rx = Math.max(w * 0.4, Math.min(w * 0.75, 340));
-      var sc = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-      sc.addColorStop(0, rgba(col.surface, 0.94));
-      sc.addColorStop(0.6, rgba(col.surface, 0.72));
-      sc.addColorStop(1, rgba(col.surface, 0));
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = sc;
-      ctx.fillRect(-rx, -rx, rx * 2, rx * 2);
+      rx = Math.max(w * 0.4, Math.min(w * 0.75, 340));
+      g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+      g.addColorStop(0, rgba(col.surface, 0.96)); g.addColorStop(0.55, rgba(col.surface, 0.8)); g.addColorStop(1, rgba(col.surface, 0));
+      ctx.fillStyle = g; ctx.fillRect(-rx, -rx, rx * 2, rx * 2);
       ctx.restore();
-      ctx.globalAlpha = 1;
     }
 
     function loop(t) {
@@ -454,18 +224,14 @@
 
     function repaint() {
       readColors();
-      vcache = null;
+      stone = null;
       paint(performance.now());
     }
 
     new ResizeObserver(resize).observe(canvas);
-    new IntersectionObserver(function (entries) {
-      visible = entries[0].isIntersecting;
-      run();
-    }).observe(host);
+    new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; run(); }).observe(host);
     document.addEventListener("visibilitychange", run);
     reduce.addEventListener("change", function () { repaint(); run(); });
-    // Theme swaps tokens only; re-read them from the slab when data-theme or the OS preference changes.
     new MutationObserver(repaint).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", repaint);
     start = performance.now();
