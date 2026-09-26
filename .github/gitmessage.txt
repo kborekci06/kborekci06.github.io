@@ -62,6 +62,4 @@
 #     "Refs: <ID>" if it advances it. ID = <CAT>-<nnn>,
 #     CAT in DES, FUN, UX, UI, PERF, CON, REPO (e.g. Closes: FUN-002).
 # 3 - Breaking change: "BREAKING CHANGE: <what breaks and how to migrate>".
-# 4 - Claude-authored commits end with an attribution trailer as the final line,
-#     using the model name the Claude Code session reports:
-#     Co-Authored-By: <Claude model name> <noreply@anthropic.com>
+# 4 - No Co-Authored-By or other attribution trailers.
