@@ -5,6 +5,7 @@
   Params: project = page with _data/schema/project.yml front matter; tone = "inverse" | "base".
   Media: project.tile.video (hover/in-view loop, poster required) or project.thumbnail (image).
   project.signals (optional) floats a glass signal bubble over the media (_includes/signal-bubble.html).
+  Meta row: project.role and project.dates (years only; "(inferred)" when dates.inferred).
   Actions: case study link, then project.tile.secondary {label, url} or, for video tiles, a play/pause button.
 {%- endcomment -%}
 {%- assign p = include.project -%}
@@ -35,6 +36,12 @@
         <p class="tile__org">{{ p.org }}</p>
         <h3 class="tile__title" id="tile-{{ p.slug }}">{{ p.title }}</h3>
         <p class="tile__blurb">{{ p.description }}</p>
+        {%- assign y0 = p.dates.start | slice: 0, 4 -%}
+        {%- if p.dates.end == "present" %}{% assign y1 = "present" %}{% else %}{% assign y1 = p.dates.end | slice: 0, 4 %}{% endif %}
+        <dl class="tile__meta">
+          <div class="tile__meta-item"><dt>Role</dt><dd>{{ p.role | escape }}</dd></div>
+          <div class="tile__meta-item"><dt>Years</dt><dd>{{ y0 }}{% if y1 and y1 != y0 %}–{{ y1 }}{% endif %}{% if p.dates.inferred %} (inferred){% endif %}</dd></div>
+        </dl>
         <div class="tile__actions">
           <a class="btn btn--solid" href="{{ p.url | relative_url }}">Read the case study<span class="visually-hidden">: {{ p.title }}</span></a>
           {%- if t.secondary %}

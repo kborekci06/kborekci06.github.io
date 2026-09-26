@@ -1,5 +1,20 @@
 // Element defaults, links, focus, skip link, buttons. Components live in sibling partials; all motion lives in _motion.scss.
 
+// Glass: translucent tokenized surface, 1px light rim, edge ring plus drop shadow (--glass-* per slab context, _tokens.scss).
+// The solid fallback is the default and the translucent surface applies only where backdrop-filter is supported,
+// so text contrast never depends on blur. $surface picks the density: --glass-surface or --glass-surface-strong.
+@mixin glass($surface: var(--glass-surface)) {
+  border: var(--vein-width) solid var(--glass-border);
+  background-color: var(--glass-fallback);
+  box-shadow: var(--glass-shadow);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: $surface;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -8,6 +23,7 @@
 
 html {
   @include slab-base;
+  scroll-padding-top: var(--header-height); // in-page anchors land below the sticky glass header
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -135,9 +151,9 @@ main:focus {
 }
 
 .btn--line {
-  background-color: transparent;
+  @include glass;
+  border-color: var(--s-vein-strong); // keeps the hairline outline over the glass rim: the button reads at rest
   color: var(--s-text);
-  border-color: var(--s-vein-strong);
 }
 
 .btn--line:hover,
@@ -147,21 +163,6 @@ main:focus {
 
 .btn[hidden] {
   display: none;
-}
-
-// Glass: translucent tokenized surface, 1px light rim, edge ring plus drop shadow (--glass-* per slab context, _tokens.scss).
-// The solid fallback is the default and the translucent surface applies only where backdrop-filter is supported,
-// so text contrast never depends on blur. $surface picks the density: --glass-surface or --glass-surface-strong.
-@mixin glass($surface: var(--glass-surface)) {
-  border: var(--vein-width) solid var(--glass-border);
-  background-color: var(--glass-fallback);
-  box-shadow: var(--glass-shadow);
-
-  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-    background-color: $surface;
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  }
 }
 
 // Utility for markup that only needs the panel treatment (includes prefer the mixin inside their own class).

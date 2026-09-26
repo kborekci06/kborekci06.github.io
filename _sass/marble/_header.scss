@@ -1,19 +1,22 @@
-// Site header (_includes/site-header.html): primary nav and theme toggle.
-// Default: a base-slab bar. On Home (body.has-hero) it lies over the night hero, dark in both themes like the hero.
+// Site header (_includes/site-header.html): primary nav and theme toggle, a sticky glass bar.
+// Default: base-slab glass, sticky. On Home (body.has-hero) it is fixed over the page in the night context (dark in
+// both themes like the hero), so it reads the same over the hero and over every light or dark slab below it.
+// Strong glass: the bar passes over photos and light slabs, and nav text must hold >= 4.5:1 on the composite.
 
 .site-header {
   @include slab-base;
-  position: relative;
+  @include glass(var(--glass-surface-strong));
+  position: sticky;
+  top: 0;
   z-index: var(--z-header);
+  border-width: 0 0 var(--vein-width);
   color: var(--s-text);
-  border-bottom: var(--vein-width) solid var(--s-vein);
 }
 
 .has-hero .site-header {
   @include slab-night;
-  position: absolute;
+  position: fixed;
   inset: 0 0 auto;
-  border-bottom-color: transparent;
 }
 
 .site-header__inner {

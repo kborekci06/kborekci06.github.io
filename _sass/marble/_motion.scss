@@ -235,6 +235,10 @@
         animation-range: contain 20% contain 45%;
       }
 
+      .js .tile__copy > :nth-child(5) {
+        animation-range: contain 25% contain 50%;
+      }
+
       .js .tile__tags {
         animation: wipe-in linear both;
         animation-timeline: --tile;
@@ -301,6 +305,10 @@
 
   .js.no-sda .tile__copy > :nth-child(4) {
     transition-delay: calc(var(--stagger) * 3);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(5) {
+    transition-delay: calc(var(--stagger) * 4);
   }
 
   .js.no-sda [data-reveal]:not(.is-in):not(:focus-within),

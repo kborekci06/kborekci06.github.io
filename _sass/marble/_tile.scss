@@ -3,10 +3,10 @@
 
 .tile__stage {
   display: grid;
-  align-content: center;
+  align-content: safe center; // a stage taller than the viewport overflows downward only, never under the header
   gap: var(--space-6);
   min-height: 100svh;
-  padding-block: var(--space-8);
+  padding-block: calc(var(--header-height) + var(--space-3)) var(--space-8); // clears the fixed glass header
 }
 
 .tile__media {
@@ -30,30 +30,25 @@
   object-position: 50% 30%;
 }
 
-// Tags: a row overlapping the media's lower edge on small screens; from md a rail over the media's corner.
-// Glass: translucent slab surface, 1px light border, solid fallback without backdrop-filter.
+// Tags: a row of glass chips overlapping the media's lower edge on small screens; from md a rail over its corner.
 .tile__tags {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-4);
-  width: fit-content;
+  gap: var(--space-2);
   max-width: calc(100% - var(--space-8));
   margin: calc(var(--space-5) * -1) 0 0 var(--space-4);
-  padding: var(--space-2) var(--space-4);
-  border: var(--vein-width) solid var(--glass-border);
-  background-color: var(--glass-fallback);
+  padding: 0;
   color: var(--s-text);
   font-size: var(--step--1);
   font-weight: var(--weight-medium);
   list-style: none;
 }
 
-@supports (backdrop-filter: blur(1px)) {
-  .tile__tags {
-    background-color: var(--glass-surface);
-    backdrop-filter: blur(var(--blur-md)) saturate(1.2);
-  }
+.tile__tags li {
+  @include glass;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-glass);
 }
 
 // Signal bubble: below the tags on small screens (in flow, full width); from md it floats over the frame's
@@ -86,6 +81,33 @@
   color: var(--s-muted);
   font-size: var(--step-1);
   line-height: var(--leading-snug);
+}
+
+// Meta row: role and years as glass chips, read from project front matter (role, dates).
+.tile__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--step--1);
+  line-height: var(--leading-snug);
+}
+
+.tile__meta-item {
+  @include glass;
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-glass);
+}
+
+.tile__meta-item dt {
+  color: var(--s-muted);
+}
+
+.tile__meta-item dd {
+  margin: 0;
+  font-weight: var(--weight-medium);
 }
 
 .tile__actions {
