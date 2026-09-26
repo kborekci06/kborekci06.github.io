@@ -1,0 +1,35 @@
+# Story page timeline beats. Contract: _data/schema/story-beat.yml. Sources: CONTEXT.md §3 beats 1 and 4.
+# The Story page is not built in the Phase 1 pilot; these two entries exercise the schema.
+
+- id: rogers-hydrocephalus-2019
+  date: "2019"
+  date_inferred: false
+  title: Hydrocephalus shunt flow monitor
+  role: High-school intern, Rogers Lab
+  hover: A high-school internship on a wireless shunt-flow sensor committed me to biomedical engineering.
+  detail: >-
+    In the summer of 2019, while still in high school, I joined the Rogers Lab on a wireless,
+    non-invasive, flexible system that monitors cerebrospinal fluid flow in hydrocephalus shunts.
+    I evaluated embedded sensor systems for flow detection, characterized device drift, and helped
+    validate phantom-model experiments. I am a co-author on the 2020 paper, credited for experiments,
+    basic data analysis, and the design of some figures.
+  artifact:
+    url: https://doi.org/10.1038/s41746-020-0239-1
+    label: Paper, npj Digital Medicine (2020)
+  tags: [Medical device, Embedded sensing]
+
+- id: invo-tech-transfer-2022
+  date: "2022"
+  date_inferred: false
+  title: Tech transfer at INVO
+  role: Tech Transfer Intern, Innovation and New Ventures Office, Northwestern
+  hover: Watching faculty research move from lab to market pulled me toward the business side.
+  detail: >-
+    In the summer of 2022, as a rising sophomore, I interned at Northwestern's Innovation and New
+    Ventures Office. I worked on technology assessment, market research, and due diligence for patent
+    applications and invention disclosures. Seeing faculty research go from lab to market showed me I
+    want to work at the boundary between teams, and it planted the idea of an MBA.
+  artifact:
+    url: null
+    label: "[confirm: curated research database or recommendation letter, pending from Kaan]"
+  tags: [Tech transfer, Business]

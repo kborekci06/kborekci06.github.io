@@ -1,0 +1,91 @@
+# Content contract: front matter every project page carries.
+# Documentation only (Jekyll exposes it as site.data.schema.project; no layout reads it).
+# Adding a project = one markdown file under projects/ with this front matter, plus its assets under assets/img/<slug>/.
+# Readers: _includes/featured-work.html selects pages with featured: true, sorted by order;
+#          _includes/flagship-card.html renders title, org, description, tags, thumbnail, url.
+# Rules: copy follows CLAUDE.md §5 (no invented facts; unknowns as "[confirm: ...]"); spelling "Borekci".
+
+title:
+  type: string
+  required: true
+  rule: Sentence case. Fits two lines at 1440px. Also the page <h1> and <title>.
+  example: "Diaphragm pacing data platform"
+
+slug:
+  type: string
+  required: true
+  rule: Kebab case. Matches the permalink segment, _data/projects/<slug>/ and assets/img/<slug>/.
+  example: diaphragm-control
+
+description:
+  type: string
+  required: true
+  rule: One sentence. Used as the card blurb and the meta description.
+
+role:
+  type: string
+  required: true
+  rule: Kaan's role as he states it; describe rather than title when the title is informal.
+  example: "Technical and project lead"
+
+team:
+  type: list of strings
+  required: false
+  rule: Names only with consent (CONTEXT.md §10 item 12). A lab or group name is allowed.
+
+dates:
+  type: map
+  required: true
+  fields:
+    start: { type: string, format: "YYYY or YYYY-MM", rule: "Use the coarsest precision the source supports; never invent a month." }
+    end: { type: string, format: "YYYY, YYYY-MM or the literal present" }
+    inferred: { type: bool, required: false, default: false, rule: "true when either date is derived, not stated by Kaan or the repo." }
+
+org:
+  type: string
+  required: true
+  rule: Partner institution shown as the card eyebrow. Never the current employer (CLAUDE.md §2).
+
+tags:
+  type: list of strings
+  required: false
+  rule: Three or fewer on a card. Evidence-backed only (no "clinical trial", no publication claims).
+
+thumbnail:
+  type: map
+  required: true (for featured projects)
+  rule: WebP, 3:2 (--aspect-card), <= 150 KB per file. No logos.
+  fields:
+    src: { type: string, rule: "Path to the widest file, named <stem>-<width>.webp." }
+    widths: { type: list of int, rule: "Every width that exists as <stem>-<w>.webp; builds srcset." }
+    width: { type: int, rule: "Intrinsic width of src." }
+    height: { type: int, rule: "Intrinsic height of src." }
+    alt: { type: string, rule: "What the image shows, not what it is for." }
+
+figures:
+  type: list of maps
+  required: false
+  rule: In-page figures for the flagship story. WebP <= 300 KB, longest side <= 1600px.
+  fields:
+    src: { type: string }
+    widths: { type: list of int, required: false }
+    alt: { type: string }
+    caption: { type: string }
+    width: { type: int }
+    height: { type: int }
+
+outcome:
+  type: string
+  required: true
+  rule: Evidence-backed outcomes only, for the flagship meta block.
+
+featured:
+  type: bool
+  required: false
+  default: false
+  rule: true shows the project as a card on Home.
+
+order:
+  type: int
+  required: false
+  rule: Ascending sort among featured projects.

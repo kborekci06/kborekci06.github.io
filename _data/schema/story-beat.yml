@@ -1,0 +1,67 @@
+# Content contract: one entry of _data/story.yml (a beat on the Story page timeline).
+# Documentation only (site.data.schema.story-beat; no layout reads it).
+# Adding a beat = append one entry to _data/story.yml. Entries are sorted by date by the Story layout, not by file order.
+# Rules: facts from CONTEXT.md §3 only; unknowns as "[confirm: ...]"; never mention the current employer or Neuralink.
+
+id:
+  type: string
+  required: true
+  rule: Kebab case, unique, stable (used as the DOM id and anchor).
+  example: rogers-hydrocephalus-2019
+
+date:
+  type: string
+  required: true
+  format: "YYYY or YYYY-MM"
+  rule: Coarsest precision the source supports.
+
+date_inferred:
+  type: bool
+  required: true
+  rule: true when the date is derived rather than stated by Kaan or the repo; the page marks it as inferred.
+
+title:
+  type: string
+  required: true
+  rule: Sentence case, short.
+
+role:
+  type: string
+  required: true
+  rule: Kaan's role and the host, as stated in the source.
+
+hover:
+  type: string
+  required: true
+  rule: One line, <= 15 words. Shown on hover and on focus.
+
+detail:
+  type: string
+  required: true
+  rule: 2-4 sentences, first person, past tense for finished work - what, what it taught.
+
+artifact:
+  type: map
+  required: false
+  rule: One link per beat (paper, repo, PDF, video). PDFs are linked, never embedded, < 5 MB.
+  fields:
+    url: { type: string, rule: "Absolute URL or site path. null while the artifact is pending." }
+    label: { type: string, rule: "Names the artifact and its format." }
+
+figure:
+  type: map
+  required: false
+  fields:
+    src: { type: string, rule: "WebP <= 300 KB." }
+    alt: { type: string }
+    width: { type: int }
+    height: { type: int }
+
+tags:
+  type: list of strings
+  required: false
+
+flagship_slug:
+  type: string
+  required: false
+  rule: slug of a project page this beat links to (see _data/schema/project.yml).
