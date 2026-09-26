@@ -98,17 +98,6 @@
   }
 }
 
-// Band layer drifts against the scroll, slower than the content: depth without moving any text.
-@keyframes band-drift {
-  from {
-    transform: translateY(var(--band-drift));
-  }
-
-  to {
-    transform: translateY(calc(var(--band-drift) * -1));
-  }
-}
-
 @keyframes media-settle {
   from {
     transform: scale(1.22);
@@ -222,13 +211,7 @@
 
   // ---- Scroll-driven (CSS first) ----
   @supports ((animation-timeline: view()) and (animation-range: entry)) {
-    // Hero: the vein field recedes and the copy lifts away over the first viewport of scroll.
-    .js .hero__field {
-      animation: field-recede linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0px 100svh;
-    }
-
+    // Hero: the copy lifts away over the first viewport of scroll (the stone itself flows on under the page).
     .js .hero__copy {
       animation: copy-out linear both;
       animation-timeline: scroll(root);
@@ -240,12 +223,6 @@
       animation: rise-in linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 90%;
-    }
-
-    .js .slab--bands::after {
-      animation: band-drift linear both;
-      animation-timeline: view();
-      animation-range: cover 0% cover 100%;
     }
 
     .js .intro__vein {

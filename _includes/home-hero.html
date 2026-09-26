@@ -1,12 +1,11 @@
 {%- comment -%}
-  Home hero: full-viewport night slab (dark in both themes, owner decision 2026-09-26). One display line (the name, the page's h1), the positioning line, a scroll cue.
-  The band field is a canvas painted by assets/js/home.js; the backlight (hero__glow) and the lit edge along the cut are CSS/SVG,
-  so without JS the slab keeps its gradient, grain, glow and edge.
+  Home hero: full-viewport transparent slab over the page stone (_layouts/home.html .stone canvas, painted by assets/js/home.js;
+  night face in the dark theme, honey face in the light theme). One display line (the name, the page's h1), the positioning line,
+  a scroll cue. The backlight (hero__glow) and the lit edge along the cut are CSS/SVG, so without JS the slab keeps its glow and edge.
   Copy from index.md front matter; name from _config.yml author. Styles: _sass/marble/_hero.scss.
 {%- endcomment -%}
-<section class="hero slab slab--night" aria-labelledby="hero-name">
+<section class="hero slab slab--base" aria-labelledby="hero-name">
   <div class="hero__field" aria-hidden="true">
-    <canvas class="hero__canvas" data-vein-field></canvas>
     <div class="hero__glow"></div>
   </div>
   <svg class="hero__edge" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><line x1="0" y1="0" x2="100" y2="10" vector-effect="non-scaling-stroke"/></svg>

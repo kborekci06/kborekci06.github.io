@@ -1,4 +1,5 @@
-// Home hero (_includes/home-hero.html): full-viewport night slab (dark in both themes), canvas band field, a warm backlight
+// Home hero (_includes/home-hero.html): full-viewport transparent slab over the page stone (night face in the dark theme, honey
+// face in the light theme), a warm backlight
 // behind one centred display line, the positioning line, a scroll cue. The bottom edge is cut on the diagonal and lit along
 // the cut like a polished onyx edge. Motion: _motion.scss (hero block).
 
@@ -11,16 +12,11 @@
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--cut)));
 }
 
-// Field wrapper: the element the scroll-driven parallax moves; the canvas inside is painted by assets/js/home.js.
+// Backlight wrapper (the canvas that used to sit here is now the page stone, _layout.scss .stone).
 .hero__field {
   position: absolute;
   inset: 0;
   z-index: -1;
-}
-
-.hero__canvas {
-  width: 100%;
-  height: 100%;
 }
 
 // Backlight: light through the stone behind the name. Over the canvas scrim, under the copy.
@@ -44,7 +40,7 @@
   overflow: visible;
   stroke: var(--s-accent);
   stroke-width: 3;
-  filter: drop-shadow(0 0 0.5rem var(--color-night-glow));
+  filter: drop-shadow(0 0 0.5rem var(--s-glow));
 }
 
 .hero__copy {

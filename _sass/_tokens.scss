@@ -35,6 +35,7 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --p-onyx-cream-200: #dfcfae;   // cream bed ground
   --p-onyx-amber-600: #8f5f27;   // amber bed ground
   --p-onyx-amber-400: #cf9440;   // amber bed core
+  --p-onyx-ivory-0: #fffdf8;     // ivory bed core (light face)
 
   // Grain: SVG feTurbulence, no bitmap. Numeric filter values only.
   --p-grain: #{$grain-url};
@@ -99,7 +100,6 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --underline-offset: 0.22em;
   --blur-md: 18px;
   --radius-glass: 0.125rem; // glass is cut stone too: near-sharp corners
-  --band-drift: 6%;         // scroll travel of the slab band layer
 
   // Motion
   --dur-fast: 240ms;
@@ -165,6 +165,24 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --color-inverse-glass-border: color-mix(in srgb, var(--p-onyx-honey-400) 30%, transparent);
   --color-inverse-glass-edge: color-mix(in srgb, var(--p-onyx-umber-950) 55%, transparent);
   --color-inverse-glass-glow: color-mix(in srgb, var(--p-onyx-glow-300) 12%, transparent);
+  // Stone (assets/js/home.js, page-fixed canvas): the honey face of the slab. Bed families: ivory ground, honey and
+  // amber beds; laminae and cracks dark. The backlight is a soft white brightening; the vignette a caramel fall-off.
+  --stone-a: var(--p-onyx-cream-0);
+  --stone-a-core: var(--p-onyx-ivory-0);
+  --stone-a-rim: var(--p-onyx-caramel-500);
+  --stone-b: var(--p-onyx-amber-400);
+  --stone-b-core: var(--p-onyx-honey-400);
+  --stone-b-rim: var(--p-onyx-umber-700);
+  --stone-c: var(--p-onyx-amber-600);
+  --stone-c-core: var(--p-onyx-amber-500);
+  --stone-c-rim: var(--p-onyx-umber-950);
+  --stone-light: var(--p-onyx-ivory-0);
+  --stone-light-alpha: 0.42;
+  --stone-crack: var(--p-onyx-umber-950);
+  --stone-vignette: var(--p-onyx-caramel-500);
+  --stone-vignette-alpha: 0.34;
+  --stone-scrim: var(--p-onyx-cream-0);
+  --hero-name-glow: 0 0 0.35em color-mix(in srgb, var(--p-onyx-cream-0) 80%, transparent);
 }
 
 @mixin theme-dark {
@@ -197,6 +215,23 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --color-inverse-glass-border: color-mix(in srgb, var(--p-onyx-glow-300) 55%, var(--p-onyx-cream-0));
   --color-inverse-glass-edge: color-mix(in srgb, var(--p-onyx-caramel-500) 22%, transparent);
   --color-inverse-glass-glow: color-mix(in srgb, var(--p-onyx-glow-300) 22%, transparent);
+  // Stone: the night face. Dark beds, translucent cream and amber beds lit from behind, cream laminae and cracks.
+  --stone-a: var(--p-onyx-umber-950);
+  --stone-a-core: var(--p-onyx-umber-900);
+  --stone-a-rim: var(--p-onyx-umber-990);
+  --stone-b: var(--p-onyx-cream-200);
+  --stone-b-core: var(--p-onyx-cream-100);
+  --stone-b-rim: var(--p-onyx-caramel-500);
+  --stone-c: var(--p-onyx-amber-600);
+  --stone-c-core: var(--p-onyx-amber-400);
+  --stone-c-rim: var(--p-onyx-burnt-700);
+  --stone-light: var(--p-onyx-glow-300);
+  --stone-light-alpha: 0.6;
+  --stone-crack: var(--p-onyx-cream-50);
+  --stone-vignette: var(--p-onyx-umber-990);
+  --stone-vignette-alpha: 0.62;
+  --stone-scrim: var(--p-onyx-umber-950);
+  --hero-name-glow: 0 0 0.3em color-mix(in srgb, var(--color-night-glow) 45%, transparent), 0 0 1.2em color-mix(in srgb, var(--color-night-glow) 22%, transparent);
 }
 
 :root {
@@ -235,14 +270,6 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
 
 // ---- Component layer ----
 // Slab context: every component inside a slab reads --s-*, so one class flips a whole section.
-// Band layer (--s-bands): the slab's second band system, concentric elliptical rings like onyx growth layers;
-// one wide soft band plus hairline contours at its edges, drawn in the slab's band tones (_layout.scss .slab--bands).
-@mixin slab-bands($band, $edge, $glow) {
-  --s-bands:
-    radial-gradient(130% 70% at 108% 118%, transparent 52%, #{$edge} 52.3%, transparent 52.8%, transparent 55%, #{$band} 60%, transparent 68%, #{$edge} 68.3%, transparent 68.8%),
-    radial-gradient(90% 60% at -12% -14%, transparent 60%, #{$glow} 66%, transparent 74%, #{$edge} 74.3%, transparent 74.8%);
-}
-
 @mixin glass-shadow($edge, $glow, $drop) {
   --glass-shadow: 0 0 0 var(--vein-width) #{$edge}, inset 0 var(--vein-width) 0 color-mix(in srgb, var(--p-onyx-glow-300) 30%, transparent),
     inset 0 0 1.5rem #{$glow}, 0 1rem 2.5rem -1rem #{$drop};
@@ -263,7 +290,6 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --s-gradient:
     radial-gradient(60rem 36rem at 12% 8%, color-mix(in srgb, var(--p-onyx-glow-300) 8%, transparent), transparent 62%),
     radial-gradient(56rem 34rem at 90% 30%, color-mix(in srgb, var(--color-vein) 10%, transparent), transparent 64%);
-  @include slab-bands(color-mix(in srgb, var(--color-vein) 26%, transparent), color-mix(in srgb, var(--color-vein-strong) 22%, transparent), color-mix(in srgb, var(--color-vein) 20%, transparent));
   --glass-surface: var(--color-glass);
   --glass-surface-strong: var(--color-glass-strong);
   --glass-fallback: var(--color-glass-solid);
@@ -286,7 +312,6 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --s-gradient:
     radial-gradient(50rem 40rem at 85% 0%, color-mix(in srgb, var(--p-onyx-glow-300) 10%, transparent), transparent 60%),
     radial-gradient(40rem 30rem at 0% 100%, color-mix(in srgb, var(--color-inverse-vein-strong) 10%, transparent), transparent 70%);
-  @include slab-bands(color-mix(in srgb, var(--color-inverse-vein) 40%, transparent), color-mix(in srgb, var(--color-inverse-vein-strong) 30%, transparent), color-mix(in srgb, var(--p-onyx-glow-300) 7%, transparent));
   --glass-surface: var(--color-inverse-glass);
   --glass-surface-strong: var(--color-inverse-glass-strong);
   --glass-fallback: var(--color-inverse-glass-solid);
@@ -319,26 +344,12 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
 }
 
 :root {
-  // Hero band field: the luminous bands run from the slab accent to the onyx glow (gradient stop only).
-  // assets/js/home.js reads --s-* and these tokens from the hero's computed style.
-  --hero-vein-accent-to: var(--color-night-glow);
-  // Strata field (assets/js/home.js): beds of banded onyx following one meandering contour, lit from behind.
-  --hero-strata-dark: var(--p-onyx-umber-950);
-  --hero-strata-dark-core: var(--p-onyx-umber-900);
-  --hero-strata-dark-rim: var(--p-onyx-umber-990);
-  --hero-strata-cream: var(--p-onyx-cream-200);
-  --hero-strata-cream-core: var(--p-onyx-cream-100);
-  --hero-strata-cream-rim: var(--p-onyx-caramel-500);
-  --hero-strata-amber: var(--p-onyx-amber-600);
-  --hero-strata-amber-core: var(--p-onyx-amber-400);
-  --hero-strata-amber-rim: var(--p-onyx-burnt-700);
-  --hero-strata-light: var(--p-onyx-glow-300);
-  --hero-strata-crack: var(--p-onyx-cream-50);
-  --hero-strata-vignette: var(--p-onyx-umber-990);
+  // Stone behind Home: slabs sit on it as glass (_layout.scss .has-hero .slab); the stone shows through at 1 - alpha.
+  --stone-slab-alpha: 86%;
+  --stone-parallax: 0.18;   // slab shift per px scrolled (read by assets/js/home.js)
   // Backlight behind the name: a warm halo (hero__glow) and a glyph glow; both theme-invariant like the night slab.
   --hero-backlight:
     radial-gradient(closest-side, color-mix(in srgb, var(--color-night-glow) 22%, transparent), color-mix(in srgb, var(--color-night-glow) 8%, transparent) 55%, transparent);
-  --hero-name-glow: 0 0 0.3em color-mix(in srgb, var(--color-night-glow) 45%, transparent), 0 0 1.2em color-mix(in srgb, var(--color-night-glow) 22%, transparent);
   // Inlay hairline on fitted panels (tile frames, portrait): stroked in the slab accent, lit with the onyx glow.
   --inlay-glow: color-mix(in srgb, var(--p-onyx-glow-300) 55%, transparent);
   // Polished-edge sheen swept across frames on hover.

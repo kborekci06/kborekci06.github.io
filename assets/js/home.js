@@ -37,14 +37,15 @@
   // Imitates the real stone first: one meandering master contour (broad wave, lobes, faint crenulation, a tilt) and a
   // stack of beds that follow it - wide dark beds, translucent cream and amber beds, clusters of thin laminae - each
   // bed pinching and swelling along its run, with fine sub-layers inside thick beds and a few short cross cracks.
-  // The strata are generated once per size and cached. The motion is light, not stone: a backlight behind the slab
-  // sweeps across on load, then drifts slowly and follows the scroll; only the translucent beds pick it up.
+  // The strata are generated once per size and cached, tall enough to cover the whole page at the parallax rate, on a
+  // page-fixed canvas behind every slab (the slabs are glass). The motion is light, not stone: a backlight sweeps across
+  // on load, then drifts slowly and travels with the viewport; only the translucent beds pick it up. Tokens (--stone-*)
+  // come from the theme, so the light theme shows the honey face and the dark theme the night face.
   var SEED = 7;
   var STEP = 5; // px between contour samples
   var SWEEP_MS = 2600; // load: the backlight crosses the slab once
   var DRIFT = { rx: 0.16, ry: 0.1, period: 26000 }; // then it wanders on a slow ellipse (fractions of w, h; ms)
   var LIGHT = { x: 0.7, y: 0.32, r: 0.55, alpha: 0.6 }; // rest position and radius (fractions of w), strength
-  var PARALLAX = 0.18; // slab shift per px scrolled
 
   function smooth(u) {
     u = clamp(u, 0, 1);
@@ -61,24 +62,25 @@
     };
   }
 
-  function veinField(canvas) {
-    var host = canvas.closest(".slab");
+  function stoneField(canvas) {
     var ctx = canvas.getContext("2d");
-    if (!host || !ctx) return;
-    var w = 0, h = 0, dpr = 1, col = {}, beds = [], xs = [], N = 0, base = null;
+    if (!ctx) return;
+    var w = 0, h = 0, H = 0, dpr = 1, col = {}, beds = [], xs = [], N = 0, base = null, PARALLAX = 0.18;
     var stone = null, mask = null, lightLayer = null; // cached layers: the slab, the translucent-bed mask, scratch for the light
     var start = 0, raf = 0, visible = true;
 
     function readColors() {
-      var cs = getComputedStyle(host);
+      var cs = getComputedStyle(root);
       var get = function (n) { return cs.getPropertyValue(n).trim(); };
       col = {
-        dark: [get("--hero-strata-dark"), get("--hero-strata-dark-core"), get("--hero-strata-dark-rim")],
-        cream: [get("--hero-strata-cream"), get("--hero-strata-cream-core"), get("--hero-strata-cream-rim")],
-        amber: [get("--hero-strata-amber"), get("--hero-strata-amber-core"), get("--hero-strata-amber-rim")],
-        light: get("--hero-strata-light"), crack: get("--hero-strata-crack"), vignette: get("--hero-strata-vignette"),
-        surface: get("--s-surface")
+        dark: [get("--stone-a"), get("--stone-a-core"), get("--stone-a-rim")], // family a: the ground beds
+        cream: [get("--stone-b"), get("--stone-b-core"), get("--stone-b-rim")], // family b: translucent beds
+        amber: [get("--stone-c"), get("--stone-c-core"), get("--stone-c-rim")], // family c: translucent, darker
+        light: get("--stone-light"), lightA: parseFloat(get("--stone-light-alpha")) || 0.6,
+        crack: get("--stone-crack"), vignette: get("--stone-vignette"), vignetteA: parseFloat(get("--stone-vignette-alpha")) || 0.6,
+        surface: get("--stone-scrim")
       };
+      PARALLAX = parseFloat(get("--stone-parallax")) || 0.18;
     }
 
     // Master contour and the bed stack. Bed boundaries accumulate, so beds never cross; each bed's thickness swells
@@ -91,7 +93,7 @@
       function thick(tp) { var r = R(); if (tp === "dark") return r < 0.35 ? 14 + r * 40 : 40 + r * r * 230; if (tp === "cream") return 8 + r * r * 90; return 5 + r * r * 40; }
       function bed(tp, tk, hair) { return { type: tp, t: tk * sc, y0: y, cren: noise(SEED + 100 + k, 38), swell: noise(SEED + 300 + k, 420), sub: Math.floor(R() * 4) + 1, seed: SEED + 500 + k, hair: !!hair }; }
       beds = [];
-      while (y < h * 1.65) {
+      while (y < H + h * 0.3) {
         t = pick(prev); th = thick(t);
         beds.push(bed(t, th)); y += th * sc; prev = t; k++;
         if (th < 30 && R() < 0.5) { // a cluster of thin laminae after a thin bed
@@ -125,12 +127,12 @@
     function line(c, a) { var j; c.beginPath(); for (j = 0; j < N; j++) c.lineTo(xs[j], a[j]); c.stroke(); }
     function mix(a, bb, u) { return a.map(function (v, j) { return v + (bb[j] - v) * u; }); }
 
-    function layer() { var c = document.createElement("canvas"); c.width = canvas.width; c.height = canvas.height; var x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); return [c, x]; }
+    function layer(tall) { var c = document.createElement("canvas"); c.width = canvas.width; c.height = Math.round((tall ? H : h) * dpr); var x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); return [c, x]; }
 
     // The slab: every bed as ground, a lighter translucent core, darker rims, sub-laminae; then cross cracks. Once.
     function renderStone() {
-      var L = layer(), c = L[1], i, b, cc, r, s, u, cr, x, y, j, slope, a, len, d, st;
-      c.fillStyle = col.dark[0]; c.fillRect(0, 0, w, h);
+      var L = layer(true), c = L[1], i, b, cc, r, s, u, cr, x, y, j, slope, a, len, d, st;
+      c.fillStyle = col.dark[0]; c.fillRect(0, 0, w, H);
       c.lineJoin = "round"; c.lineCap = "round";
       for (i = 0; i < beds.length; i++) {
         b = beds[i]; cc = col[b.type];
@@ -146,7 +148,7 @@
       cr = mulberry32(SEED + 9);
       for (i = 0; i < 9; i++) { // short bright fractures roughly normal to the bedding
         x = cr() * w; j = Math.floor((x + STEP) / STEP); y = beds[Math.floor(cr() * beds.length)].top[j];
-        if (y < 0 || y > h) continue;
+        if (y < 0 || y > H) continue;
         slope = (base(x + 6) - base(x - 6)) / 12; a = Math.atan(slope) + Math.PI / 2 * (cr() < 0.5 ? 1 : -1) + (cr() - 0.5) * 0.5; len = 30 + cr() * 110;
         c.beginPath(); c.moveTo(x, y); d = 0;
         while (d < len) { st = 6 + cr() * 8; x += Math.cos(a + (cr() - 0.5) * 0.5) * st; y += Math.sin(a + (cr() - 0.5) * 0.5) * st; d += st; c.lineTo(x, y); }
@@ -154,7 +156,7 @@
       }
       stone = L[0];
       // Mask of the translucent beds: what the backlight can pass through.
-      L = layer(); c = L[1]; c.fillStyle = "#fff";
+      L = layer(true); c = L[1]; c.fillStyle = "#fff";
       for (i = 0; i < beds.length; i++) { b = beds[i]; if (b.type === "dark" || b.hair) continue; c.globalAlpha = b.type === "cream" ? 1 : 0.7; path(c, b.top, b.bot); c.fill(); }
       mask = L[0];
       lightLayer = layer();
@@ -167,6 +169,7 @@
       h = Math.max(1, Math.round(box.height));
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
+      H = h + Math.ceil(Math.max(0, document.documentElement.scrollHeight - h) * PARALLAX); // stone tall enough for the whole scroll
       generate();
       readColors();
       stone = null;
@@ -178,37 +181,38 @@
       var u = clamp((t - start) / SWEEP_MS, 0, 1), e = smooth(u), ph = (t - start - SWEEP_MS) / DRIFT.period * 6.283;
       var lx = u < 1 ? -0.3 + (LIGHT.x + 0.3) * e : LIGHT.x + Math.sin(ph) * DRIFT.rx;
       var ly = u < 1 ? LIGHT.y + (1 - e) * 0.25 : LIGHT.y + Math.cos(ph * 0.7) * DRIFT.ry;
-      return { x: lx * w, y: ly * h + sy * PARALLAX * 0.6, a: LIGHT.alpha * (u < 1 ? 0.75 + 0.25 * e : 1) };
+      return { x: lx * w, y: ly * h, a: col.lightA * (u < 1 ? 0.75 + 0.25 * e : 1) };
     }
 
     function paint(t) {
-      var still = reduce.matches, sy = still ? 0 : window.scrollY, oy = -sy * PARALLAX, L, c, g, vg, rx;
+      var still = reduce.matches, sy = window.scrollY, oy = -Math.min(sy * PARALLAX, H - h), L, c, g, vg, rx;
       if (!col.surface) return;
       if (!stone) renderStone();
-      L = still ? { x: LIGHT.x * w, y: LIGHT.y * h, a: LIGHT.alpha } : lightAt(t, sy);
+      L = still ? { x: LIGHT.x * w, y: LIGHT.y * h, a: col.lightA } : lightAt(t, sy);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       ctx.globalAlpha = 1;
-      ctx.drawImage(stone, 0, oy, w, h);
+      ctx.drawImage(stone, 0, oy, w, H);
       // Light through the translucent beds: mask x radial glow, added on top; then a vignette away from the light.
       c = lightLayer[1];
       c.globalCompositeOperation = "source-over"; c.globalAlpha = 1; c.clearRect(0, 0, w, h);
-      c.drawImage(mask, 0, oy, w, h);
+      c.drawImage(mask, 0, oy, w, H);
       g = c.createRadialGradient(L.x, L.y, 0, L.x, L.y, w * LIGHT.r);
       g.addColorStop(0, rgba(col.light, 1)); g.addColorStop(0.5, rgba(col.light, 0.45)); g.addColorStop(1, rgba(col.light, 0));
       c.globalCompositeOperation = "source-in"; c.fillStyle = g; c.fillRect(0, 0, w, h);
       ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = L.a; ctx.drawImage(lightLayer[0], 0, 0, w, h);
       ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
       vg = ctx.createRadialGradient(L.x, L.y, w * 0.15, L.x, L.y, w * 0.95);
-      vg.addColorStop(0, rgba(col.vignette, 0)); vg.addColorStop(1, rgba(col.vignette, 0.62));
+      vg.addColorStop(0, rgba(col.vignette, 0)); vg.addColorStop(1, rgba(col.vignette, col.vignetteA));
       ctx.fillStyle = vg; ctx.fillRect(0, 0, w, h);
-      // Elliptical scrim behind the centred copy so the name and positioning line keep their contrast.
+      // Elliptical scrim behind the hero copy (page-fixed: it scrolls away with the hero) so the name keeps its contrast.
+      if (sy > h) return;
       ctx.save();
-      ctx.translate(w / 2, h * 0.5);
+      ctx.translate(w / 2, h * 0.5 - sy);
       ctx.scale(1, 0.62);
       rx = Math.max(w * 0.4, Math.min(w * 0.75, 340));
       g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-      g.addColorStop(0, rgba(col.surface, 0.96)); g.addColorStop(0.55, rgba(col.surface, 0.8)); g.addColorStop(1, rgba(col.surface, 0));
+      g.addColorStop(0, rgba(col.surface, 0.97)); g.addColorStop(0.55, rgba(col.surface, 0.86)); g.addColorStop(1, rgba(col.surface, 0));
       ctx.fillStyle = g; ctx.fillRect(-rx, -rx, rx * 2, rx * 2);
       ctx.restore();
     }
@@ -229,8 +233,9 @@
     }
 
     new ResizeObserver(resize).observe(canvas);
-    new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; run(); }).observe(host);
     document.addEventListener("visibilitychange", run);
+    // Reduced motion: no loop; the stone still follows the scroll (a scroll-linked position, not an animation).
+    window.addEventListener("scroll", function () { if (reduce.matches) paint(performance.now()); }, { passive: true });
     reduce.addEventListener("change", function () { repaint(); run(); });
     new MutationObserver(repaint).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", repaint);
@@ -350,8 +355,8 @@
     reduce.addEventListener("change", run);
   }
 
-  var field = document.querySelector("[data-vein-field]");
-  if (field) veinField(field);
+  var field = document.querySelector("[data-stone-field]");
+  if (field) stoneField(field);
   revealFallback();
   document.querySelectorAll(".tile").forEach(tileVideo);
   document.querySelectorAll("[data-signal-bubble]").forEach(signalBubble);

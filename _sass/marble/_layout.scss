@@ -24,9 +24,28 @@
   @include slab-inverse;
 }
 
-// Night: dark in both themes (the hero). Everything else still inverts with the theme.
+// Night: dark in both themes (header over media, etc.). The hero no longer uses it: it follows the theme.
 .slab--night {
   @include slab-night;
+}
+
+// The stone: a page-fixed canvas behind everything on Home (assets/js/home.js paints generated onyx strata and a
+// travelling backlight). Slabs above it are glass, so the pattern flows on under the whole page as it scrolls.
+.stone {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.has-hero .slab {
+  background-color: color-mix(in srgb, var(--s-surface) var(--stone-slab-alpha), transparent);
+}
+
+.has-hero .hero {
+  background: none;
 }
 
 // Grain: SVG noise at low opacity over every slab, under its content.
@@ -37,21 +56,6 @@
   z-index: -1;
   background-image: var(--p-grain);
   opacity: var(--s-grain-opacity);
-  pointer-events: none;
-}
-
-// Band layer: the slab's second band system (--s-bands, concentric onyx rings) behind the content, giving glass panels
-// something to blur. Oversized vertically so the scroll drift (_motion.scss) never shows an edge; the slab clips it.
-.slab--bands {
-  overflow: clip;
-}
-
-.slab--bands::after {
-  content: "";
-  position: absolute;
-  inset: calc(var(--band-drift) * -1) 0;
-  z-index: -1;
-  background-image: var(--s-bands);
   pointer-events: none;
 }
 
