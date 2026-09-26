@@ -2,6 +2,7 @@
 // 1. Vein field: a generated canvas behind the hero name (draw-on at load, slow drift, depth parallax on scroll).
 // 2. Reveal fallback: IntersectionObserver classes where CSS scroll-driven animations are unsupported.
 // 3. Tile video: hover/focus-to-play on hover devices, in-view autoplay on touch, a play/pause button everywhere.
+// 4. Signal bubble: redraws the Liquid-rendered traces each frame from their data attributes; rest -> active on tile hover/focus.
 // Native scrolling only: no scroll-input listeners, no cancelled events, no scroll position writes.
 (function () {
   "use strict";
@@ -234,8 +235,71 @@
     }
   }
 
+  // ---- 4. Signal bubble (_includes/signal-bubble.html; shapes: _data/signal-shapes.yml) ----
+  // Same geometry as the Liquid path: one period of points repeated freq x window times across 400 units,
+  // scaled around origin by amp, y = 50 - 40 * value. Phase is integrated so a change of freq never jumps.
+  function signalBubble(box) {
+    var win = parseFloat(box.getAttribute("data-window"));
+    var tile = box.closest(".tile") || box;
+    var tau = parseFloat(getComputedStyle(box).getPropertyValue("--signal-ease")) || 250;
+    var active = false, raf = 0, visible = false, last = 0;
+    var traces = [].map.call(box.querySelectorAll("[data-points]"), function (el) {
+      var pair = function (n) { return el.getAttribute(n).split(",").map(parseFloat); };
+      var rest = pair("data-rest");
+      return { el: el, pts: JSON.parse(el.getAttribute("data-points")), o: parseFloat(el.getAttribute("data-origin")),
+        rest: rest, act: pair("data-active"), f: rest[0], a: rest[1], ph: 0 };
+    });
+
+    function draw(s) {
+      var cyc = s.f * win, fr = s.ph % 1, d = "", k, i, p, x;
+      for (k = -1; k <= Math.ceil(cyc) + 1; k++) {
+        for (i = 0; i < s.pts.length; i++) {
+          p = s.pts[i];
+          x = (k + p[0] - fr) / cyc * 400;
+          d += (d ? "L" : "M") + x.toFixed(1) + "," + (50 - 40 * (s.o + (p[1] - s.o) * s.a)).toFixed(1);
+        }
+      }
+      s.el.setAttribute("d", d);
+    }
+
+    function frame(t) {
+      var dt = last ? Math.min(t - last, 100) : 0, mix = 1 - Math.exp(-dt / tau);
+      last = t;
+      traces.forEach(function (s) {
+        var g = active ? s.act : s.rest;
+        s.f += (g[0] - s.f) * mix;
+        s.a += (g[1] - s.a) * mix;
+        s.ph += s.f * dt / 1000;
+        draw(s);
+      });
+      raf = visible && !document.hidden && !reduce.matches ? requestAnimationFrame(frame) : 0;
+      if (!raf) last = 0;
+    }
+
+    function run() {
+      if (!raf && visible && !document.hidden && !reduce.matches) raf = requestAnimationFrame(frame);
+    }
+
+    function set(on) {
+      active = on;
+      box.classList.toggle("is-active", on);
+    }
+
+    tile.addEventListener("pointerenter", function () { set(true); });
+    tile.addEventListener("pointerleave", function () { set(tile.contains(document.activeElement)); });
+    tile.addEventListener("focusin", function () { set(true); });
+    tile.addEventListener("focusout", function (e) { if (!tile.contains(e.relatedTarget)) set(tile.matches(":hover")); });
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      run();
+    }).observe(box);
+    document.addEventListener("visibilitychange", run);
+    reduce.addEventListener("change", run);
+  }
+
   var field = document.querySelector("[data-vein-field]");
   if (field) veinField(field);
   revealFallback();
   document.querySelectorAll(".tile").forEach(tileVideo);
+  document.querySelectorAll("[data-signal-bubble]").forEach(signalBubble);
 })();

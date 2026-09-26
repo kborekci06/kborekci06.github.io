@@ -1,0 +1,19 @@
+# Waveform library for _includes/signal-bubble.html and assets/js/home.js (both read this file; one source).
+# A shape is one period: points [x, y] with x in [0, 1) and y in [-1, 1], joined by straight lines and repeated.
+# origin = the y the amplitude scales around (a capnogram flattens onto its baseline; a motion trace around zero).
+# Illustrative shapes only, drawn to read like the signal type; never recorded data (CLAUDE.md §5).
+# New signal type = one entry here, then kind: <name> on a project's signals list (_data/schema/project.yml).
+
+window: 8 # seconds of signal visible across the bubble; visible cycles = freq x window
+
+co2: # capnogram: flat inspiratory baseline, sharp expiratory upstroke, sloped alveolar plateau, sharp downstroke
+  origin: -1
+  points: [[0, -1], [0.28, -1], [0.34, 0.6], [0.4, 0.78], [0.74, 0.92], [0.79, -1]]
+
+motion: # smooth multi-harmonic wobble, as from an accelerometer axis
+  origin: 0
+  points: [[0.0, 0.271], [0.0625, 0.683], [0.125, 0.617], [0.1875, 0.463], [0.25, 0.618], [0.3125, 0.963], [0.375, 1.0], [0.4375, 0.476], [0.5, -0.271], [0.5625, -0.683], [0.625, -0.617], [0.6875, -0.463], [0.75, -0.618], [0.8125, -0.963], [0.875, -1.0], [0.9375, -0.476]]
+
+custom: # plain sine, the default for a signal type without its own shape
+  origin: 0
+  points: [[0.0, 0.0], [0.0833, 0.5], [0.1667, 0.866], [0.25, 1.0], [0.3333, 0.866], [0.4167, 0.5], [0.5, 0.0], [0.5833, -0.5], [0.6667, -0.866], [0.75, -1.0], [0.8333, -0.866], [0.9167, -0.5]]

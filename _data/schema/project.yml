@@ -98,3 +98,22 @@ tile:
     video: { type: string, required: false, rule: "Hover/in-view loop under assets/video/<slug>/: H.264, no audio, < 1.5 Mb/s, < 10 s (CLAUDE.md §6). Replaces the thumbnail on the tile." }
     poster: { type: map, required: "with video", rule: "src, width, height, alt; WebP first frame of the video." }
     secondary: { type: map, required: false, rule: "label, url; the second action (e.g. a poster PDF). Video tiles without it get a play/pause button." }
+
+signals:
+  type: list of maps
+  required: false
+  rule: >
+    Illustrative traces for the Home tile's glass signal bubble (_includes/signal-bubble.html), for projects whose
+    signal has no footage. Drawn from _data/signal-shapes.yml, never from recordings; the bubble always carries the
+    caption "Illustrative signal, not recorded data" (CLAUDE.md §5). A new trace (e.g. a pose-estimation joint angle)
+    is one entry here; a new waveform type is one entry in _data/signal-shapes.yml plus kind: <name>.
+    rest = the slow breathing loop; active = the state on tile hover or focus (e.g. frequency up, amplitude down).
+  fields:
+    id: { type: string, rule: "Kebab case, unique within the project." }
+    label: { type: string, rule: "Visible row label, e.g. \"CO₂\"." }
+    kind: { type: string, rule: "co2 | motion | custom, or any other key of _data/signal-shapes.yml; unknown kinds draw as custom (sine)." }
+    unit: { type: string, required: false, rule: "Shown after the label in brackets. Use a.u. (arbitrary units): the trace carries no scale." }
+    rest: { type: map, rule: "freq: cycles per second (visible cycles = freq x window in _data/signal-shapes.yml); amp: 0-1 of full height." }
+    active: { type: map, rule: "Same fields as rest; the state the trace glides to on tile hover or focus." }
+  example:
+    - { id: co2, label: "CO₂", kind: co2, unit: "a.u.", rest: { freq: 0.25, amp: 1 }, active: { freq: 0.6, amp: 0.55 } }

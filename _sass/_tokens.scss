@@ -112,6 +112,12 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --glass-blur: var(--blur-md);
   --glass-saturate: 1.4;
 
+  // Signal bubble (_includes/signal-bubble.html): size only; colours come from the slab context (--s-accent, --s-vein).
+  --signal-height: 2.25rem;
+  --signal-dash: 2 4;           // baseline grid dash (SVG user units)
+  --signal-ease: 250ms;         // time constant JS uses to glide between rest and active (read from computed style)
+  --bubble-width: 100%;          // in flow under the media on small screens
+
   --z-base: 1;
   --z-header: 5;
   --z-skip: 10;
@@ -250,6 +256,8 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
 @media (min-width: $bp-md) {
   :root {
     --gutter: var(--space-6);
+    --signal-height: 3rem;
+    --bubble-width: 16rem;
     --portrait-width: 22rem;
   }
 }
