@@ -1,0 +1,134 @@
+// Design tokens: the only file allowed to hold raw values (CLAUDE.md §4).
+// Layers: primitives (--p-*) -> semantic (--color-*, --space-*, ...) -> components (_sass/marble/*).
+// Theme switch swaps the semantic color layer only; components never branch on theme.
+// Contrast of every semantic pair is recorded in PILOT_REPORT.md §3 (marble-ui formula).
+
+// Breakpoints: SCSS variables because media queries cannot read custom properties. Mobile-first, min-width only.
+$bp-md: 48em; // 768px: two-column hero and card grid
+$bp-lg: 64em; // 1024px: wider gutters, larger portrait
+
+:root {
+  // Primitives: marble neutrals (light) and night neutrals (dark), one verde accent per theme.
+  --p-marble-0: #fcfcfa;   // light surface, near-white, L >= 98%
+  --p-marble-200: #c8c8c2; // decorative vein on light
+  --p-marble-500: #74746e; // meaningful vein on light (>= 3:1)
+  --p-marble-700: #4a4a46; // muted text on light
+  --p-marble-900: #1b1b1a; // charcoal text on light
+  --p-night-0: #121211;    // dark surface, near-black
+  --p-night-200: #3a3a37;  // decorative vein on dark
+  --p-night-500: #85857f;  // meaningful vein on dark (>= 3:1)
+  --p-night-700: #b5b5af;  // muted text on dark
+  --p-night-900: #ededea;  // off-white text on dark
+  --p-verde-700: #1d5b4c;  // accent on light
+  --p-verde-200: #8ccfb8;  // accent on dark
+
+  // Space: 4px base scale (marble-ui §2). Section rhythm uses 7-9 only.
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  // Type: one display face (grotesk 600), one text face (serif 400/600). Three weights total.
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-text: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-display: 600;
+
+  // Scale: ratio 1.25 from a 1.125rem body; the display step is the page's one bold element.
+  --step--1: 0.875rem;  // labels, meta, tags
+  --step-0: 1.125rem;   // body
+  --step-1: 1.40625rem; // lead, card title
+  --step-2: 1.75rem;    // section heading
+  --step-3: 2.1875rem;  // positioning line at lg
+  --step-display: clamp(3rem, 12.5vw, 10rem); // hero name
+
+  --leading-body: 1.6;
+  --leading-snug: 1.3;
+  --leading-display: 1.1;
+  --leading-name: 0.92; // hero name only: single-line slab, cap-to-baseline tight
+  --tracking-display: -0.01em;
+  --tracking-name: -0.035em; // optical tightening at 10rem
+  --tracking-label: 0.08em;  // all-caps labels of <= 3 words only
+
+  // Layout
+  --measure: 65ch;
+  --container: 80rem;
+  --gutter: var(--space-4);
+  --portrait-width: 15rem;
+  --header-gap: var(--space-5);
+
+  // Geometry: crisp edges, hairline veins, no shadows.
+  --radius: 0;
+  --vein-width: 1px;
+  --focus-width: 2px;
+  --focus-offset: 3px;
+  --underline-width: 1px;
+  --underline-width-hover: 2px;
+  --underline-offset: 0.2em;
+  --tap-min: 2.75rem; // 44px targets (rubric A2)
+  --aspect-card: 3 / 2;
+  --aspect-portrait: 4 / 5;
+
+  // Motion: user-initiated only, removed under prefers-reduced-motion (_sass/marble/_base.scss).
+  --duration: 150ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  // Stacking
+  --z-skip: 10;
+}
+
+// Semantic color layer. Light is the default; dark is applied by OS preference until the user toggles.
+@mixin theme-light {
+  color-scheme: light;
+  --color-surface: var(--p-marble-0);
+  --color-text: var(--p-marble-900);
+  --color-text-muted: var(--p-marble-700);
+  --color-vein: var(--p-marble-200);
+  --color-vein-strong: var(--p-marble-500);
+  --color-accent: var(--p-verde-700);
+}
+
+@mixin theme-dark {
+  color-scheme: dark;
+  --color-surface: var(--p-night-0);
+  --color-text: var(--p-night-900);
+  --color-text-muted: var(--p-night-700);
+  --color-vein: var(--p-night-200);
+  --color-vein-strong: var(--p-night-500);
+  --color-accent: var(--p-verde-200);
+}
+
+:root {
+  @include theme-light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include theme-dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  @include theme-dark;
+}
+
+@media (min-width: $bp-md) {
+  :root {
+    --gutter: var(--space-6);
+    --portrait-width: 17rem;
+  }
+}
+
+@media (min-width: $bp-lg) {
+  :root {
+    --gutter: var(--space-8);
+    --portrait-width: 21rem;
+    --header-gap: var(--space-6);
+  }
+}
