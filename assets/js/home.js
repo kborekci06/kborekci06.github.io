@@ -2,7 +2,7 @@
 // 1. Vein field: a generated canvas behind the hero name (draw-on at load, slow drift, depth parallax on scroll).
 // 2. Reveal fallback: IntersectionObserver classes where CSS scroll-driven animations are unsupported.
 // 3. Tile video: hover/focus-to-play on hover devices, in-view autoplay on touch, a play/pause button everywhere.
-// Never touches wheel/touch events or the scroll position: native scrolling only.
+// Native scrolling only: no scroll-input listeners, no cancelled events, no scroll position writes.
 (function () {
   "use strict";
 

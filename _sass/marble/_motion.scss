@@ -232,6 +232,16 @@
       }
     }
 
+    // Keyboard safety: focus can scroll a control into view before its scrub has revealed it,
+    // so any block holding focus drops its entrance and shows at rest.
+    .js .tile:focus-within .tile__copy > *,
+    .js .tile:focus-within .tile__frame,
+    .js .tile:focus-within .tile__tags,
+    .js [data-reveal]:focus-within,
+    .js [data-reveal]:focus {
+      animation: none;
+    }
+
     // Story: the vein draws along the cut, the portrait rises out of the cut, then drifts in parallax.
     .teaser {
       view-timeline: --teaser block;
@@ -276,9 +286,9 @@
     transition-delay: calc(var(--stagger) * 3);
   }
 
-  .js.no-sda [data-reveal]:not(.is-in),
-  .js.no-sda .tile:not(.is-in) .tile__frame,
-  .js.no-sda .tile:not(.is-in) .tile__copy > *,
+  .js.no-sda [data-reveal]:not(.is-in):not(:focus-within),
+  .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__frame,
+  .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__copy > *,
   .js.no-sda .teaser:not(.is-in) .teaser__portrait {
     opacity: 0;
     transform: translateY(var(--rise));
