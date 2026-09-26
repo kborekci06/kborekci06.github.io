@@ -13,7 +13,9 @@
   gap: var(--space-3);
 }
 
+// Visual order image -> org -> title; DOM keeps the title first. No focusable element is reordered.
 .card__media {
+  order: -2;
   width: 100%;
   aspect-ratio: var(--aspect-card);
   object-fit: cover;
@@ -22,6 +24,7 @@
 }
 
 .card__org {
+  order: -1;
   color: var(--color-text-muted);
 }
 
@@ -70,9 +73,9 @@
   font-size: var(--step--1);
 }
 
-.card__tags li + li::before {
+.card__tags li:not(:last-child)::after {
   content: "/";
-  margin-right: var(--space-3);
+  margin-left: var(--space-3);
   color: var(--color-vein-strong);
 }
 

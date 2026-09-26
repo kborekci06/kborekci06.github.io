@@ -46,7 +46,7 @@ $bp-lg: 64em; // 1024px: wider gutters, larger portrait
   --step-1: 1.40625rem; // lead, card title
   --step-2: 1.75rem;    // section heading
   --step-3: 2.1875rem;  // positioning line at lg
-  --step-display: clamp(3rem, 12.5vw, 10rem); // hero name
+  --step-display: clamp(3rem, 14vw, 12rem); // hero name
 
   --leading-body: 1.6;
   --leading-snug: 1.3;
@@ -61,7 +61,7 @@ $bp-lg: 64em; // 1024px: wider gutters, larger portrait
   --container: 80rem;
   --gutter: var(--space-4);
   --portrait-width: 15rem;
-  --header-gap: var(--space-5);
+  --header-gap: var(--space-3);
 
   // Geometry: crisp edges, hairline veins, no shadows.
   --radius: 0;
