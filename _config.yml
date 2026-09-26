@@ -16,3 +16,16 @@ header_pages:
 webrick:
   mime_types:
     mp4: video/mp4
+
+# Root files that must never be published to the site
+exclude:
+  - README.md
+  - DEV.md
+  - CLAUDE.md
+  - CONTEXT.md
+  - FILE_MAP.md
+  - ISSUE_LOG.md
+  - ROADMAP.md
+  - Gemfile
+  - Gemfile.lock
+  - RESUME_KAAN_BOREKCI_2026.pdf
