@@ -1,0 +1,19 @@
+{%- comment -%}
+  One flagship card. Param: project = a page carrying the _data/schema/project.yml front matter.
+  DOM order is title first for screen readers; CSS order shows image, org, title (_sass/marble/_card.scss).
+  sizes mirrors the card grid: 1 column below 48em, 2 columns above, container capped at 80rem.
+{%- endcomment -%}
+{%- assign p = include.project -%}
+<article class="card">
+  <h3 class="card__title"><a class="card__link" href="{{ p.url | relative_url }}">{{ p.title }}</a></h3>
+  <p class="card__org label">{{ p.org }}</p>
+  <p class="card__blurb">{{ p.description }}</p>
+  {%- if p.tags and p.tags.size > 0 %}
+  <ul class="card__tags" aria-label="Tags">
+    {%- for tag in p.tags limit: 3 %}
+    <li>{{ tag }}</li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+  {% include responsive-image.html image=p.thumbnail class="card__media" sizes="(min-width: 80rem) 35rem, (min-width: 48em) 44vw, 92vw" %}
+</article>

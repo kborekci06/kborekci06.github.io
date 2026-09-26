@@ -1,0 +1,11 @@
+---
+layout: base
+---
+{%- comment -%}
+  Home: hero, featured flagships, story teaser. All copy comes from index.md front matter;
+  cards come from project front matter. Overrides minima's unused home layout.
+{%- endcomment -%}
+{% include home-hero.html %}
+{% include featured-work.html title=page.work_heading %}
+{% include story-teaser.html teaser=page.story_teaser %}
+{{ content }}

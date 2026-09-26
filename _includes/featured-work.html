@@ -1,0 +1,16 @@
+{%- comment -%}
+  Featured work: every page with featured: true, sorted by order (contract: _data/schema/project.yml).
+  Adding a card = front matter on a project page; this file never changes. Styles: _sass/marble/_card.scss.
+  Param: title = section heading.
+{%- endcomment -%}
+{%- assign flagships = site.pages | where_exp: "p", "p.featured == true" | sort: "order" -%}
+<section class="section container" aria-labelledby="work-title">
+  <div class="section__head">
+    <h2 class="section__title" id="work-title">{{ include.title }}</h2>
+  </div>
+  <div class="card-grid">
+    {%- for project in flagships %}
+    {% include flagship-card.html project=project %}
+    {%- endfor %}
+  </div>
+</section>

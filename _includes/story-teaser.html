@@ -1,0 +1,12 @@
+{%- comment -%}
+  Story teaser: one sentence and one link. Param: teaser = { title, text, link_label, url } from index.md front matter.
+  Styles: _sass/marble/_teaser.scss.
+{%- endcomment -%}
+{%- assign t = include.teaser -%}
+<section class="section container" aria-labelledby="story-title">
+  <div class="section__head">
+    <h2 class="section__title" id="story-title">{{ t.title }}</h2>
+  </div>
+  <p class="teaser__text">{{ t.text }}</p>
+  <a class="teaser__link" href="{{ t.url | relative_url }}">{{ t.link_label }}<span aria-hidden="true">&nbsp;→</span></a>
+</section>
