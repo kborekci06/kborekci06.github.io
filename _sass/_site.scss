@@ -1,0 +1,13 @@
+// Entry point for the repo-owned design system. Compiled and inlined by _includes/styles.html
+// (one <style> in <head>: no render-blocking stylesheet request, no CSS @import at runtime).
+// Order: tokens -> fonts -> element base -> page frame -> components (one partial per include).
+
+@import "tokens";
+@import "marble/fonts";
+@import "marble/base";
+@import "marble/layout";
+@import "marble/header";
+@import "marble/hero";
+@import "marble/card";
+@import "marble/teaser";
+@import "marble/footer";

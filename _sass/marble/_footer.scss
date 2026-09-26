@@ -1,0 +1,50 @@
+// Site footer (_includes/site-footer.html): name, email as text, profiles, resume.
+
+.site-footer {
+  border-top: var(--vein-width) solid var(--color-vein);
+}
+
+.site-footer__inner {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-7);
+}
+
+.site-footer__name {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+}
+
+.site-footer__address {
+  font-style: normal;
+}
+
+.site-footer__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer__list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+}
+
+.site-footer__key {
+  margin-right: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: $bp-md) {
+  .site-footer__inner {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .site-footer__address {
+    justify-self: end;
+  }
+}

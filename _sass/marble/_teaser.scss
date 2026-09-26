@@ -1,0 +1,16 @@
+// Story teaser (_includes/story-teaser.html): one sentence and one link.
+
+.teaser__text {
+  max-width: 40ch;
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+}
+
+.teaser__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+}
