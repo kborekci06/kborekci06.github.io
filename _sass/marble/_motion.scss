@@ -108,15 +108,15 @@
   }
 }
 
-// The arch rises out of the niche: the clip opens from the base upward, keeping the arch shape.
+// The portrait panel rises out of the cut: the top edge opens on the slab's diagonal, the chamfer stays.
 @keyframes portrait-rise {
   from {
-    clip-path: inset(40% 0 0 round var(--arch-shape));
+    clip-path: polygon(0 34%, 100% 20%, 100% 88%, 84% 100%, 0 100%);
     transform: translateY(var(--rise));
   }
 
   to {
-    clip-path: inset(0 round var(--arch-shape));
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 84% 100%, 0 100%);
     transform: none;
   }
 }

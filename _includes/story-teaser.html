@@ -1,6 +1,6 @@
 {%- comment -%}
   Story teaser: inverse slab with an angled top cut and a lit band drawn along it, the onyx band layer behind;
-  portrait in a backlit arched niche with scroll parallax, one sentence, one link.
+  portrait in a fitted panel with an inlay hairline and scroll parallax, one sentence, one link.
   Params: teaser = { title, text, link_label, url }, portrait = { src, widths, width, height, sizes, alt } (index.md front matter).
   Styles: _sass/marble/_teaser.scss; motion: _sass/marble/_motion.scss.
 {%- endcomment -%}
@@ -9,11 +9,10 @@
   <svg class="teaser__vein" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><line x1="0" y1="10" x2="100" y2="0" vector-effect="non-scaling-stroke"/></svg>
   <div class="container teaser__inner">
     {%- if include.portrait %}
-    <div class="teaser__niche">
-      <figure class="teaser__portrait">
-        {% include responsive-image.html image=include.portrait class="teaser__img" sizes=include.portrait.sizes %}
-      </figure>
-    </div>
+    <figure class="teaser__portrait">
+      {% include responsive-image.html image=include.portrait class="teaser__img" sizes=include.portrait.sizes %}
+      <svg class="inlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="3,2.4 97,2.4 97,86.18 81.96,97.6 3,97.6" vector-effect="non-scaling-stroke"/></svg>
+    </figure>
     {%- endif %}
     <div class="teaser__copy" data-reveal>
       <h2 class="teaser__title" id="story-title">{{ t.title }}</h2>
