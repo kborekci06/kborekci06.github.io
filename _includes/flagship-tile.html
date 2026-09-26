@@ -4,6 +4,7 @@
   or with reduced motion the track collapses and the tile is a plain section.
   Params: project = page with _data/schema/project.yml front matter; tone = "inverse" | "base".
   Media: project.tile.video (hover/in-view loop, poster required) or project.thumbnail (image).
+  Frame: a fitted stone panel (chamfered corners, one wide cut, mirrored on alternate tiles) with an inlay hairline.
   project.signals (optional) floats a glass signal bubble over the media (_includes/signal-bubble.html).
   Meta row: project.role and project.dates (years only; "(inferred)" when dates.inferred).
   Actions: case study link, then project.tile.secondary {label, url} or, for video tiles, a play/pause button.
@@ -20,6 +21,7 @@
           {%- else %}
           {% include responsive-image.html image=p.thumbnail class="tile__img" sizes="(min-width: 48em) 58vw, 92vw" %}
           {%- endif %}
+          <svg class="inlay tile__inlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="3.54,2.4 96.46,2.4 98.4,5.26 98.4,84.75 89.69,97.6 3.54,97.6 1.6,94.74 1.6,5.26" vector-effect="non-scaling-stroke"/></svg>
         </div>
         {%- if p.tags and p.tags.size > 0 %}
         <ul class="tile__tags" aria-label="Tags">

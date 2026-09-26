@@ -13,42 +13,29 @@
   position: relative;
 }
 
-// Frame: a polished onyx slab, bullnosed on two opposite corners; alternate tiles mirror it (bookmatched).
-// --frame-shape is the two-value radius (top-left/bottom-right, top-right/bottom-left) shared by the clip, the rim and
-// the frame-open keyframes. The media fills it; a rim (::after) and a hover sheen (::before) sit over the media.
-.tile {
-  --frame-shape: var(--radius-bullnose) 0;
-}
-
-.tile:nth-of-type(even) {
-  --frame-shape: 0 var(--radius-bullnose);
-}
-
+// Frame: a fitted stone panel (ported from Emperador). Small chamfers on three corners, one wide cut on the lower outer
+// corner, an inlay hairline inset from the edge (.inlay, _layout.scss). Chamfers are in percent so the inlay polygon
+// (SVG, same space) follows them; 2 % of width = 3 % of height at 3:2. The media fills it; a hover sheen sits over it.
 .tile__frame {
   position: relative;
   overflow: clip;
   aspect-ratio: var(--aspect-card);
-  border-radius: var(--frame-shape);
   background-color: var(--s-surface-2);
-  clip-path: inset(0 round var(--frame-shape));
-}
-
-.tile__frame::before,
-.tile__frame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: var(--frame-shape);
-  pointer-events: none;
+  clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 86.5%, 91% 100%, 2% 100%, 0 97%, 0 3%);
 }
 
 .tile__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   background-image: var(--sheen);
   translate: -100% 0;
+  pointer-events: none;
 }
 
-.tile__frame::after {
-  box-shadow: var(--rim);
+.tile__inlay {
+  z-index: 2;
 }
 
 .tile__img,
@@ -59,7 +46,7 @@
   object-position: 50% 30%;
 }
 
-// Tags: a row of glass chips overlapping the media's lower edge on small screens; from md a rail over its corner.
+// Tags: a row of glass chips overlapping the media's lower edge on small screens; from md a rail across its top edge.
 .tile__tags {
   position: relative;
   display: flex;
@@ -76,12 +63,12 @@
 
 .tile__tags li {
   @include glass;
-  padding: var(--space-1) var(--space-4);
-  border-radius: var(--radius-control);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-glass);
 }
 
-// Signal bubble: below the tags in flow up to lg (full width, then 22rem); from lg it floats over the frame's upper
-// outer corner, partly outside it, diagonal to the tag rail so neither covers the other.
+// Signal panel: below the tags in flow up to lg (full width, then 22rem); from lg it floats over the frame's wide lower
+// cut, partly outside it, opposite the tag rail on the top edge.
 .tile__media > .signal-bubble {
   margin-top: var(--space-3);
 }
@@ -126,8 +113,8 @@
   @include glass;
   display: flex;
   gap: var(--space-2);
-  padding: var(--space-1) var(--space-4);
-  border-radius: var(--radius-control);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-glass);
 }
 
 .tile__meta-item dt {
@@ -150,9 +137,18 @@
 @media (min-width: $bp-md) {
   .tile__tags {
     position: absolute;
-    left: var(--space-4);
-    bottom: calc(var(--space-4) * -1);
+    top: calc(var(--space-4) * -1);
+    left: var(--space-6);
     margin: 0;
+  }
+
+  // Even tiles sit on the right: the frame mirrors so its wide cut stays on the inner corner, under the signal panel.
+  .tile:nth-of-type(even) .tile__frame {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 97%, 98% 100%, 9% 100%, 0 86.5%, 0 3%);
+  }
+
+  .tile:nth-of-type(even) .tile__inlay {
+    scale: -1 1;
   }
 
   .tile__stage {
@@ -178,8 +174,8 @@
 @media (min-width: $bp-lg) {
   .tile__media > .signal-bubble {
     position: absolute;
-    top: calc(var(--space-8) * -1);
     right: calc(var(--space-6) * -1);
+    bottom: calc(var(--space-8) * -1);
     margin: 0;
   }
 

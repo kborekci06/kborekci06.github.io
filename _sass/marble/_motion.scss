@@ -57,15 +57,28 @@
   }
 }
 
-// Tile frame opens from a polished cabochon to the bullnosed slab (--frame-shape, _tile.scss).
+// Tile frame opens from a small cut stone to the fitted panel; same eight vertices as .tile__frame's resting polygon
+// (and its mirror on even tiles from md). Ported from Emperador.
 @keyframes frame-open {
   from {
-    clip-path: inset(12% 16% round var(--radius-pebble));
+    clip-path: polygon(18% 12%, 82% 12%, 84% 15%, 84% 76%, 77% 88%, 18% 88%, 16% 85%, 16% 15%);
     transform: scale(0.94);
   }
 
   to {
-    clip-path: inset(0 round var(--frame-shape));
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 86.5%, 91% 100%, 2% 100%, 0 97%, 0 3%);
+    transform: none;
+  }
+}
+
+@keyframes frame-open-mirror {
+  from {
+    clip-path: polygon(18% 12%, 82% 12%, 84% 15%, 84% 85%, 82% 88%, 23% 88%, 16% 76%, 16% 15%);
+    transform: scale(0.94);
+  }
+
+  to {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 97%, 98% 100%, 9% 100%, 0 86.5%, 0 3%);
     transform: none;
   }
 }
@@ -254,6 +267,19 @@
         animation: frame-open linear both;
         animation-timeline: --tile;
         animation-range: entry 45% contain 40%;
+      }
+
+      @media (min-width: $bp-md) {
+        .js .tile:nth-of-type(even) .tile__frame {
+          animation-name: frame-open-mirror;
+        }
+      }
+
+      // The inlay draws on once the panel has opened.
+      .js .tile__inlay {
+        animation: wipe-in linear both;
+        animation-timeline: --tile;
+        animation-range: contain 0% contain 35%;
       }
 
       .js .tile__img,
