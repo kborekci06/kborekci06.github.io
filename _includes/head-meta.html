@@ -20,8 +20,8 @@
 <meta property="og:description" content="{{ doc_description | escape }}">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
 {% include theme-init.html %}
-<link rel="preload" href="{{ '/assets/fonts/archivo-700-wdth-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ '/assets/fonts/ibm-plex-sans-400-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/cormorant-garamond-600-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/eb-garamond-400-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 {% include styles.html %}
 {%- for script in page.scripts %}
 <script src="{{ script | relative_url }}" defer></script>

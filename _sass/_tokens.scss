@@ -47,16 +47,16 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --slab-pad: clamp(var(--space-8), 10vw, var(--space-10));
 
   // Type: Archivo 700 (display, width axis 100-125) + IBM Plex Sans 400/500 (text).
-  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --font-text: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-text: "EB Garamond", Georgia, "Times New Roman", serif;
   --weight-regular: 400;
   --weight-medium: 500;
-  --weight-display: 700;
-  --width-display: 125;     // font-stretch percent for the expanded cut
-  --width-heading: 108;
+  --weight-display: 600;
+  --width-display: 100;     // font-stretch percent; the serif has no width axis
+  --width-heading: 100;
 
   --step--1: 0.875rem;
-  --step-0: 1.0625rem;
+  --step-0: 1.125rem;
   --step-1: clamp(1.1875rem, 1.05rem + 0.5vw, 1.375rem);
   --step-2: clamp(1.375rem, 1.1rem + 1.1vw, 1.875rem);
   --step-3: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
@@ -67,8 +67,8 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --leading-snug: 1.3;
   --leading-tight: 1.08;
   --leading-display: 0.92;
-  --tracking-display: -0.03em;
-  --tracking-heading: -0.02em;
+  --tracking-display: -0.01em;
+  --tracking-heading: -0.005em;
   --tracking-label: 0.1em;
 
   // Layout
