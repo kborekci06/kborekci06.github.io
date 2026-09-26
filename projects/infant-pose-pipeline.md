@@ -20,6 +20,9 @@ figures: []
 outcome: "[confirm: sanitized Phase 1 finding, pending Kaan's project resources]"
 featured: true
 order: 2
+tile:
+  video: /assets/video/infant-pose-pipeline/pose-loop.mp4
+  poster: { src: /assets/video/infant-pose-pipeline/pose-loop-poster.webp, width: 584, height: 390, alt: "Video of an infant lying on its back, with pose-estimation keypoints, a skeleton and a bounding box tracking its movement" }
 ---
 
 {% include tag-row.html slug="infant-pose-pipeline" %}

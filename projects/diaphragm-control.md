@@ -20,6 +20,8 @@ figures: []
 outcome: "Provisional patent filed, IRB-approved data collection on healthy volunteers, BMES 2025 poster"
 featured: true
 order: 1
+tile:
+  secondary: { label: "BMES 2025 poster (PDF)", url: /assets/img/projects/diaphragm-control/BMES-POSTER-2025.pdf }
 ---
 ### Building the foundation for closed-loop diaphragm pacing through a portable IMU-CO₂ platform for pediatric CCHS
 {% include tag-row.html slug="diaphragm-control" %}

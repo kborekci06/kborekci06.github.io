@@ -89,3 +89,12 @@ order:
   type: int
   required: false
   rule: Ascending sort among featured projects.
+
+tile:
+  type: map
+  required: false
+  rule: Home flagship tile extras, read by _includes/flagship-tile.html. Without it the tile shows the thumbnail and one action.
+  fields:
+    video: { type: string, required: false, rule: "Hover/in-view loop under assets/video/<slug>/: H.264, no audio, < 1.5 Mb/s, < 10 s (CLAUDE.md §6). Replaces the thumbnail on the tile." }
+    poster: { type: map, required: "with video", rule: "src, width, height, alt; WebP first frame of the video." }
+    secondary: { type: map, required: false, rule: "label, url; the second action (e.g. a poster PDF). Video tiles without it get a play/pause button." }
