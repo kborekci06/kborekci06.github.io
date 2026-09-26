@@ -28,7 +28,8 @@
 }
 
 // Both ends are insets so the clip interpolates (against the implicit "none" it would flip at 50 %); the negative
-// insets leave room for glows and shadows.
+// insets leave room for glows and shadows. Users fill backwards only: a finished wipe must leave no clip-path, which
+// would make the element a backdrop root and cut the glass chips inside it off from the photo they blur.
 @keyframes wipe-in {
   from {
     clip-path: inset(-2rem 100% -2rem -2rem);
@@ -156,7 +157,7 @@
   }
 
   .js .hero__edge {
-    animation: wipe-in calc(var(--dur-slow) * 2) var(--ease-in-out) calc(var(--stagger) * 6) both;
+    animation: wipe-in calc(var(--dur-slow) * 2) var(--ease-in-out) calc(var(--stagger) * 6) backwards;
   }
 
   .hero__cue-line {
@@ -283,7 +284,7 @@
 
       // The inlay draws on once the panel has opened.
       .js .tile__inlay {
-        animation: wipe-in linear both;
+        animation: wipe-in linear backwards;
         animation-timeline: --tile;
         animation-range: contain 0% contain 35%;
       }
@@ -318,7 +319,7 @@
       }
 
       .js .tile__tags {
-        animation: wipe-in linear both;
+        animation: wipe-in linear backwards;
         animation-timeline: --tile;
         animation-range: contain 30% contain 55%;
       }
@@ -347,7 +348,7 @@
     }
 
     .js .teaser__vein {
-      animation: wipe-in linear both;
+      animation: wipe-in linear backwards;
       animation-timeline: --teaser;
       animation-range: entry 5% entry 60%;
     }
