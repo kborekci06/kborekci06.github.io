@@ -1,0 +1,67 @@
+
+## --- EXAMPLE COMMIT BASED ON TEMPLATE BELOW (write your commit without # above) ---
+# feat(tokens): add marble light and dark surface tokens
+# ONE BLANK LINE BETWEEN FIELDS
+# The marble theme needs surface and vein colors that hold contrast in
+# both color schemes. Tokens live on :root and are redefined under the
+# dark-mode selectors so components never hard-code a color.
+# ONE BLANK LINE BETWEEN FIELDS
+# Refs: DES-002
+
+## --- BARE TEMPLATE ---
+# <type>(<scope>): <subject>  --> 50 chars max, imperative mood, no period at the end
+
+# <body - optional: WHY this change? (wrap at 72 chars)>
+
+# <footer - optional: ISSUE_LOG IDs, breaking changes, co-authors>
+
+## DESCRIPTION OF RULES FOR EACH FIELD
+# --- TYPES ---
+# feat:     new feature, page, section, or capability
+# fix:      bug fix (broken layout, link, asset, build error)
+# docs:     documentation only (README, .github/ conventions)
+# refactor: change that neither fixes a bug nor adds a feature
+# perf:     performance improvement (asset size, load time)
+# test:     adding or fixing tests or checks
+# chore:    tooling / dependencies / config, housekeeping
+# build:    changes to the build system (Gemfile, _config.yml build settings)
+# ci:       CI / CD pipeline changes (GitHub Actions, Pages deploy)
+# style:    whitespace / formatting only, no change in behavior or rendering
+
+# --- SCOPES: part of the site being touched ---
+# layout    _layouts/ and _includes/ structure
+# tokens    design tokens: colors, type scale, spacing, themes
+# content   copy and prose on pages
+# assets    images, video, PDFs under assets/
+# data      _data/ YAML files
+# story     story / about section
+# work      work / projects section and case-study pages
+# home      home page
+# perf      performance work spanning several areas
+# a11y      accessibility
+# seo       metadata, sitemap, social cards
+# repo      repo meta: .gitignore, .github/, conventions
+
+# --- SUBJECT ---
+# 1 - Imperative mood: "add X", not "added X" or "adds X". It completes
+#     the sentence "If applied, this commit will ___."
+# 2 - Lowercase the first letter (after the type/scope).
+# 3 - No period at the end.
+# 4 - <= 50 characters if possible. Hard ceiling 72.
+# 5 - Tells what changed, not why; the why goes in the body.
+
+# --- BODY ---
+# 1 - Separated from the subject by a blank line.
+# 2 - Wrap at 72 characters.
+# 3 - Explains the why: motivation, context, alternatives tried, why this approach won.
+# 4 - Bullets are fine when listing several reasons.
+
+# --- FOOTER ---
+# 1 - Separated from the body by a blank line. One trailer per line.
+# 2 - ISSUE_LOG reference: "Closes: <ID>" if the commit finishes the issue,
+#     "Refs: <ID>" if it advances it. ID = <CAT>-<nnn>,
+#     CAT in DES, FUN, UX, UI, PERF, CON, REPO (e.g. Closes: FUN-002).
+# 3 - Breaking change: "BREAKING CHANGE: <what breaks and how to migrate>".
+# 4 - Claude-authored commits end with an attribution trailer as the final line,
+#     using the model name the Claude Code session reports:
+#     Co-Authored-By: <Claude model name> <noreply@anthropic.com>
