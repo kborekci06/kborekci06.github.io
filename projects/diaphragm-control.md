@@ -8,7 +8,7 @@ description: "A wearable that logs exhaled CO₂ and motion for children with CC
 role: "Technical and project lead"
 team: ["Shael", "Akash", "Jay"]
 dates: { start: "2024", end: "present" }
-org: "Lurie Children's Hospital"
+org: "Lurie Children’s Hospital"
 tags: ["Medical Device", "Embedded Systems", "PCB Design"]
 thumbnail:
   src: /assets/img/diaphragm-control/card-1100.webp

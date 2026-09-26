@@ -6,7 +6,7 @@ permalink: /projects/infant-pose-pipeline/
 slug: infant-pose-pipeline
 description: "Screening infant motor development from ordinary video, and a proposal to put the physics of infant motion into the model."
 role: "R&D engineer (student intern)"
-team: ["Dr. Arun Jayaraman's lab"]
+team: ["Dr. Arun Jayaraman’s lab"]
 dates: { start: "2024", end: "present" }
 org: "Shirley Ryan AbilityLab"
 tags: ["Computer Vision", "Pose Estimation and Lifting", "Python"]
