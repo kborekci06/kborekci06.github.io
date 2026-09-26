@@ -322,7 +322,7 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --hero-vein-accent-to: var(--color-night-glow);
   // Backlight behind the name: a warm halo (hero__glow) and a glyph glow; both theme-invariant like the night slab.
   --hero-backlight:
-    radial-gradient(closest-side, color-mix(in srgb, var(--color-night-glow) 26%, transparent), color-mix(in srgb, var(--color-night-glow) 9%, transparent) 55%, transparent);
+    radial-gradient(closest-side, color-mix(in srgb, var(--color-night-glow) 22%, transparent), color-mix(in srgb, var(--color-night-glow) 8%, transparent) 55%, transparent);
   --hero-name-glow: 0 0 0.3em color-mix(in srgb, var(--color-night-glow) 45%, transparent), 0 0 1.2em color-mix(in srgb, var(--color-night-glow) 22%, transparent);
   // Portrait niche backlight (Story teaser): a warm halo behind the arch.
   --niche-glow: radial-gradient(closest-side, color-mix(in srgb, var(--p-onyx-glow-300) 34%, transparent), color-mix(in srgb, var(--p-onyx-glow-300) 10%, transparent) 60%, transparent);

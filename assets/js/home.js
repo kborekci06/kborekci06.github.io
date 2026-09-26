@@ -153,10 +153,10 @@
       ctx.save();
       ctx.translate(w / 2, h * 0.5);
       ctx.scale(1, 0.62);
-      var rx = Math.max(w * 0.4, Math.min(w * 0.62, 320));
+      var rx = Math.max(w * 0.4, Math.min(w * 0.75, 340));
       var sc = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-      sc.addColorStop(0, rgba(col.surface, 0.88));
-      sc.addColorStop(0.6, rgba(col.surface, 0.55));
+      sc.addColorStop(0, rgba(col.surface, 0.94));
+      sc.addColorStop(0.6, rgba(col.surface, 0.72));
       sc.addColorStop(1, rgba(col.surface, 0));
       ctx.globalAlpha = 1;
       ctx.fillStyle = sc;
