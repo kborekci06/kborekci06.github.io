@@ -145,6 +145,16 @@
     translate: 0 var(--hover-lift);
   }
 
+  // Signal bubble floats up a little further than the frame, so the two layers separate on hover.
+  .signal-bubble {
+    transition: translate var(--dur-base) var(--ease-out);
+  }
+
+  .tile__media:hover .signal-bubble,
+  .tile:focus-within .signal-bubble {
+    translate: 0 calc(var(--hover-lift) * 2);
+  }
+
   .tile__media:hover .tile__img,
   .tile__media:hover .tile__video,
   .tile:focus-within .tile__img,
@@ -230,6 +240,12 @@
         animation-timeline: --tile;
         animation-range: contain 30% contain 55%;
       }
+
+      .js .tile .signal-bubble {
+        animation: rise-in linear both;
+        animation-timeline: --tile;
+        animation-range: contain 25% contain 50%;
+      }
     }
 
     // Keyboard safety: focus can scroll a control into view before its scrub has revealed it,
@@ -237,6 +253,7 @@
     .js .tile:focus-within .tile__copy > *,
     .js .tile:focus-within .tile__frame,
     .js .tile:focus-within .tile__tags,
+    .js .tile:focus-within .signal-bubble,
     .js [data-reveal]:focus-within,
     .js [data-reveal]:focus {
       animation: none;
@@ -308,7 +325,8 @@
 
   .btn,
   .theme-toggle,
-  .site-nav__link::after {
+  .site-nav__link::after,
+  .signal-bubble {
     transition: none;
   }
 }

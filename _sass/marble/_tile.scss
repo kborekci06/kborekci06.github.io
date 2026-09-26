@@ -56,6 +56,12 @@
   }
 }
 
+// Signal bubble: below the tags on small screens (in flow, full width); from md it floats over the frame's
+// lower outer corner, half outside it, mirroring the tag rail on the opposite corner.
+.tile__media > .signal-bubble {
+  margin-top: var(--space-3);
+}
+
 .tile__copy {
   display: grid;
   gap: var(--space-4);
@@ -96,6 +102,18 @@
     left: var(--space-4);
     bottom: calc(var(--space-4) * -1);
     margin: 0;
+  }
+
+  .tile__media > .signal-bubble {
+    position: absolute;
+    right: calc(var(--space-5) * -1);
+    bottom: calc(var(--space-9) * -1);
+    margin: 0;
+  }
+
+  .tile:nth-of-type(even) .tile__media > .signal-bubble {
+    right: auto;
+    left: calc(var(--space-5) * -1);
   }
 
   .tile__stage {

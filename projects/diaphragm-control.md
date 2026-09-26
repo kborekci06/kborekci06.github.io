@@ -22,6 +22,11 @@ featured: true
 order: 1
 tile:
   secondary: { label: "BMES 2025 poster (PDF)", url: /assets/img/projects/diaphragm-control/BMES-POSTER-2025.pdf }
+# Illustrative traces for the tile's glass bubble (contract: _data/schema/project.yml signals). Not recorded data:
+# at rest a slow breath; on hover or focus the capnogram speeds up and flattens and motion grows, as activity rises.
+signals:
+  - { id: co2, label: "CO₂", kind: co2, unit: "a.u.", rest: { freq: 0.25, amp: 1 }, active: { freq: 0.6, amp: 0.55 } }
+  - { id: motion, label: "Motion", kind: motion, unit: "a.u.", rest: { freq: 0.2, amp: 0.45 }, active: { freq: 0.5, amp: 0.9 } }
 ---
 ### Building the foundation for closed-loop diaphragm pacing through a portable IMU-CO₂ platform for pediatric CCHS
 {% include tag-row.html slug="diaphragm-control" %}
