@@ -1,6 +1,6 @@
 // Home runtime, loaded with defer (index.md front matter: scripts). Motion map: PILOT_REPORT.md §0.3.
-// 1. Band field: generated honey-onyx bands behind the hero name (draw-on at load, slow flow, depth parallax on scroll),
-//    with a sparse three-order branch tree growing out of each band after the draw-on (cached per branch once grown).
+// 1. Band field: generated honey-onyx bands behind the hero name (draw-on at load, slow flow, depth parallax on scroll);
+//    each band is a stream that divides as it crosses the screen (forks, braids), drawn live every frame.
 // 2. Reveal fallback: IntersectionObserver classes where CSS scroll-driven animations are unsupported.
 // 3. Tile video: hover/focus-to-play on hover devices, in-view autoplay on touch, a play/pause button everywhere.
 // 4. Signal bubble: redraws the Liquid-rendered traces each frame from their data attributes; rest -> active on tile hover/focus.
@@ -34,45 +34,39 @@
   }
 
   // ---- 1. Band field (honey onyx) ----
-  // Onyx bands, not cracks: each family is a smooth wave with offset copies. One wide ribbon per family is lit from
-  // behind (additive, accent -> glow gradient, three passes for a soft falloff); hairline contours follow its edges.
+  // Onyx bands, not cracks: each family is a smooth wave. It crosses the screen as a stream that divides at a few fork
+  // points into narrower streams (a braided river seen from above). Lit streams glow additively (accent -> glow gradient,
+  // four passes for a soft falloff); unlit ones are umber; hairline growth rings follow every stream's edges.
   var SEED = 1906;
   var DRAW_MS = 2200;
   var STEP = 24; // px between wave samples
+  var TAPER = 6; // samples over which a drawing-on front narrows to a point
   var DEPTH = [
     { parallax: 0.1, speed: 0.00005 }, // far
     { parallax: 0.24, speed: 0.00008 }, // mid
     { parallax: 0.42, speed: 0.00011 } // near
   ];
   var GLOW = [[1.4, 0.06], [0.8, 0.1], [0.35, 0.18], [0.08, 0.35]]; // ribbon passes: width factor, alpha
-  // Branches: a sparse recursive tree grows out of each band (PILOT_REPORT.md §1). Per order (0 primary, 1, 2):
-  // thinner, dimmer, shorter; each tip fades to zero. Indexed by order.
-  var BR = {
-    width: [4, 2.2, 1.2], // core width at the root, px at 1200 px wide
-    bright: [1, 0.6, 0.35], // alpha factor
-    grow: [600, 450, 350], // ms to grow, after the bands have drawn on
-    tilt: [0.00006, 0.00012, 0.0002], // rad of drift per px of scroll: finer orders move further (depth per order)
-    sway: [0.015, 0.03, 0.05] // rad amplitude of the slow sway with the band flow
+  // Forks (PILOT_REPORT.md §3): where a stream divides, both children start on the parent's centre line at the parent's
+  // width, share its tangent, then turn apart, narrow to their share and keep going to the edge (or rejoin: a braid).
+  var FORK = {
+    unlit: [0, 1, 1, 2], // split points per unlit trunk, drawn at random; lit trunks always split twice
+    angle: [5, 15], // degrees between the two children once turned
+    share: [0.55, 0.65], // width share of the wider child; the narrower takes the rest
+    rings: [4, 1, 1], // growth rings per side on the trunk and on each child (fewer lines downstream)
+    lag: 0.1 // the narrower child's draw-on front trails the wider one's by this fraction of the width: the fork opens
   };
-  var SEG = 10; // samples per branch
-  var STAGGER = 600; // ms spread of primary starts
 
-  // 2x3 affine matrices [a, b, c, d, e, f]: x' = a x + c y + e, y' = b x + d y + f.
-  function mul(m, n) {
-    return [m[0] * n[0] + m[2] * n[1], m[1] * n[0] + m[3] * n[1], m[0] * n[2] + m[2] * n[3], m[1] * n[2] + m[3] * n[3],
-      m[0] * n[4] + m[2] * n[5] + m[4], m[1] * n[4] + m[3] * n[5] + m[5]];
-  }
-
-  function place(x, y, a) {
-    var c = Math.cos(a), s = Math.sin(a);
-    return [c, s, -s, c, x, y];
+  function smooth(u) {
+    u = clamp(u, 0, 1);
+    return u * u * (3 - 2 * u);
   }
 
   function veinField(canvas) {
     var host = canvas.closest(".slab");
     var ctx = canvas.getContext("2d");
     if (!host || !ctx) return;
-    var w = 0, h = 0, dpr = 1, fams = [], col = {}, lit = null, branches = [];
+    var w = 0, h = 0, dpr = 1, fams = [], col = {}, lit = null, N = 0, yb = null;
     var start = 0, raf = 0, visible = true;
 
     function readColors() {
@@ -84,12 +78,14 @@
       lit.addColorStop(0, col.accent);
       lit.addColorStop(0.55, col.accentTo);
       lit.addColorStop(1, col.accent);
-      branches.forEach(function (b) { b.sprite = null; }); // colours changed: re-bake on next paint
     }
 
-    // One family: base line through (0, y0) with a gentle tilt, two summed sines; contours at cumulative offsets.
+    // One family: base line through (0, y0) with a gentle tilt, two summed sines; growth rings at cumulative offsets.
+    // Families are spaced by where they cross mid-screen; the ones far from the copy are lit, the ones behind it unlit.
     function generate() {
-      var r = mulberry32(SEED), list = [], n = w > 900 ? 5 : 4, s = Math.min(h, w * 0.7), i, j, off, offs;
+      var r = mulberry32(SEED), list = [], n = w > 900 ? 6 : 5, s = Math.min(h, w * 0.7), i, j, off, offs, tilt, ym;
+      N = Math.ceil((w + 2 * STEP) / STEP) + 1; // sample grid x_j = -STEP + j * STEP, past both edges
+      yb = new Float32Array(N);
       for (i = 0; i < n; i++) {
         offs = [];
         off = 0;
@@ -97,57 +93,73 @@
           off += 3 + r() * 11; // growth-ring spacing outward from the ribbon edge
           offs.push(off);
         }
+        tilt = -0.18 - r() * 0.2;
+        ym = h * (-0.05 + (i + 0.2 + r() * 0.6) / n * 1.1);
         list.push({
-          y0: h * (-0.15 + (i + r() * 0.6) / n * 1.3), tilt: -0.18 - r() * 0.2, depth: i % 3,
+          y0: ym - tilt * w / 2, tilt: tilt, depth: i % 3,
           a1: s * (0.06 + r() * 0.08), f1: (0.35 + r() * 0.5) / w * 6.28, p1: r() * 6.28,
           a2: s * (0.01 + r() * 0.015), f2: (1.2 + r() * 1.2) / w * 6.28, p2: r() * 6.28,
           offs: offs, ribbon: (40 + r() * 90) * clamp(w / 1200, 0.5, 1), delay: r() * 0.3,
-          lit: i % 2 === (w > 900 ? 0 : 1) // phones: light the bands above and below the copy, not the one behind it
+          lit: Math.abs(ym / h - 0.5) > 0.15 // lit above and below the copy, never behind it (phones and desktop)
         });
       }
       fams = list;
-      branches = [];
-      var rb = mulberry32(SEED + 11), sc = clamp(w / 1200, 0.55, 1), rx = Math.max(w * 0.4, Math.min(w * 0.75, 340));
-      // A root must sit on screen and outside the copy scrim, or its tree would grow where nobody sees it.
-      function seen(f, x) {
-        var y = f.y0 + x * f.tilt + f.a1 * Math.sin(x * f.f1 + f.p1) + f.a2 * Math.sin(x * f.f2 + f.p2), dx = (x - w / 2) / rx, dy = (y - h / 2) / (rx * 0.62);
-        return y > h * 0.06 && y < h * 0.94 && dx * dx + dy * dy > 0.8;
-      }
+      var rf = mulberry32(SEED + 11);
       fams.forEach(function (f) {
-        var n = f.lit ? (w > 900 ? 4 : 2) : 1, k, side, dir, turn, x, tries;
-        for (k = 0; k < n; k++) {
-          side = rb() < 0.5 ? -1 : 1; // leaves above or below the band
-          dir = rb() < 0.75 ? 1 : -1; // mostly with the band's direction
-          turn = side * dir * (0.35 + rb() * 0.3); // shallow departure, 20-37 degrees
-          for (tries = 0, x = -1; tries < 6 && (x < 0 || !seen(f, x)); tries++) x = w * (0.06 + (k + 0.1 + rb() * 0.8) / n * 0.88);
-          if (!seen(f, x)) continue;
-          grow({ fam: f, x: x, off: side * (f.ribbon * 0.5 + f.offs[0]), base: (dir > 0 ? 0 : Math.PI) + turn },
-            null, 0, (150 + rb() * 110) * sc, turn, STAGGER * rb(), rb, sc);
-        }
+        var trunk = { off: new Float32Array(N), wf: new Float32Array(N).fill(1), j0: 0, j1: N - 1, xs: -STEP, lag: 0, lvl: 0 };
+        var kids, forks = f.lit ? 2 : FORK.unlit[Math.floor(rf() * 4)];
+        f.streams = [trunk];
+        if (!forks) return;
+        kids = fork(f, trunk, snap(w * (0.1 + rf() * 0.25)), 1, rf);
+        if (forks > 1) fork(f, kids[rf() < 0.6 ? 0 : 1], snap(kids[0].xs + w * (0.25 + rf() * 0.25)), 2, rf);
       });
     }
 
-    // One branch in its own frame (root at 0,0, heading +x): one slow bend back toward its parent plus a small wobble.
-    // Children fork off at 35-75 % of its length; parents are pushed before children, so one pass resolves transforms.
-    function grow(root, parent, lvl, len, turn, start, r, sc) {
-      var bend = -turn * 0.8, pts = [0, 0], hd = [0], x = 0, y = 0, hh = 0, wob = r() * 6.28, i, b, kids, c, s, ct;
-      for (i = 1; i <= SEG; i++) {
-        hh += bend / SEG + 0.07 * Math.sin(i * 1.1 + wob);
-        x += Math.cos(hh) * len / SEG;
-        y += Math.sin(hh) * len / SEG;
-        pts.push(x, y);
-        hd.push(hh);
+    function snap(x) {
+      return Math.round((x + STEP) / STEP);
+    }
+
+    // Divide stream p at grid index js into two children. O(x) is the separation of their centre lines: zero with zero
+    // slope at the fork (shared tangent), then "apart" (keeps diverging at the fork angle), "parallel" (turns, then runs
+    // alongside) or, on second-level forks only, "rejoin" (opens and closes again: a braid). Each child narrows from the
+    // parent's width to its share as it separates (and widens back on a rejoin), so the pair always sums to the parent.
+    function fork(f, p, js, lvl, r) {
+      if (js >= p.j1 - 4) return [p, p];
+      var th = Math.tan((FORK.angle[0] + r() * (FORK.angle[1] - FORK.angle[0])) * Math.PI / 180);
+      var k = FORK.share[0] + r() * (FORK.share[1] - FORK.share[0]), side = r() < 0.5 ? -1 : 1;
+      var mode = lvl > 1 && r() < 0.4 ? "rejoin" : r() < 0.5 ? "apart" : "parallel";
+      var sep = Math.max(f.ribbon * p.wf[js], 24), len = mode === "apart" ? w * 0.25 : 1.5 * sep / th;
+      var hold = r() * w * 0.15, kids = [mk(k, side * (1 - k)), mk(1 - k, -side * k)], j, d, O, g, c, q;
+      // The wider child carries on from the parent at full width and narrows to its share; the narrower one grows out of
+      // the parent's centre line from zero width to its share. Widths always sum to the parent's, nothing doubles at the
+      // fork, and both glow as brightly per pixel as the parent: total light scales with width.
+      function mk(sh, dir) {
+        return { off: new Float32Array(N), wf: new Float32Array(N), g: new Float32Array(N), jt: N - 1, j0: js, j1: N - 1,
+          xs: -STEP + js * STEP, lag: (sh >= 0.5 ? 0 : FORK.lag) + p.lag, sh: sh, dir: dir, mode: mode, lvl: lvl };
       }
-      b = { root: root, parent: parent, lvl: lvl, pts: pts, hd: hd, w: BR.width[lvl] * Math.max(sc, 0.7), a: BR.bright[lvl],
-        start: start, rot: parent ? parent.b.hd[parent.i] + turn : root.base, out: turn < 0 ? -1 : 1, ph: r() * 6.28, lit: root.fam.lit, sprite: null };
-      branches.push(b);
-      if (lvl >= 2) return;
-      kids = lvl === 0 ? (b.lit ? 2 : 1) : (b.lit ? (r() < 0.35 ? 2 : 1) : 0);
-      for (c = 0; c < kids; c++) {
-        s = Math.round(SEG * (0.35 + r() * 0.4));
-        ct = (c ? -1 : 1) * b.out * (0.35 + r() * 0.25); // first child away from the band, second back toward it
-        grow(root, { b: b, i: s }, lvl + 1, len * (0.5 + r() * 0.2), ct, start + BR.grow[lvl] * s / SEG, r, sc);
+      for (j = js; j < N; j++) {
+        d = (j - js) * STEP;
+        if (mode === "apart") {
+          O = th * (d < len ? d * d / (2 * len) : d - len / 2);
+          g = smooth(d / len);
+        } else if (mode === "parallel") {
+          O = sep * smooth(d / len);
+          g = O / sep;
+        } else {
+          O = sep * (smooth(d / len) - smooth((d - len - hold) / len));
+          g = O / sep;
+        }
+        for (q = 0; q < 2; q++) {
+          c = kids[q];
+          c.off[j] = p.off[j] + c.dir * O;
+          c.wf[j] = p.wf[j] * (c.sh >= 0.5 ? 1 - (1 - c.sh) * g : c.sh * g);
+          c.g[j] = g;
+          if (g >= 0.98 && c.jt === N - 1) c.jt = j;
+        }
       }
+      p.j1 = js;
+      f.streams.push(kids[0], kids[1]);
+      return kids;
     }
 
     function resize() {
@@ -162,105 +174,40 @@
       paint(performance.now());
     }
 
-    // Stroke one contour of family f at offset o, across the first fraction reach of the width.
-    function contour(f, o, reach, t, oy) {
-      var x, y, end = w * reach + STEP, ph = t * DEPTH[f.depth].speed;
+    // Trunk centre line of family f at time t (flow phase) and scroll offset oy, sampled on the grid into yb.
+    function trunk(f, t, oy) {
+      var j, x, ph = t * DEPTH[f.depth].speed;
+      for (j = 0; j < N; j++) {
+        x = -STEP + j * STEP;
+        yb[j] = f.y0 + x * f.tilt + f.a1 * Math.sin(x * f.f1 + f.p1 + ph) + f.a2 * Math.sin(x * f.f2 + f.p2 - ph * 1.7) + oy;
+      }
+    }
+
+    // A stream's ribbon as a filled band of half-width hw * wf (vertical offsets, like the rings), grid indices j0..j1.
+    // While a stream is still drawing on, its last TAPER samples narrow to a point, so the front is soft, not a cut.
+    function band(st, j0, j1, hw) {
+      var j, e = j1 < st.j1 ? j1 : Infinity, q;
       ctx.beginPath();
-      for (x = -STEP; x <= end; x += STEP) {
-        y = f.y0 + x * f.tilt + f.a1 * Math.sin(x * f.f1 + f.p1 + ph) + f.a2 * Math.sin(x * f.f2 + f.p2 - ph * 1.7) + o + oy;
-        if (x === -STEP) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      for (j = j0; j <= j1; j++) {
+        q = hw * st.wf[j] * Math.min(1, (e - j) / TAPER);
+        ctx.lineTo(-STEP + j * STEP, yb[j] + st.off[j] - q);
       }
+      for (j = j1; j >= j0; j--) {
+        q = hw * st.wf[j] * Math.min(1, (e - j) / TAPER);
+        ctx.lineTo(-STEP + j * STEP, yb[j] + st.off[j] + q);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // One growth ring at o outside the stream's edge (sign picks the side).
+    // A child keeps its parent's outer rings only through the fork: they close onto its first ring (o -> offs[0] as the child
+    // separates) and stop once they coincide with it, so no ring ends in open space.
+    function ring(f, st, j0, j1, sign, o, merge) {
+      var j;
+      ctx.beginPath();
+      for (j = j0; j <= j1; j++) ctx.lineTo(-STEP + j * STEP, yb[j] + st.off[j] + sign * (f.ribbon * 0.5 * st.wf[j] + (merge ? o + (f.offs[0] - o) * st.g[j] : o)));
       ctx.stroke();
-    }
-
-    // Tapered branch outline up to fraction frac of its length, filled with a root-to-tip fade. Lit bands: a wide amber
-    // halo plus a glow core, additive; unlit bands: one structural-band core.
-    function paintBranch(c, b, frac) {
-      var P = b.pts, n = frac * SEG, top = Math.min(Math.ceil(n), SEG), L = [], R = [], passes, p, i, q, px, py, wd, g;
-      if (n <= 0) return;
-      passes = b.lit ? [[4, 0.18, col.accent], [1, 0.8, col.accentTo]] : [[1, 0.5, col.mid]];
-      c.globalCompositeOperation = b.lit ? "lighter" : "source-over";
-      for (p = 0; p < passes.length; p++) {
-        L.length = R.length = 0;
-        for (i = 0; i <= top; i++) {
-          px = P[2 * i];
-          py = P[2 * i + 1];
-          if (i > n) { // growing tip: stop part-way along the last segment
-            q = n - (i - 1);
-            px = P[2 * i - 2] + (px - P[2 * i - 2]) * q;
-            py = P[2 * i - 1] + (py - P[2 * i - 1]) * q;
-          }
-          wd = b.w * passes[p][0] * 0.5 * (1 - 0.8 * i / SEG) * (i >= n && frac < 1 ? 0.2 : 1);
-          L.push(px - Math.sin(b.hd[i]) * wd, py + Math.cos(b.hd[i]) * wd);
-          R.unshift(px + Math.sin(b.hd[i]) * wd, py - Math.cos(b.hd[i]) * wd);
-        }
-        g = c.createLinearGradient(0, 0, P[2 * SEG], P[2 * SEG + 1]);
-        g.addColorStop(0, rgba(passes[p][2], passes[p][1] * b.a));
-        g.addColorStop(0.5, rgba(passes[p][2], passes[p][1] * b.a * 0.55));
-        g.addColorStop(1, rgba(passes[p][2], 0));
-        c.fillStyle = g;
-        c.beginPath();
-        c.moveTo(L[0], L[1]);
-        for (i = 2; i < L.length; i += 2) c.lineTo(L[i], L[i + 1]);
-        for (i = 0; i < R.length; i += 2) c.lineTo(R[i], R[i + 1]);
-        c.closePath();
-        c.fill();
-      }
-      c.globalCompositeOperation = "source-over";
-    }
-
-    // Cached layer: a fully grown branch is painted once into its own small canvas and blitted with its transform.
-    function bake(b) {
-      var P = b.pts, pad = b.w * 2 + 2, x0 = 0, y0 = 0, x1 = 0, y1 = 0, i, cv, c;
-      for (i = 0; i < P.length; i += 2) {
-        x0 = Math.min(x0, P[i]); x1 = Math.max(x1, P[i]);
-        y0 = Math.min(y0, P[i + 1]); y1 = Math.max(y1, P[i + 1]);
-      }
-      x0 -= pad; y0 -= pad;
-      cv = document.createElement("canvas");
-      cv.width = Math.ceil((x1 + pad - x0) * dpr);
-      cv.height = Math.ceil((y1 + pad - y0) * dpr);
-      c = cv.getContext("2d");
-      c.setTransform(dpr, 0, 0, dpr, -x0 * dpr, -y0 * dpr);
-      paintBranch(c, b, 1);
-      b.sprite = { cv: cv, x: x0, y: y0, w: cv.width / dpr, h: cv.height / dpr };
-    }
-
-    // Branches ride their band: the primary's root follows the band's centre line, flow phase, slope and parallax;
-    // each order adds its own sway and scroll drift, composed down the tree so children stay attached.
-    function drawBranches(t, tt, sy, still) {
-      var i, b, f, ph, x, y, sl, dyn, m, g;
-      ctx.globalAlpha = 1;
-      for (i = 0; i < branches.length; i++) {
-        b = branches[i];
-        f = b.root.fam;
-        g = still ? 1 : clamp((t - start - DRAW_MS - b.start) / BR.grow[b.lvl], 0, 1);
-        dyn = b.out * BR.tilt[b.lvl] * sy + BR.sway[b.lvl] * Math.sin(tt * DEPTH[f.depth].speed * 2.5 + b.ph);
-        if (b.parent) {
-          m = b.parent.b.m;
-          x = b.parent.b.pts[2 * b.parent.i];
-          y = b.parent.b.pts[2 * b.parent.i + 1];
-          b.m = mul(m, place(x, y, b.rot + dyn));
-        } else {
-          ph = tt * DEPTH[f.depth].speed;
-          x = b.root.x;
-          y = f.y0 + x * f.tilt + f.a1 * Math.sin(x * f.f1 + f.p1 + ph) + f.a2 * Math.sin(x * f.f2 + f.p2 - ph * 1.7);
-          sl = f.tilt + f.a1 * f.f1 * Math.cos(x * f.f1 + f.p1 + ph) + f.a2 * f.f2 * Math.cos(x * f.f2 + f.p2 - ph * 1.7);
-          b.m = place(x, y + b.root.off - sy * DEPTH[f.depth].parallax, Math.atan(sl) + b.rot + dyn);
-        }
-        if (g <= 0) continue;
-        m = b.m;
-        ctx.setTransform(m[0] * dpr, m[1] * dpr, m[2] * dpr, m[3] * dpr, m[4] * dpr, m[5] * dpr);
-        if (g < 1) {
-          paintBranch(ctx, b, 1 - (1 - g) * (1 - g));
-          continue;
-        }
-        if (!b.sprite) bake(b);
-        ctx.globalCompositeOperation = b.lit ? "lighter" : "source-over";
-        ctx.drawImage(b.sprite.cv, b.sprite.x, b.sprite.y, b.sprite.w, b.sprite.h);
-      }
-      ctx.globalCompositeOperation = "source-over";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     function paint(t) {
@@ -269,7 +216,7 @@
       var eased = 1 - Math.pow(1 - prog, 3);
       var sy = still ? 0 : window.scrollY;
       var tt = still ? 0 : t;
-      var i, j, k, f, reach, oy, g;
+      var i, j, k, n, f, st, reach, front, j1, g, merge;
       if (!col.surface) return; // not sized yet: the first ResizeObserver callback reads tokens and paints
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
@@ -277,35 +224,41 @@
       ctx.lineCap = "round";
       for (i = 0; i < fams.length; i++) {
         f = fams[i];
-        reach = clamp(eased * 1.3 - f.delay, 0, 1);
+        reach = eased * 1.5 - f.delay; // > 1 leaves time for trailing children (delay <= 0.3, trail <= 0.2)
         if (reach <= 0) continue;
-        oy = -sy * DEPTH[f.depth].parallax;
-        // Lit ribbon: additive light through the stone.
-        if (f.lit) {
-          ctx.globalCompositeOperation = "lighter";
-          ctx.strokeStyle = lit;
-          for (g = 0; g < GLOW.length; g++) {
-            ctx.globalAlpha = GLOW[g][1] * (f.depth === 2 ? 1.2 : 1);
-            ctx.lineWidth = f.ribbon * GLOW[g][0];
-            contour(f, 0, reach, tt, oy);
+        trunk(f, tt, -sy * DEPTH[f.depth].parallax);
+        for (n = 0; n < f.streams.length; n++) {
+          st = f.streams[n];
+          // Draw-on front for this stream; a child starts drawing when its front passes the fork.
+          front = -STEP + (w + 2 * STEP) * clamp(reach - st.lag, 0, 1);
+          j1 = Math.min(st.j1, Math.floor((front + STEP) / STEP));
+          if (j1 <= st.j0) continue;
+          // Lit ribbon: additive light through the stone.
+          if (f.lit) {
+            ctx.globalCompositeOperation = "lighter";
+            ctx.fillStyle = lit;
+            for (g = 0; g < GLOW.length; g++) {
+              ctx.globalAlpha = GLOW[g][1] * (f.depth === 2 ? 1.2 : 1);
+              band(st, st.j0, j1, f.ribbon * GLOW[g][0] / 2);
+            }
+            ctx.globalCompositeOperation = "source-over";
+          } else {
+            ctx.fillStyle = col.far;
+            ctx.globalAlpha = 0.35;
+            band(st, st.j0, j1, f.ribbon * 0.3);
           }
-          ctx.globalCompositeOperation = "source-over";
-        } else {
-          ctx.strokeStyle = col.far;
-          ctx.globalAlpha = 0.35;
-          ctx.lineWidth = f.ribbon * 0.6;
-          contour(f, 0, reach, tt, oy);
-        }
-        // Hairline contours: growth rings along the band edges.
-        for (j = 0; j < 7; j++) { // four rings below the ribbon (j 0-3), three above (j 4-6)
-          k = j % 4;
-          ctx.strokeStyle = k === 0 ? (f.lit ? col.accent : col.mid) : k % 2 ? col.mid : col.far;
-          ctx.globalAlpha = k === 0 ? 0.6 : 0.7;
-          ctx.lineWidth = k === 0 ? 1.2 : 0.8;
-          contour(f, (j > 3 ? -1 : 1) * (f.ribbon * 0.5 + f.offs[k]), reach, tt, oy);
+          // Hairline growth rings along the stream's edges.
+          for (j = 0; j < 8; j++) { // rings below the ribbon (j 0-3), above (j 4-7); fewer on children
+            k = j % 4;
+            if (j === 7 || (k >= FORK.rings[st.lvl] && (!st.lvl || k >= FORK.rings[st.lvl - 1]))) continue;
+            ctx.strokeStyle = k === 0 ? (f.lit ? col.accent : col.mid) : k % 2 ? col.mid : col.far;
+            ctx.globalAlpha = k === 0 ? 0.6 : 0.7;
+            ctx.lineWidth = k === 0 ? 1.2 : 0.8;
+            merge = k >= FORK.rings[st.lvl];
+            ring(f, st, st.j0, merge ? Math.min(j1, st.jt) : j1, j > 3 ? -1 : 1, f.offs[k], merge);
+          }
         }
       }
-      drawBranches(t, tt, sy, still);
       // Elliptical scrim behind the centred copy: quiets the bands so the name and positioning line keep full contrast;
       // the warm backlight on top of it is CSS (.hero__glow).
       ctx.save();

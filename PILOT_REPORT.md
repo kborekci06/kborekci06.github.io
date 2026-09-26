@@ -1,4 +1,4 @@
-# Stone variant report: Amber (Onyx bands with fractal branches, Emperador fitted panels)
+# Stone variant report: Amber (Onyx bands dividing into streams, Emperador fitted panels)
 
 Branch `stone/amber` from `stone/onyx` (6dbff5e). Home only. Refs: DES-002.
 
@@ -22,8 +22,8 @@ References (scratchpad only, never in the repo): two backlit honey onyx slabs (B
 | Element | Source | Change on this branch |
 |---|---|---|
 | Palette, fonts, hero copy scrim, backlight, lit cut edge, header, footer band layer, signal data, content | Onyx (kept) | none |
-| Band field (lit ribbons, growth-ring contours, draw-on, flow, three parallax depths) | Onyx (kept) | phones light the bands above and below the copy (odd families) instead of the one behind it |
-| Branch trees on every band | new; recursion and per-order falloff technique from the Alpi worktree, not its lattice | `assets/js/home.js` §1 |
+| Band field (lit ribbons, growth-ring contours, draw-on, flow, three parallax depths) | Onyx (kept) | each band divides into streams (§3); 6 families above 900 px (5 below), lit when they cross mid-screen away from the copy |
+| Streams dividing (forks, braids) | new, owner round 2 ("a stream dividing into creeks"); replaces the round-1 spur branches, which the owner rejected as not continuous | `assets/js/home.js` §1 |
 | Tile frame: chamfered polygon, one wide lower-outer cut, mirrored on even tiles from md | Emperador `_tile.scss` | Onyx bullnose, cabochon keyframe and `--frame-shape` removed |
 | Inlay hairline (SVG polygon inset from the chamfers, non-scaling stroke) | Emperador `flagship-tile.html`, `.inlay` in `_layout.scss` | retinted: stroke = slab accent (honey-400 on umber, burnt-700 on cream), glow = `--inlay-glow` (glow-300 55 %, the role Emperador's gold-100 played) |
 | Frame opening during the pin (`frame-open`, `frame-open-mirror`), inlay drawing on after it | Emperador `_motion.scss` | Onyx's hover sheen kept on top |
@@ -32,29 +32,32 @@ References (scratchpad only, never in the repo): two backlit honey onyx slabs (B
 | Portrait: fitted panel (square top, wide lower cut) with the same inlay, rising out of the slab cut | Emperador `story-teaser.html`, `_teaser.scss` | arched niche, halo, `div.teaser__niche`, `--arch`, `--niche-glow`, `--rim` removed |
 | Not ported | Emperador `polished-edge.html` | Onyx's lit SVG edge on the hero and Story cuts already plays that role |
 
-Fix found while verifying: `wipe-in` had only a `from` inset, so the clip flipped at 50 % of its range instead of wiping (tags, inlay, Story edge; the same on Onyx and Emperador). Both ends are now insets (commit 03b8888).
+Fix found while verifying: `wipe-in` had only a `from` inset, so the clip flipped at 50 % of its range instead of wiping (tags, inlay, Story edge; the same on Onyx and Emperador). Both ends are now insets (commit 03b8888). Second fix (`d5b4707`): wipes now fill backwards only; filling forwards left an inset clip-path on the tag rail, which made it a backdrop root, so the glass chips stopped blurring the photo (light tag 4.36:1, back to 5.67:1).
 
-## 3. Band and branch parameters (`assets/js/home.js`)
+## 3. Band field: streams that divide (`assets/js/home.js`)
 
-Bands (unchanged from Onyx): 5 families above 900 px width, 4 below; lit families alternate (even above 900 px, odd below); draw-on 2.2 s; parallax 0.10 / 0.24 / 0.42 per depth.
+Round 1 grew spur branches out of the bands; the owner found them not continuous. Round 2 removes them: no line starts on a band and ends in space. Each band is a stream that divides as it crosses the screen, like a braided river seen from above.
 
-| Parameter | Order 0 (primary) | Order 1 | Order 2 |
-|---|---|---|---|
-| Count | 4 per lit band above 900 px, 2 below; 1 per unlit band | 2 per lit primary (one outward, one back toward the band); 1 per unlit primary | 1 per order-1 branch on lit bands, 2 with p = 0.35; none on unlit |
-| Length | 150-260 px x scale (scale = w/1200, clamped 0.55-1) | 0.5-0.7 x parent | 0.5-0.7 x parent |
-| Core width at root | 4 px x max(scale, 0.7) | 2.2 px x same | 1.2 px x same |
-| Brightness factor | 1 | 0.6 | 0.35 |
-| Departure angle | 20-37 deg from the band tangent, 75 % along the band direction | 20-34 deg from the parent heading | same |
-| Grow time | 600 ms | 450 ms | 350 ms |
-| Scroll drift (rad per px) | 0.00006 | 0.00012 | 0.0002 |
-| Flow sway amplitude | 0.015 rad | 0.03 rad | 0.05 rad |
+| Parameter | Value |
+|---|---|
+| Families | 6 above 900 px width, 5 below, spaced by where they cross mid-screen; tilt, sines, ribbon width and ring spacing as on Onyx |
+| Lit families | those crossing mid-screen more than 15 % of the height from the centre (above and below the copy, never behind it): 4 at 1440, 4 at 390 |
+| Split points per trunk | lit: 2 (one on the trunk, one on one of its children); unlit: 0, 1, 1 or 2 at random |
+| Levels | 3 including the trunk (trunk, children, grandchildren) |
+| First split | 10-35 % of the width; second split 25-50 % of the width further on |
+| Divergence angle | 5-15 deg between the two children once turned (`FORK.angle`) |
+| Width split | wider child 0.55-0.65 of the parent, narrower child the rest; widths always sum to the parent's |
+| Fork modes | apart (keeps diverging at the fork angle), parallel (turns, then runs alongside at one parent width), rejoin (second-level forks only, p = 0.4: opens and closes again, a braid) |
+| Segments at 1440 | 4 lit trunks, 8 forks, 20 drawn segments, 12 lit streams reaching the right edge (one pair rejoins, so 11 read as separate); plus 2 unlit trunks with 2 forks between them |
+| Segments at 390 | 4 lit trunks, 8 forks, 20 drawn segments, 12 lit streams at the right edge; 1 unlit trunk with 2 forks |
+| Growth rings | 4 below and 3 above on trunks, 1 per side on children; a wider child's extra inherited rings close onto its first ring through the fork and stop only once they coincide with it |
+| Draw-on | 2.2 s front per family (as Onyx); the wider child continues with the front, the narrower child trails by 10 % of the width so each fork visibly opens; every front tapers to a point over 6 samples |
+| Flow, parallax | unchanged from Onyx: slow two-sine flow, depths 0.10 / 0.24 / 0.42 |
 
-- Shape: 10 samples per branch; one slow bend back toward the parent (0.8 x the departure angle) plus a 0.07 rad wobble; the outline tapers to 20 % width at the tip and the fill fades root to tip (alpha 1 -> 0.55 at mid -> 0); a growing tip tapers to a point.
-- Light: lit bands draw an amber halo (4 x width, honey-400, alpha 0.18) and a glow core (glow-300, alpha 0.8), both additive; unlit bands one amber-500 core at alpha 0.5.
-- Placement: roots sit on the band's lit edge hairline (ribbon/2 + first ring offset); a root is rejected if it is off screen or inside the copy scrim ellipse (6 tries), so no tree grows behind the name. Counts after culling: 47 branches at 1440, 28 at 390.
-- Timing: bands draw on first; primaries start 0-600 ms after the draw-on ends; each child starts when its parent reaches the fork. Growth spans about 2 s (2.2 s to 4.2 s after load).
-- Motion: the primary root follows its band's centre line, flow phase, slope and parallax; each order adds its own sway and scroll drift, composed down the tree with 2x3 matrices, so children stay attached while finer orders move further (a per-order translation would have detached them at the forks).
-- Cache: a fully grown branch is baked once into its own small canvas and blitted with its transform (one drawImage per branch); sprites are rebuilt only on resize or a theme/token change. Reduced motion: every branch drawn fully grown in one static frame.
+- Continuity: at a fork both children start on the parent's centre line and share its tangent (the separation and its slope are zero there, smoothstep or quadratic ramp), then curve apart. The wider child carries on at the parent's full width and narrows to its share; the narrower one grows out of the parent from zero width. Nothing doubles or jumps at the fork, and a rejoining child shrinks back into its sibling.
+- Light: every stream glows as brightly per pixel as its trunk (additive amber halo and glow core, four passes as on Onyx), so the total light of a child scales with its width. Unlit streams are umber at 0.35.
+- Rendering: live, every frame, as filled ribbons (vertical offsets from the trunk's sampled centre line, 24 px grid) plus ring polylines. The coordinator asked to keep per-stream cached canvases. That was not done: the flow reshapes every stream each frame, so a cached bitmap would freeze the flow the owner liked (Onyx never cached its bands; the round-1 cache held only the spur branches). The frame budget is met without a cache (§4).
+- Reduced motion: one static, fully drawn frame (canvas byte-identical 800 ms apart).
 
 ## 4. Gates
 
@@ -66,7 +69,7 @@ Bands (unchanged from Onyx): 5 families above 900 px width, 4 below; lit familie
 | G4 JS off | pass | light and dark: `html.js` absent, 0 hidden elements under main and footer |
 | G5 reduced motion | pass | both themes: 0 running animations, 0 hidden elements, stage static, frame at its resting polygon, canvas byte-identical 800 ms apart |
 | G6 no scroll-jacking | pass | wheel / preventDefault / lenis / locomotive in assets/js: none |
-| G7 JS | pass | `home.js` 21,721 B raw / 7,773 B gz (Onyx 4,912), defer; inline theme-init 146 B gz and toggle 370 B gz unchanged; total 8,289 B gz; no library |
+| G7 JS | pass | `home.js` 19,572 B raw / 7,260 B gz (Onyx 4,912), defer; inline theme-init 146 B gz and toggle 370 B gz unchanged; total 7,776 B gz; no library |
 | G8 motion | pass | probes below |
 
 ```
@@ -78,18 +81,18 @@ story     mid-entry polygon(0 17.3%, 100% 10.2%, 100% 88%, 84% 100%, 0 100%) -> 
 hover     sheen -100% -> 100%, frame 0 -> -4px, bubble 0 -> -8px, bubble active
 ```
 
-Frame trace (rAF intervals, headless Chrome, 1440): scripted scroll at 20 px/frame over the whole page after the branches have grown: 309 frames, max 16.8 ms, 0 over 34 ms. Load choreography (draw-on + branch growth, 5 s, no scroll): 300 frames, max 16.8 ms, 0 over 34 ms at 1440 and at 390. Horizontal overflow 0 px at 390, 768, 1440. Toggle: OS light, no stored choice -> click -> `data-theme="dark"`, stored, persists on reload.
+Frame trace (rAF intervals, headless Chrome, 1440, round 2 streams): scripted scroll at 20 px/frame over the whole page after the draw-on: 309 frames, max 16.8 ms, 0 over 34 ms. Load choreography (draw-on of all streams, 5 s, no scroll): 301 frames at 1440 and 300 at 390, max 16.8 ms, 0 over 34 ms. Horizontal overflow 0 px at 390, 768, 1440. Toggle: OS light, no stored choice -> click -> `data-theme="dark"`, stored, persists on reload.
 
 ## 5. Contrast on composited pixels
 
-Method: glyphs hidden (colour, text-shadow and decoration transparent); capture of the text's ink box (a Range over its contents; the whole box for buttons and chips; the plot box with trace and grid hidden for the trace) at its real scroll state; WCAG ratio of the text colour against every pixel after a 3 px rim trim. Hero pairs at scroll 0 after the branches have grown; tiles at pin 0.6 or later (scrolled further when the element sits below the fold at 390). Worst of 1440 and 390 per theme. Need 3.0 for text >= 24 px and UI strokes, else 4.5.
+Method: glyphs hidden (colour, text-shadow and decoration transparent); capture of the text's ink box (a Range over its contents; the whole box for buttons and chips; the plot box with trace and grid hidden for the trace) at its real scroll state; WCAG ratio of the text colour against every pixel after a 3 px rim trim. Hero pairs at scroll 0 after the streams have drawn on (round 2); tiles at pin 0.6 or later (scrolled further when the element sits below the fold at 390). Worst of 1440 and 390 per theme. Need 3.0 for text >= 24 px and UI strokes, else 4.5.
 
 | Pair | Light: text, worst / median | Dark: text, worst / median | Need |
 |---|---|---|---|
-| hero-name | #fbf1e1, 6.15 / 14.69 | #fbf1e1, 6.15 / 14.69 | 3.0 |
-| hero-positioning | #cdb08a, 5.30 / 6.41 | #cdb08a, 5.30 / 6.41 | 4.5 |
+| hero-name | #fbf1e1, 3.45 / 13.43 | #fbf1e1, 3.45 / 13.43 | 3.0 |
+| hero-positioning | #cdb08a, 5.24 / 6.97 | #cdb08a, 5.24 / 6.97 | 4.5 |
 | hero-cue | #cdb08a, 8.30 / 8.64 | #cdb08a, 8.30 / 8.64 | 4.5 |
-| nav-over-hero | #fbf1e1, 16.99 / 16.99 | #fbf1e1, 16.99 / 16.99 | 4.5 |
+| nav-over-hero | #fbf1e1, 17.02 / 17.02 | #fbf1e1, 17.02 / 17.02 | 4.5 |
 | intro-text | #150d08, 16.83 / 17.66 | #fbf1e1, 13.70 / 15.85 | 3.0 |
 | nav-over-intro | #fbf1e1, 17.06 / 17.06 | #fbf1e1, 17.05 / 17.06 | 4.5 |
 | t1-org | #cdb08a, 8.66 / 8.95 | #6a4a2e, 7.40 / 7.53 | 4.5 |
@@ -117,22 +120,22 @@ Method: glyphs hidden (colour, text-shadow and decoration transparent); capture 
 | footer-email | #150d08, 16.98 / 17.28 | #fbf1e1, 13.92 / 14.73 | 3.0 |
 | footer-link | #7c3b0e, 7.64 / 7.77 | #f0b35a, 9.10 / 9.43 | 4.5 |
 
-No pair fails. Lowest 4.5-class worst pixel: 4.98:1 (Story text, dark theme). Hero positioning line: 5.30 at 1440 and 5.51 at 390 (Onyx: 4.67 at 390); at 390 the lit band no longer runs behind the copy and no branch root is allowed inside the scrim. Large-text rows are not directly comparable with Onyx's table: this run measures the ink box, Onyx the element box.
+No pair fails (full table re-measured after round 2). Lowest 4.5-class worst pixel: 4.98:1 (Story text, dark theme). Hero positioning line: 5.37 at 1440 and 5.24 at 390 (Onyx: 4.67 at 390): no lit stream runs behind the copy. Hero name: 3.45 at 1440 (a lit stream passes near the ends of the ink box; large text needs 3.0), 11.84 at 390. Large-text rows are not directly comparable with Onyx's table: this run measures the ink box, Onyx the element box.
 
 ## 6. Screenshots (`pilot-shots/amber/`, WebP, 25 files)
 
-- `hero-rest-{light,dark}-{1440,390}`: 2.4 s after load, bands drawn, first primaries starting to grow.
-- `hero-branched-{light,dark}-{1440,390}`: 5.2 s after load, all branches grown.
+- `hero-rest-{light,dark}-{1440,390}`: 0.6 s after navigation, mid draw-on, forks opening.
+- `hero-drawn-{light,dark}-{1440,390}`: 5 s after navigation, all streams drawn.
 - `tile1-rest-{light,dark}-{1440,390}` (pin 0.6), `tile1-hover-{light,dark}-{1440,390}` (CDP mouse over the frame, 1.3 s).
 - `story-{light,dark}-{1440,390}`, `footer-{light,dark}-{1440,390}`, `reduced-tile1-light-1440` (reduced motion emulated).
 - Headless Chrome on port 9471 over CDP, served from `_site` on 127.0.0.1:4731; every load checked that the served `home.js` contains the branch code. 390 uses device emulation (mobile), which reflows.
 
 ## 7. What I would change next
 
-1. Tune branch density with Kaan: primaries per lit band (4 now), second-grandchild probability (0.35), lengths.
-2. A few primaries read as short straight strokes near the root; a stronger first bend or a longer first segment would soften them.
-3. Branches grow once at load; test a slow light pulse travelling out along one tree every 10-15 s.
-4. Carry one or two branch strokes into the CSS band layer on the tile, Story and footer slabs so the motif continues below the hero.
+1. Tune the streams with Kaan: split points per trunk (2), divergence (5-15 deg), share (0.55-0.65), braid probability (0.4).
+2. The inner rings of a fork start at the fork apex inside the parent; check they read as the creek banks and not as new lines.
+3. The lit stream near the header at 1440 is half hidden; consider dropping it to 3 lit trunks.
+4. Carry a divided stream into the CSS band layer on the tile, Story and footer slabs so the motif continues below the hero.
 5. The signal panel covers the frame's wide cut at 1440; test pulling it further outside the frame.
 6. Light-theme tag chips over the white board photo hold 5.67:1; a denser amber glass would lift them toward 7:1.
 7. Buttons and the toggle lost their pills with the radius change; confirm Kaan wants the cut-stone corner there too.
@@ -148,3 +151,5 @@ No pair fails. Lowest 4.5-class worst pixel: 4.98:1 (Story text, dark theme). He
 - 768 px renders beyond the overflow check.
 - Theme flash on reload observed visually (script order unchanged).
 - Frame timing on a real device or under CPU throttling; the traces above are headless Chrome on this Mac.
+- Per-stream cached canvases (requested in round 2): not implemented, see §3; the frame budget was measured without them.
+- `reduced-tile1-light-1440` is from round 1; every other shot was retaken after round 2 and the wipe fill fix.
