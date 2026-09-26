@@ -2,8 +2,18 @@
 title: "Kaan Borekci"
 description: "Medical Devices · Robotics · AI for Healthcare"
 
+url: "https://kborekci06.github.io" # absolute canonical and og:url (FUN-007)
+author:
+  name: "Kaan Borekci"
+  email: "kaan@borekci.com"
+  image: "/assets/img/portrait/kaan-borekci-720.webp"
+  alumni_of: "Northwestern University"
+
 theme: minima
 permalink: pretty
+
+sass:
+  style: compressed
 
 # Tell minima which pages to put in the header nav:
 header_pages:
@@ -29,3 +39,5 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - RESUME_KAAN_BOREKCI_2026.pdf
+  - PILOT_REPORT.md
+  - pilot-shots
