@@ -65,7 +65,7 @@
 
     // One family: base line through (0, y0) with a gentle tilt, two summed sines; contours at cumulative offsets.
     function generate() {
-      var r = mulberry32(SEED), list = [], n = w > 900 ? 5 : 4, i, j, off, offs;
+      var r = mulberry32(SEED), list = [], n = w > 900 ? 5 : 4, s = Math.min(h, w * 0.7), i, j, off, offs;
       for (i = 0; i < n; i++) {
         offs = [];
         off = 0;
@@ -75,9 +75,9 @@
         }
         list.push({
           y0: h * (-0.15 + (i + r() * 0.6) / n * 1.3), tilt: -0.18 - r() * 0.2, depth: i % 3,
-          a1: h * (0.06 + r() * 0.08), f1: (0.35 + r() * 0.5) / w * 6.28, p1: r() * 6.28,
-          a2: h * (0.01 + r() * 0.015), f2: (1.2 + r() * 1.2) / w * 6.28, p2: r() * 6.28,
-          offs: offs, ribbon: 40 + r() * 90, delay: r() * 0.3, lit: i % 2 === 0
+          a1: s * (0.06 + r() * 0.08), f1: (0.35 + r() * 0.5) / w * 6.28, p1: r() * 6.28,
+          a2: s * (0.01 + r() * 0.015), f2: (1.2 + r() * 1.2) / w * 6.28, p2: r() * 6.28,
+          offs: offs, ribbon: (40 + r() * 90) * clamp(w / 1200, 0.5, 1), delay: r() * 0.3, lit: i % 2 === 0
         });
       }
       fams = list;
@@ -153,7 +153,7 @@
       ctx.save();
       ctx.translate(w / 2, h * 0.5);
       ctx.scale(1, 0.62);
-      var rx = Math.max(w * 0.4, 220);
+      var rx = Math.max(w * 0.4, Math.min(w * 0.62, 320));
       var sc = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
       sc.addColorStop(0, rgba(col.surface, 0.88));
       sc.addColorStop(0.6, rgba(col.surface, 0.55));
