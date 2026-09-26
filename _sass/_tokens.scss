@@ -223,7 +223,7 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --color-night-accent: var(--p-onyx-honey-400);
   --night-grain-opacity: 0.1;
   --color-night-glass: color-mix(in srgb, var(--p-onyx-umber-950) 62%, transparent);
-  --color-night-glass-strong: color-mix(in srgb, var(--p-onyx-umber-950) 80%, transparent);
+  --color-night-glass-strong: color-mix(in srgb, var(--p-onyx-umber-950) 88%, transparent);
   --color-night-glass-solid: var(--p-onyx-umber-900);
   --color-night-glass-border: color-mix(in srgb, var(--p-onyx-honey-400) 30%, transparent);
   --color-night-glass-edge: color-mix(in srgb, var(--p-onyx-umber-950) 55%, transparent);
@@ -324,6 +324,8 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --hero-backlight:
     radial-gradient(closest-side, color-mix(in srgb, var(--color-night-glow) 26%, transparent), color-mix(in srgb, var(--color-night-glow) 9%, transparent) 55%, transparent);
   --hero-name-glow: 0 0 0.3em color-mix(in srgb, var(--color-night-glow) 45%, transparent), 0 0 1.2em color-mix(in srgb, var(--color-night-glow) 22%, transparent);
+  // Portrait niche backlight (Story teaser): a warm halo behind the arch.
+  --niche-glow: radial-gradient(closest-side, color-mix(in srgb, var(--p-onyx-glow-300) 34%, transparent), color-mix(in srgb, var(--p-onyx-glow-300) 10%, transparent) 60%, transparent);
   // Polished-edge sheen swept across frames on hover.
   --sheen: linear-gradient(105deg, transparent 38%, color-mix(in srgb, var(--p-onyx-glow-300) 26%, transparent) 48%, color-mix(in srgb, var(--p-onyx-cream-0) 30%, transparent) 50%, transparent 60%);
   --rim: inset 0 0 0 var(--vein-width) color-mix(in srgb, var(--p-onyx-glow-300) 35%, transparent), inset 0 var(--vein-width-strong) 0 color-mix(in srgb, var(--p-onyx-cream-0) 30%, transparent);

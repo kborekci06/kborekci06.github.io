@@ -57,16 +57,35 @@
   }
 }
 
-// Tile frame opens from a small cut stone to the full frame; same five vertices as .tile__frame's resting polygon.
+// Tile frame opens from a polished cabochon to the bullnosed slab (--frame-shape, _tile.scss).
 @keyframes frame-open {
   from {
-    clip-path: polygon(16% 12%, 84% 12%, 84% 78%, 78% 88%, 16% 88%);
+    clip-path: inset(12% 16% round var(--radius-pebble));
     transform: scale(0.94);
   }
 
   to {
-    clip-path: polygon(0 0, 100% 0, 100% 86%, 92% 100%, 0 100%);
+    clip-path: inset(0 round var(--frame-shape));
     transform: none;
+  }
+}
+
+// Backlight switching on behind the name.
+@keyframes glow-on {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+// Band layer drifts against the scroll, slower than the content: depth without moving any text.
+@keyframes band-drift {
+  from {
+    transform: translateY(var(--band-drift));
+  }
+
+  to {
+    transform: translateY(calc(var(--band-drift) * -1));
   }
 }
 
@@ -76,14 +95,15 @@
   }
 }
 
+// The arch rises out of the niche: the clip opens from the base upward, keeping the arch shape.
 @keyframes portrait-rise {
   from {
-    clip-path: polygon(0 34%, 100% 20%, 100% 88%, 84% 100%, 0 100%);
+    clip-path: inset(40% 0 0 round var(--arch-shape));
     transform: translateY(var(--rise));
   }
 
   to {
-    clip-path: polygon(0 0, 100% 0, 100% 88%, 84% 100%, 0 100%);
+    clip-path: inset(0 round var(--arch-shape));
     transform: none;
   }
 }
@@ -110,6 +130,14 @@
 
   .js .hero__positioning {
     animation: rise-in var(--dur-slow) var(--ease-out) calc(var(--stagger) * 3) both;
+  }
+
+  .js .hero__glow {
+    animation: glow-on calc(var(--dur-slow) * 2) var(--ease-out) calc(var(--stagger) * 2) both;
+  }
+
+  .js .hero__edge {
+    animation: wipe-in calc(var(--dur-slow) * 2) var(--ease-in-out) calc(var(--stagger) * 6) both;
   }
 
   .hero__cue-line {
@@ -143,6 +171,16 @@
   .tile__media:hover .tile__frame,
   .tile:focus-within .tile__frame {
     translate: 0 var(--hover-lift);
+  }
+
+  // Polished sheen: one pass of light across the frame on hover or focus.
+  .tile__frame::before {
+    transition: translate var(--dur-slow) var(--ease-in-out);
+  }
+
+  .tile__media:hover .tile__frame::before,
+  .tile:focus-within .tile__frame::before {
+    translate: 100% 0;
   }
 
   // Signal bubble floats up a little further than the frame, so the two layers separate on hover.
@@ -182,6 +220,12 @@
       animation: rise-in linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 90%;
+    }
+
+    .js .slab--bands::after {
+      animation: band-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
     }
 
     .js .intro__vein {
@@ -336,7 +380,8 @@
   .btn,
   .theme-toggle,
   .site-nav__link::after,
-  .signal-bubble {
+  .signal-bubble,
+  .tile__frame::before {
     transition: none;
   }
 }

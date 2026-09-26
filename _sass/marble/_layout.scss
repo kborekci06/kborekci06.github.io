@@ -40,6 +40,21 @@
   pointer-events: none;
 }
 
+// Band layer: the slab's second band system (--s-bands, concentric onyx rings) behind the content, giving glass panels
+// something to blur. Oversized vertically so the scroll drift (_motion.scss) never shows an edge; the slab clips it.
+.slab--bands {
+  overflow: clip;
+}
+
+.slab--bands::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--band-drift) * -1) 0;
+  z-index: -1;
+  background-image: var(--s-bands);
+  pointer-events: none;
+}
+
 // Angled top edge: the slab cuts diagonally into the one above it (marble veined geometry).
 .slab--cut {
   margin-top: calc(var(--cut) * -1);

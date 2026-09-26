@@ -9,11 +9,12 @@
   gap: var(--space-6);
 }
 
-// Structural vein: a strong hairline that draws on as the intro enters (_motion.scss).
+// Structural band: a hairline that runs caramel -> burnt accent -> soft caramel and draws on as the intro enters.
 .intro__vein {
   display: block;
   height: var(--vein-width-strong);
   background-color: var(--s-vein-strong);
+  background-image: linear-gradient(90deg, var(--s-vein-strong), var(--s-accent) 45%, var(--s-vein-strong));
   transform-origin: left;
 }
 
