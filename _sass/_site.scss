@@ -1,6 +1,7 @@
 // Entry point for the repo-owned design system. Compiled and inlined by _includes/styles.html
 // (one <style> in <head>: no render-blocking stylesheet request, no CSS @import at runtime).
-// Order: tokens -> fonts -> element base -> page frame -> components (one partial per include).
+// Order: tokens -> fonts -> element base -> slabs and page frame -> components (one partial per include) -> motion last,
+// so every scroll-driven and reduced-motion rule sits in one file and wins by order, never by !important.
 
 @import "tokens";
 @import "marble/fonts";
@@ -8,6 +9,8 @@
 @import "marble/layout";
 @import "marble/header";
 @import "marble/hero";
-@import "marble/card";
+@import "marble/intro";
+@import "marble/tile";
 @import "marble/teaser";
 @import "marble/footer";
+@import "marble/motion";
