@@ -13,13 +13,42 @@
   position: relative;
 }
 
-// Frame: sharp corners with one diagonal cut, the marble edge. The media fills it.
+// Frame: a polished onyx slab, bullnosed on two opposite corners; alternate tiles mirror it (bookmatched).
+// --frame-shape is the two-value radius (top-left/bottom-right, top-right/bottom-left) shared by the clip, the rim and
+// the frame-open keyframes. The media fills it; a rim (::after) and a hover sheen (::before) sit over the media.
+.tile {
+  --frame-shape: var(--radius-bullnose) 0;
+}
+
+.tile:nth-of-type(even) {
+  --frame-shape: 0 var(--radius-bullnose);
+}
+
 .tile__frame {
+  position: relative;
   overflow: clip;
   aspect-ratio: var(--aspect-card);
+  border-radius: var(--frame-shape);
   background-color: var(--s-surface-2);
-  box-shadow: var(--shadow-2);
-  clip-path: polygon(0 0, 100% 0, 100% 86%, 92% 100%, 0 100%);
+  clip-path: inset(0 round var(--frame-shape));
+}
+
+.tile__frame::before,
+.tile__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--frame-shape);
+  pointer-events: none;
+}
+
+.tile__frame::before {
+  background-image: var(--sheen);
+  translate: -100% 0;
+}
+
+.tile__frame::after {
+  box-shadow: var(--rim);
 }
 
 .tile__img,
@@ -47,12 +76,12 @@
 
 .tile__tags li {
   @include glass;
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-glass);
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-control);
 }
 
-// Signal bubble: below the tags on small screens (in flow, full width); from md it floats over the frame's
-// lower outer corner, half outside it, mirroring the tag rail on the opposite corner.
+// Signal bubble: below the tags in flow up to lg (full width, then 22rem); from lg it floats over the frame's upper
+// outer corner, partly outside it, diagonal to the tag rail so neither covers the other.
 .tile__media > .signal-bubble {
   margin-top: var(--space-3);
 }
@@ -97,8 +126,8 @@
   @include glass;
   display: flex;
   gap: var(--space-2);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-glass);
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-control);
 }
 
 .tile__meta-item dt {
@@ -126,18 +155,6 @@
     margin: 0;
   }
 
-  .tile__media > .signal-bubble {
-    position: absolute;
-    right: calc(var(--space-5) * -1);
-    bottom: calc(var(--space-9) * -1);
-    margin: 0;
-  }
-
-  .tile:nth-of-type(even) .tile__media > .signal-bubble {
-    right: auto;
-    left: calc(var(--space-5) * -1);
-  }
-
   .tile__stage {
     grid-template-columns: 5fr 7fr;
     align-items: center;
@@ -155,5 +172,19 @@
 
   .tile:nth-of-type(odd) .tile__stage {
     grid-template-columns: 7fr 5fr;
+  }
+}
+
+@media (min-width: $bp-lg) {
+  .tile__media > .signal-bubble {
+    position: absolute;
+    top: calc(var(--space-8) * -1);
+    right: calc(var(--space-6) * -1);
+    margin: 0;
+  }
+
+  .tile:nth-of-type(even) .tile__media > .signal-bubble {
+    right: auto;
+    left: calc(var(--space-6) * -1);
   }
 }

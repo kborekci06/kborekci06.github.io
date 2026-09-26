@@ -1,20 +1,22 @@
-// Signal bubble (_includes/signal-bubble.html): a glass panel of illustrative traces plus a caption that says so.
+// Signal bubble (_includes/signal-bubble.html): an amber glass instrument panel of illustrative traces plus a caption
+// that says so. One trace per row, full width, so each reads as a readout rather than a chip.
 // Placement on a tile lives in _tile.scss; entrance and hover lift in _motion.scss; path animation in assets/js/home.js.
 
 .signal-bubble {
   @include glass(var(--glass-surface-strong)); // strong glass: the bubble floats over a photo, muted caption must hold 4.5:1
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); // side by side when wide, stacked in a narrow float
-  gap: var(--space-2) var(--space-4);
+  gap: var(--space-4);
   width: var(--bubble-width);
-  padding: var(--space-3);
+  padding: var(--bubble-pad);
   border-radius: var(--radius-glass);
   color: var(--s-text);
 }
 
 .signal-bubble__row {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--vein-width) solid var(--s-vein);
 }
 
 .signal-bubble__label {
@@ -44,6 +46,7 @@
 
 .signal-bubble__trace {
   stroke: var(--s-accent);
+  filter: drop-shadow(0 0 0.25rem var(--s-glow)); // the trace glows like a lit band
   stroke-width: var(--vein-width-strong);
   stroke-linejoin: round;
 }
