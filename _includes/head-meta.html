@@ -1,5 +1,7 @@
 {%- comment -%}
-  <head> contents for _layouts/base.html, in load order: meta, pre-paint theme, font preloads (both faces paint above the fold), inline CSS, JSON-LD.
+  <head> contents for _layouts/base.html, in load order: meta, pre-paint theme + js class, font preloads, inline CSS, deferred page scripts, JSON-LD.
+  Preloads: the display face paints the hero name (LCP); the text face paints the positioning line.
+  page.scripts (optional list) = deferred scripts for that page only.
   Title: site title alone on Home, "Page · Site" elsewhere. Description: page, then site.
 {%- endcomment -%}
 <meta charset="utf-8">
@@ -18,9 +20,12 @@
 <meta property="og:description" content="{{ doc_description | escape }}">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
 {% include theme-init.html %}
-<link rel="preload" href="{{ '/assets/fonts/schibsted-grotesk-600-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ '/assets/fonts/source-serif-4-var-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/archivo-700-wdth-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/ibm-plex-sans-400-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 {% include styles.html %}
+{%- for script in page.scripts %}
+<script src="{{ script | relative_url }}" defer></script>
+{%- endfor %}
 {%- if page.url == "/" %}
 {% include schema-person.html %}
 {%- endif %}

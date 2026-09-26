@@ -1,5 +1,6 @@
 {%- comment -%}
-  Pre-paint theme: runs before first render so a stored choice never flashes.
-  No stored choice = no data-theme, and CSS follows prefers-color-scheme (_sass/_tokens.scss).
+  Pre-paint script, the only script that runs before first render (CLAUDE.md §4 budgets).
+  1. Stored theme choice wins; no stored choice = no data-theme, CSS follows prefers-color-scheme (_sass/_tokens.scss).
+  2. Adds the "js" class that gates every hidden-until-revealed state, so content stays visible with JS off.
 {%- endcomment -%}
-<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
