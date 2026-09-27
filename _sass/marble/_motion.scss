@@ -117,6 +117,36 @@
   }
 }
 
+// Intro facets: each panel arrives from its apart offset and tilt (per-facet custom properties, _intro.scss) and its
+// glass closes the inner chamfers as it fits against its neighbours.
+@keyframes facet-join {
+  from {
+    transform: translate(var(--facet-dx), var(--facet-dy)) rotate(var(--facet-rot));
+  }
+}
+
+@keyframes facet-cut {
+  from {
+    clip-path: var(--facet-apart);
+  }
+}
+
+@keyframes facet-ring-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes seam-draw {
+  from {
+    transform: scale(var(--seam-sx), var(--seam-sy));
+  }
+}
+
 @keyframes parallax-y {
   from {
     transform: translateY(calc(var(--parallax) * -1));
@@ -202,6 +232,15 @@
     translate: 0 calc(var(--hover-lift) * 2);
   }
 
+  .facets__sheen::before {
+    transition: translate var(--dur-slow) var(--ease-in-out);
+  }
+
+  .facets:hover .facets__sheen::before,
+  .facets:focus-within .facets__sheen::before {
+    translate: 100% 0;
+  }
+
   .tile__media:hover .tile__img,
   .tile__media:hover .tile__video,
   .tile:focus-within .tile__img,
@@ -225,10 +264,66 @@
       animation-range: entry 0% entry 90%;
     }
 
-    .js .intro__vein {
-      animation: draw-x linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 45%;
+    // Intro facets: apart as the panel enters, fitted by the time it reaches mid-screen, then the joint fills.
+    .facets {
+      view-timeline: --facets block;
+    }
+
+    .js .facets[data-reveal] {
+      animation: none;
+    }
+
+    .js .facet {
+      animation: facet-join linear both;
+      animation-timeline: --facets;
+      animation-range: entry 0% cover 34%;
+    }
+
+    .js .facet::before {
+      animation: facet-cut linear both;
+      animation-timeline: --facets;
+      animation-range: cover 22% cover 34%;
+    }
+
+    .js .facet::after {
+      animation: facet-ring-out linear both;
+      animation-timeline: --facets;
+      animation-range: cover 24% cover 34%;
+    }
+
+    .js .facets::before {
+      animation: glow-on linear both;
+      animation-timeline: --facets;
+      animation-range: entry 40% cover 40%;
+    }
+
+    .js .facets__inlay {
+      animation: wipe-in linear backwards;
+      animation-timeline: --facets;
+      animation-range: cover 28% cover 40%;
+    }
+
+    .js .facet + .facet > .facet__body::before,
+    .js .facets__tagline::before {
+      animation: seam-draw linear both;
+      animation-timeline: --facets;
+      animation-range: cover 30% cover 40%;
+    }
+
+    .js .facets__tagline,
+    .js .facets__blurb,
+    .js .facets__cta {
+      animation: rise-in linear both;
+      animation-timeline: --facets;
+      animation-range: cover 32% cover 40%;
+    }
+
+    .js .facets__blurb {
+      animation-range: cover 35% cover 43%;
+    }
+
+    .js .facets__cta {
+      animation-range: cover 38% cover 46%;
     }
 
     // Pinned, scrubbed flagship: the track is 220svh, the stage sticks for the middle 120svh.
@@ -315,7 +410,17 @@
     .js .tile:focus-within .tile__tags,
     .js .tile:focus-within .signal-bubble,
     .js [data-reveal]:focus-within,
-    .js [data-reveal]:focus {
+    .js [data-reveal]:focus,
+    .js .facets:focus-within .facet,
+    .js .facets:focus-within .facet::before,
+    .js .facets:focus-within .facet::after,
+    .js .facets:focus-within::before,
+    .js .facets:focus-within .facets__inlay,
+    .js .facets:focus-within .facet__body::before,
+    .js .facets:focus-within .facets__tagline,
+    .js .facets:focus-within .facets__tagline::before,
+    .js .facets:focus-within .facets__blurb,
+    .js .facets:focus-within .facets__cta {
       animation: none;
     }
 
@@ -367,6 +472,54 @@
     transition-delay: calc(var(--stagger) * 4);
   }
 
+  // Facets fallback: the apart state until .is-in, then one timed join; the joint fills after it.
+  .js.no-sda .facet,
+  .js.no-sda .facet::before,
+  .js.no-sda .facet::after,
+  .js.no-sda .facets::before,
+  .js.no-sda .facets__inlay,
+  .js.no-sda .facet__body::before,
+  .js.no-sda .facets__tagline::before {
+    transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-slow) var(--ease-out), clip-path var(--dur-slow) var(--ease-out);
+  }
+
+  .js.no-sda .facets__tagline,
+  .js.no-sda .facets__blurb,
+  .js.no-sda .facets__cta {
+    transition: opacity var(--dur-slow) var(--ease-out) var(--dur-base), transform var(--dur-slow) var(--ease-out) var(--dur-base);
+  }
+
+  .js.no-sda .facets:not(.is-in):not(:focus-within) {
+    .facet {
+      transform: translate(var(--facet-dx), var(--facet-dy)) rotate(var(--facet-rot));
+    }
+
+    .facet::before {
+      clip-path: var(--facet-apart);
+    }
+
+    .facet::after {
+      opacity: 1;
+    }
+
+    &::before,
+    .facets__inlay {
+      opacity: 0;
+    }
+
+    .facet + .facet > .facet__body::before,
+    .facets__tagline::before {
+      transform: scale(var(--seam-sx), var(--seam-sy));
+    }
+
+    .facets__tagline,
+    .facets__blurb,
+    .facets__cta {
+      opacity: 0;
+      transform: translateY(var(--rise));
+    }
+  }
+
   .js.no-sda [data-reveal]:not(.is-in):not(:focus-within),
   .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__frame,
   .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__copy > *,
@@ -391,7 +544,8 @@
   .theme-toggle,
   .site-nav__link::after,
   .signal-bubble,
-  .tile__frame::before {
+  .tile__frame::before,
+  .facets__sheen::before {
     transition: none;
   }
 }
