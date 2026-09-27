@@ -6,7 +6,6 @@ title: "Home"
 description: "Kaan Borekci: engineering and AI for improving quality of life for all."
 # Home copy. Sources: CONTEXT.md §1 (positioning, identity facts) and §3 (arc). Rendered by _layouts/home.html.
 positioning: "Engineering and AI for improving quality of life for all."
-intro: "I trained in biomedical and mechanical engineering at Northwestern. I work at two boundaries: hardware and software, and the disciplines and people on each side of a project, from engineers to clinicians, caregivers, and business stakeholders. I learn a domain fast, build the first working version, and hand a grounded platform to the next team."
 portrait:
   src: /assets/img/portrait/kaan-borekci-720.webp
   widths: [400, 720]

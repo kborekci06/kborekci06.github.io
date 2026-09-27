@@ -3,12 +3,12 @@ layout: base
 ---
 {%- comment -%}
   Home, slab by slab, all as glass over the page stone (.stone canvas, assets/js/home.js): hero (base, transparent), intro (base, cut), flagship tiles (alternating), story teaser (inverse); footer from base.
-  Copy comes from index.md front matter; tiles from project front matter (_data/schema/project.yml).
+  Hero and teaser copy comes from index.md front matter, the intro from _data/pillars.yml; tiles from project front matter (_data/schema/project.yml).
   Motion map: PILOT_REPORT.md §0.3, implemented in _sass/marble/_motion.scss and assets/js/home.js.
 {%- endcomment -%}
 <canvas class="stone" data-stone-field aria-hidden="true"></canvas>
 {% include home-hero.html %}
-{% include home-intro.html intro=page.intro %}
+{% include home-intro.html %}
 {% include featured-work.html title=page.work_heading %}
 {% include story-teaser.html teaser=page.story_teaser portrait=page.portrait %}
 {{ content }}
