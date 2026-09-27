@@ -13,7 +13,6 @@
   tags: ["Evolutionary Computation", "Machine Learning", "EMG Signal Processing"]
 
 - title: "Robot Controller Design and Trajectory Planning"
-  # url: "/projects/robotic-manipulation/"
   url: "https://github.com/kborekci06/Robotic-Manipulation-Final-Project"
   image: "/assets/img/projects/robot-manip.mp4"
   poster: "/assets/img/projects/robot-manip.png"
