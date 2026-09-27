@@ -39,5 +39,6 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - RESUME_KAAN_BOREKCI_2026.pdf
+  - onyx-pattern
   - PILOT_REPORT.md
   - pilot-shots
