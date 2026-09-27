@@ -44,23 +44,3 @@
   .site-nav .page-link:hover {
     opacity: 0.75;
   }
-  
-  /* Footer (light + subtle divider) */
-  .site-footer {
-    background-color: #ffffff;
-    color: var(--text);
-    border-top: 1px solid var(--border);
-  }
-  
-  .site-footer a {
-    color: var(--text);
-  }
-  
-  .site-footer a:hover {
-    opacity: 0.75;
-  }
-  
-  /* Footer cleanup (avoid duplicate name) */
-  .site-footer .p-name {
-    display: none;
-  }

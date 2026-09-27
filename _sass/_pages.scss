@@ -2,17 +2,7 @@
 /* Vertical text density utilities    */
 /* ================================== */
 
-/* Dense text — tighter lines */
-.text-narrow {
-    line-height: 1.4;
-  }
-  
-  /* Standard (inherits body 1.7) */
-  .text-normal {
-    line-height: 1.7;
-  }
-  
-  /* Spacious text — looser lines */
+/* Spacious text — looser lines */
   .text-wide {
     line-height: 2.0;
   }
@@ -43,11 +33,6 @@
   
   .split > * {
     min-width: 0;         /* prevents overflow in grid columns */
-  }
-
-  /* OPT-IN: vertically center the two columns within the row */
-  .split--center {
-    align-items: center;
   }
 
   .split__media--vcenter {
