@@ -58,6 +58,7 @@ $rw: unquote("calc(var(--intro-cut-wide) - var(--intro-inset) * var(--intro-mite
 }
 
 .facets__set {
+  position: relative;
   display: grid;
   grid-column: 1 / -1;
   grid-row: 1 / -1;
@@ -65,6 +66,23 @@ $rw: unquote("calc(var(--intro-cut-wide) - var(--intro-inset) * var(--intro-mite
   grid-template-rows: subgrid;
   padding: 0;
   list-style: none;
+}
+
+// One blur sheet under the joined panel. Each facet blurs its own backdrop, and where two facets meet the two blurs
+// do not agree (each clamps at its edge), which showed as soft vertical bands through the joint. The sheet blurs the
+// stone once for the whole panel, so the facets on top blur an already smooth backdrop. It is hidden while the facets
+// are apart (_motion.scss) and has no tint of its own.
+.facets__set::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: #{facet-shape($c, $c, $cw, $c)};
+  pointer-events: none;
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
 }
 
 // One facet: glass on ::before (cut to --facet-fit, the settled shape), its own inlay ring on ::after (seen only apart).

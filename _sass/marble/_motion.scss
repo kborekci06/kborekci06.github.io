@@ -131,6 +131,12 @@
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 @keyframes facet-ring-out {
   from {
     opacity: 1;
@@ -291,6 +297,12 @@
       animation-range: cover 24% cover 34%;
     }
 
+    .js .facets__set::before {
+      animation: fade-in linear both;
+      animation-timeline: --facets;
+      animation-range: cover 22% cover 34%;
+    }
+
     .js .facets::before {
       animation: glow-on linear both;
       animation-timeline: --facets;
@@ -414,6 +426,7 @@
     .js .facets:focus-within .facet,
     .js .facets:focus-within .facet::before,
     .js .facets:focus-within .facet::after,
+    .js .facets:focus-within .facets__set::before,
     .js .facets:focus-within::before,
     .js .facets:focus-within .facets__inlay,
     .js .facets:focus-within .facet__body::before,
@@ -476,6 +489,7 @@
   .js.no-sda .facet,
   .js.no-sda .facet::before,
   .js.no-sda .facet::after,
+  .js.no-sda .facets__set::before,
   .js.no-sda .facets::before,
   .js.no-sda .facets__inlay,
   .js.no-sda .facet__body::before,
@@ -503,6 +517,7 @@
     }
 
     &::before,
+    .facets__set::before,
     .facets__inlay {
       opacity: 0;
     }
