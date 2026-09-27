@@ -67,7 +67,7 @@ signals:
   </div>
   </div>
   <div class="split__media split__media--right split__media--vcenter">
-    {% include media-block.html class="w-75" src="assets/img/projects/diaphragm-control/cchs1.png" caption="<strong>Image 1:</strong> Front and Back View of The Through-Hole PCB: <br> <i>Developed after the failed high-fidelity PCB iteration developed by one of my teammates, to keep data collection and IRB + Patent application processes continuing</i>" %}
+    {% include media-block.html class="w-75" src="assets/img/projects/diaphragm-control/diaphragm-control.png" caption="<strong>Image 1:</strong> Front and Back View of The Through-Hole PCB: <br> <i>Developed after the failed high-fidelity PCB iteration developed by one of my teammates, to keep data collection and IRB + Patent application processes continuing</i>" %}
   </div>
 </div>
 
