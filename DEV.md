@@ -10,7 +10,7 @@ Already done on this Mac (rbenv via Homebrew, Ruby 3.2.4, gems installed). For a
 brew install rbenv ruby-build
 echo 'eval "$(rbenv init - zsh)"' >> ~/.zshrc && source ~/.zshrc   # skip if rbenv init is already in ~/.zshrc
 rbenv install 3.2.4          # skip if already installed
-cd ~/Desktop/kborekci06.github.io
+cd ~/Developer/kborekci06.github.io
 ruby -v                      # expect ruby 3.2.4 (picked up from .ruby-version)
 gem install bundler
 bundle install
@@ -23,7 +23,7 @@ VS Code route: `Cmd+Shift+B` runs the default build task "Jekyll Dev". It cleans
 Terminal route:
 
 ```zsh
-cd ~/Desktop/kborekci06.github.io
+cd ~/Developer/kborekci06.github.io
 bundle exec jekyll serve --livereload --trace
 ```
 
