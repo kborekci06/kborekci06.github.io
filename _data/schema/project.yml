@@ -2,7 +2,7 @@
 # Documentation only (Jekyll exposes it as site.data.schema.project; no layout reads it).
 # Adding a project = one markdown file under projects/ with this front matter, plus its assets under assets/img/<slug>/.
 # Readers: _includes/featured-work.html selects pages with featured: true, sorted by order;
-#          _includes/flagship-card.html renders title, org, description, tags, thumbnail, url.
+#          _includes/flagship-tile.html renders title, org, description, tags, thumbnail, url.
 # Rules: copy follows CLAUDE.md §5 (no invented facts; unknowns as "[confirm: ...]"); spelling "Borekci".
 
 title:
