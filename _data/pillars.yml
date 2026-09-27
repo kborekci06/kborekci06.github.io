@@ -1,18 +1,18 @@
 # Home intro (_includes/home-intro.html): three pillars that join into one panel holding the tagline, blurb and link.
 # Placeholder wording from CONTEXT.md §1 and §3; not final (owner rewrites with /story-craft).
 # Contract: tagline; pillars [{id, label, line <= 12 words}] x3; blurb <= 45 words, first person; cta {label, url}.
-tagline: "Forged through mechanics, computation, and care."
+tagline: "Forged through craft and legacy."
 pillars:
-  - id: mechanics
-    label: "Mechanics"
-    line: "Solids, fluids, and dynamics, trained through biomedical and mechanical engineering."
-  - id: computation
-    label: "Computation"
-    line: "Firmware, computer vision, and physics-informed models of human motion."
-  - id: care
-    label: "Care"
-    line: "Built with clinicians, caregivers, and patients, for quality of life."
-blurb: "I have always worked at the intersection: hardware beside software, a clinician's question beside an engineer's constraint. I like cross-disciplinary problems. I learn a domain fast, build the first working version, and hand a grounded platform to the next team."
+  - id: hardware
+    label: "Hardware"
+    line: "Mechanics, electronics, and medical device firmware, from a first schematic to a working prototype."
+  - id: software
+    label: "Software"
+    line: "Computer vision, physics-informed models, and the data pipelines that turn signals into decisions."
+  - id: people
+    label: "People"
+    line: "Clinicians, patients, engineers, and business stakeholders, translated for each other."
+blurb: "I have always worked at the intersection: hardware beside software, a clinician's question beside an engineer's constraint. I learn a domain fast, build the first working version, and hand a grounded platform to the next team."
 cta:
   label: "More about my story"
   url: /story/
