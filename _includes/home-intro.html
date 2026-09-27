@@ -1,10 +1,30 @@
 {%- comment -%}
-  Home intro: one paragraph (<= 60 words) on the base slab, under a vein that draws on with scroll.
-  Param: intro = string from index.md front matter. Styles: _sass/marble/_intro.scss.
+  Home intro: three fitted glass panels, one per pillar, that slide together on scroll into one panel holding the tagline,
+  the blurb and the story link. Renders only from _data/pillars.yml (contract in its header); markup never changes with copy.
+  DOM order is heading, pillars, blurb, link; the grid shows the pillars on top. Styles: _sass/marble/_intro.scss;
+  motion: _sass/marble/_motion.scss (data-reveal gives the IntersectionObserver fallback in assets/js/home.js §2).
 {%- endcomment -%}
-<section class="intro slab slab--base slab--cut" id="intro" aria-label="Introduction">
+{%- assign d = site.data.pillars -%}
+<section class="intro slab slab--base slab--cut" id="intro" aria-labelledby="intro-title">
   <div class="container intro__inner">
-    <span class="intro__vein" aria-hidden="true"></span>
-    <p class="intro__text" data-reveal>{{ include.intro }}</p>
+    <div class="facets" data-reveal>
+      <h2 class="facets__tagline" id="intro-title">{{ d.tagline }}</h2>
+      <ul class="facets__set" aria-label="Pillars">
+        {%- for p in d.pillars %}
+        <li class="facet facet--{{ p.id }}">
+          <div class="facet__body">
+            <h3 class="facet__label">{{ p.label }}</h3>
+            <p class="facet__line">{{ p.line }}</p>
+          </div>
+        </li>
+        {%- endfor %}
+      </ul>
+      <div class="facets__joint">
+        <p class="facets__blurb">{{ d.blurb }}</p>
+        <a class="btn btn--line facets__cta" href="{{ d.cta.url | relative_url }}">{{ d.cta.label }}</a>
+      </div>
+      <span class="facets__inlay" aria-hidden="true"></span>
+      <span class="facets__sheen" aria-hidden="true"></span>
+    </div>
   </div>
 </section>
