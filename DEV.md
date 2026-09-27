@@ -56,6 +56,14 @@ Then open http://127.0.0.1:4000.
 - Sass errors: printed in the terminal running the server (`--trace` shows the full stack). The page keeps the last good CSS until fixed.
 - Browser does not refresh: confirm the tab is on http://127.0.0.1:4000, not a `file://` URL, and that the terminal shows the rebuild.
 
+## Branches
+
+`dev` is the working branch: commit here, preview locally, push whenever. `main` is the live site: merge `dev` into `main` only when the site is ready to publish.
+
+```zsh
+git switch main && git merge --ff-only dev && git push && git switch dev
+```
+
 ## Before pushing
 
 ```zsh
