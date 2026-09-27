@@ -19,7 +19,6 @@ sass:
 header_pages:
   - index.md
   - experience.md
-  # - internships.md
   - resume.md
   - contact.md
 

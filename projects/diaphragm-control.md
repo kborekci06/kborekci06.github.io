@@ -300,6 +300,3 @@ The device is now being used in IRB-approved formal data collection on healthy c
 </object>
 
 {% include link-list.html slug="diaphragm-control" %}
-
-<!-- ## Timeline:
-{% include timeline.html slug="robotic-manipulation" %} -->
