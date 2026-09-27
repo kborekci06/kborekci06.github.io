@@ -238,7 +238,6 @@
     window.addEventListener("scroll", function () { if (reduce.matches) paint(performance.now()); }, { passive: true });
     reduce.addEventListener("change", function () { repaint(); run(); });
     new MutationObserver(repaint).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", repaint);
     start = performance.now();
     run();
   }

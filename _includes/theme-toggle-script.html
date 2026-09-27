@@ -7,8 +7,7 @@
   var btn = document.querySelector(".theme-toggle");
   if (!btn) return;
   var root = document.documentElement;
-  var media = window.matchMedia("(prefers-color-scheme: dark)");
-  function current() { return root.getAttribute("data-theme") || (media.matches ? "dark" : "light"); }
+  function current() { return root.getAttribute("data-theme") || "dark"; } // no stored choice = dark (the default)
   var label = btn.querySelector(".theme-toggle__text");
   function sync() {
     var dark = current() === "dark";
@@ -21,7 +20,6 @@
     try { localStorage.setItem("theme", next); } catch (e) {}
     sync();
   });
-  media.addEventListener("change", sync);
   sync();
   btn.hidden = false;
 })();

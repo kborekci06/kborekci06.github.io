@@ -234,18 +234,14 @@ $grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
   --hero-name-glow: 0 0 0.3em color-mix(in srgb, var(--color-night-glow) 45%, transparent), 0 0 1.2em color-mix(in srgb, var(--color-night-glow) 22%, transparent);
 }
 
+// Dark (the night face of the stone) is the default (owner, 2026-09-26); a stored choice of light overrides it.
+// The OS colour-scheme preference is not consulted: the site opens dark for everyone until they toggle.
 :root {
-  @include theme-light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    @include theme-dark;
-  }
-}
-
-:root[data-theme="dark"] {
   @include theme-dark;
+}
+
+:root[data-theme="light"] {
+  @include theme-light;
 }
 
 // Night: the hero's umber slab and the header over it stay dark in both themes (owner decision 2026-09-26).
