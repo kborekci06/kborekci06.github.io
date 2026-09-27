@@ -2,6 +2,8 @@
 
 Branch `intro/facets` from `design` (26cfb21). Home intro slab only. Refs: CON-050.
 
+Merged into `design` 2026-09-26 (owner's pick over confluence and lens). Changes on merge: pillars set to Hardware / Software / People, tagline "Forged through craft and legacy.", one blur sheet under the joined panel (`.facets__set::before`) so the facets' separate backdrop blurs no longer show as bands through the joint (seam step 4.0 to 1.3 grey levels in dark, 3.0 to 2.5 in light, measured on the settled 1440 capture), unused `intro` front matter removed. The 390 join was re-checked at cover 15/26/34/40/47 %: the join ends with the panel top a third down the viewport, so item 1 below needs no change in the emulator; a real phone is still untested.
+
 ## 1. Plan (written before the build)
 
 ### Concept in five lines
