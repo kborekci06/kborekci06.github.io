@@ -112,9 +112,13 @@ description: "Every design built for Kaan Borekci's site, grouped by experiment.
     <ul class="tiles">
       {%- for d in group.designs %}
       <li class="tile reveal" style="--i: {{ forloop.index0 }}">
-        <a class="tile__link" href="/experiments/{{ group.slug }}/{{ d.slug }}/">
+        {%- assign folder = "/experiments/" | append: group.slug | append: "/" | append: d.slug | append: "/" -%}
+        {%- assign href = d.url | default: folder -%}
+        {%- assign preview = d.preview | default: folder | append: "preview.webp" -%}
+        {%- if d.preview %}{% assign preview = d.preview %}{% endif %}
+        <a class="tile__link" href="{{ href }}">
           <figure class="tile__preview">
-            <img src="/experiments/{{ group.slug }}/{{ d.slug }}/preview.webp" width="1200" height="750" alt="Screenshot of the {{ d.name }} design" loading="lazy">
+            <img src="{{ preview }}" width="1200" height="750" alt="Screenshot of the {{ d.name }} design" loading="lazy">
           </figure>
           <div class="tile__body">
             <p class="tile__label">{{ group.short }}{{ forloop.index }}</p>
