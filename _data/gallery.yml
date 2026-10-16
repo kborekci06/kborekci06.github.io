@@ -1,0 +1,14 @@
+# Registry read by index.html (the gallery). Named gallery.yml because _data/experiments/ (the per-design data folders) already owns site.data.experiments.
+# One entry per design folder experiments/<group>/<slug>/ (the page is /experiments/<group>/<slug>/), with
+# preview.webp (1200x750 screenshot of the page) beside it. Adding a design = its folder plus one entry here.
+# status: working (being developed) | candidate (in the running for the final site) | archived (kept for the record)
+- slug: marble
+  short: M
+  title: Marble
+  summary: "Stone as a style, not a picture: an onyx canvas, glass slabs, sharp cuts, Garamond display type, dark by default with a light face."
+  designs:
+    - slug: onyx
+      name: Onyx
+      direction: "Dark onyx stone under glass slabs"
+      date: 2026-09
+      status: working
