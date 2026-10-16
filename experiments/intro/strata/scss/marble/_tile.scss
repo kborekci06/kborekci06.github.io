@@ -1,0 +1,186 @@
+// Flagship tile (_partials/flagship-tile.html): a mini-hero per slab. Track = scroll length of the pin; stage = what pins.
+// Static layout here; the pin, the scrub and the entrances are in _motion.scss. Media share one aspect (--aspect-card).
+
+.tile__stage {
+  display: grid;
+  align-content: safe center; // a stage taller than the viewport overflows downward only, never under the header
+  gap: var(--space-6);
+  min-height: 100svh;
+  padding-block: calc(var(--header-height) + var(--space-3)) var(--space-8); // clears the fixed glass header
+}
+
+.tile__media {
+  position: relative;
+}
+
+// Frame: a fitted stone panel (ported from Emperador). Small chamfers on three corners, one wide cut on the lower outer
+// corner, an inlay hairline inset from the edge (.inlay, _layout.scss). Chamfers are in percent so the inlay polygon
+// (SVG, same space) follows them; 2 % of width = 3 % of height at 3:2. The media fills it; a hover sheen sits over it.
+.tile__frame {
+  position: relative;
+  overflow: clip;
+  aspect-ratio: var(--aspect-card);
+  background-color: var(--s-surface-2);
+  clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 86.5%, 91% 100%, 2% 100%, 0 97%, 0 3%);
+}
+
+.tile__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: var(--sheen);
+  translate: -100% 0;
+  pointer-events: none;
+}
+
+.tile__inlay {
+  z-index: 2;
+}
+
+.tile__img,
+.tile__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+// Tags: a row of glass chips overlapping the media's lower edge on small screens; from md a rail across its top edge.
+.tile__tags {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  max-width: calc(100% - var(--space-8));
+  margin: calc(var(--space-5) * -1) 0 0 var(--space-4);
+  padding: 0;
+  color: var(--s-text);
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  list-style: none;
+}
+
+.tile__tags li {
+  @include glass;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-glass);
+}
+
+// Signal panel: below the tags in flow up to lg (full width, then 22rem); from lg it floats over the frame's wide lower
+// cut, partly outside it, opposite the tag rail on the top edge.
+.tile__media > .signal-bubble {
+  margin-top: var(--space-3);
+}
+
+.tile__copy {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  padding-top: var(--space-4);
+}
+
+.tile__org {
+  color: var(--s-muted);
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+}
+
+.tile__title {
+  max-width: 16ch;
+  font-size: var(--step-3);
+}
+
+.tile__blurb {
+  max-width: 44ch;
+  color: var(--s-muted);
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+}
+
+// Meta row: role and years as glass chips, read from project front matter (role, dates).
+.tile__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--step--1);
+  line-height: var(--leading-snug);
+}
+
+.tile__meta-item {
+  @include glass;
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-glass);
+}
+
+.tile__meta-item dt {
+  color: var(--s-muted);
+}
+
+.tile__meta-item dd {
+  margin: 0;
+  font-weight: var(--weight-medium);
+}
+
+.tile__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+// Two columns from md: copy beside media; even tiles mirror so the page zigzags.
+@media (min-width: $bp-md) {
+  .tile__tags {
+    position: absolute;
+    top: calc(var(--space-4) * -1);
+    left: var(--space-6);
+    margin: 0;
+  }
+
+  // Even tiles sit on the right: the frame mirrors so its wide cut stays on the inner corner, under the signal panel.
+  .tile:nth-of-type(even) .tile__frame {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 97%, 98% 100%, 9% 100%, 0 86.5%, 0 3%);
+  }
+
+  .tile:nth-of-type(even) .tile__inlay {
+    scale: -1 1;
+  }
+
+  .tile__stage {
+    grid-template-columns: 5fr 7fr;
+    align-items: center;
+    gap: var(--space-7);
+  }
+
+  .tile__copy {
+    order: -1;
+    padding-top: 0;
+  }
+
+  .tile:nth-of-type(odd) .tile__copy {
+    order: 1;
+  }
+
+  .tile:nth-of-type(odd) .tile__stage {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+@media (min-width: $bp-lg) {
+  .tile__media > .signal-bubble {
+    position: absolute;
+    right: calc(var(--space-6) * -1);
+    bottom: calc(var(--space-8) * -1);
+    margin: 0;
+  }
+
+  .tile:nth-of-type(even) .tile__media > .signal-bubble {
+    right: auto;
+    left: calc(var(--space-6) * -1);
+  }
+}

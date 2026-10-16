@@ -1,0 +1,402 @@
+// Home intro, strata (_partials/home-intro.html): the pillars as horizontal glass courses and the portrait as a lens
+// cut through them; then the work heading that follows on the same base slab.
+// Static state here is the settled one (JS off, reduced motion, no scroll-driven animations): portrait, three courses,
+// the Forged panel (tagline, blurb, link). Below md: the portrait is a 3:2 lens on top of the stack. From md: a wide
+// portrait panel beside the three courses (as tall as they are), the Forged panel as the base course under both. Act 1 and both transitions are in
+// _motion.scss; the act-1 outlines are declared here (--a1-*, inert until the pinned scrub reads them).
+// Every piece is glass cut by a clip-path polygon with a one-vein cut-edge ring (even-odd, inner loop inset by one vein),
+// and act 1 and the settled state of a piece share a vertex count, so the outline morphs while the piece travels.
+// Neighbouring pieces overlap by one vein, so two rings meet as one hairline.
+
+$w: "var(--vein-width)";
+$c: "var(--intro-chamfer)";
+$cw: "var(--intro-cut-wide)";
+$lc: "var(--intro-lens-c)";
+$P: "var(--intro-p)";
+$W: "var(--intro-w)";
+$hc: "var(--intro-course)";
+$H: "var(--intro-lens-h)";
+$xL: "(#{$W} - #{$P}) / 2";       // lens left edge in act 1 (centred)
+$xR: "(#{$W} + #{$P}) / 2";
+$mS: "#{$hc} + #{$H} / 2";         // lens midline, from Software's top
+$t: "#{$H} / 2 + #{$w}";           // People's top, from the top of its act-1 glass (one vein above the midline)
+
+@function pt($x, $y) {
+  @return "calc(#{$x}) calc(#{$y})";
+}
+
+@function pts($list) {
+  $s: "";
+  @each $p in $list {
+    $s: if($s == "", $p, "#{$s}, #{$p}");
+  }
+  @return $s;
+}
+
+@function shape($list) {
+  @return unquote("polygon(#{pts($list)})");
+}
+
+// Cut-edge ring: the outline and the outline inset by one vein, even-odd filled. Both loops close on their first
+// point, so the bridge between them is traversed there and back and has no area.
+@function ring($outer, $inner) {
+  @return unquote("polygon(evenodd, #{pts($outer)}, #{nth($outer, 1)}, #{pts($inner)}, #{nth($inner, 1)})");
+}
+
+// Chamfered octagon on the box (x0, y0)-(x1, y1), corners clockwise from top-left, inset by $in (a cut vertex moves
+// along its edge by $in x tan(22.5deg), so the inset stays parallel to the cut).
+// A square corner ("0px") moves by $in on both axes instead.
+@function oct($x0, $y0, $x1, $y1, $tl, $tr, $br, $bl, $in: "0px") {
+  $in: "(#{$in})";
+  $m: "#{$in} * var(--intro-miter)";
+  $k1: if($tl == "0px", $in, $m);
+  $k2: if($tr == "0px", $in, $m);
+  $k3: if($br == "0px", $in, $m);
+  $k4: if($bl == "0px", $in, $m);
+  @return (
+    pt("#{$x0} + #{$tl} + #{$k1}", "#{$y0} + #{$in}"),
+    pt("#{$x1} - #{$tr} - #{$k2}", "#{$y0} + #{$in}"),
+    pt("#{$x1} - #{$in}", "#{$y0} + #{$tr} + #{$k2}"),
+    pt("#{$x1} - #{$in}", "#{$y1} - #{$br} - #{$k3}"),
+    pt("#{$x1} - #{$br} - #{$k3}", "#{$y1} - #{$in}"),
+    pt("#{$x0} + #{$bl} + #{$k4}", "#{$y1} - #{$in}"),
+    pt("#{$x0} + #{$in}", "#{$y1} - #{$bl} - #{$k4}"),
+    pt("#{$x0} + #{$in}", "#{$y0} + #{$tl} + #{$k1}")
+  );
+}
+
+// The same eight vertices collapsed onto one horizontal line at $y: the closed cut a piece opens from.
+@function slit($y, $l, $r) {
+  @return (pt($l, $y), pt("100% - #{$r}", $y), pt("100%", $y), pt("100%", $y), pt("100% - #{$r}", $y), pt($l, $y), pt("0px", $y), pt("0px", $y));
+}
+
+@function oct-cut($tl, $tr, $br, $bl) {
+  @return shape(oct("0px", "0px", "100%", "100%", $tl, $tr, $br, $bl));
+}
+
+@function oct-ring($tl, $tr, $br, $bl) {
+  @return ring(oct("0px", "0px", "100%", "100%", $tl, $tr, $br, $bl), oct("0px", "0px", "100%", "100%", $tl, $tr, $br, $bl, $w));
+}
+
+.intro {
+  overflow-x: clip; // courses slide in from past the gutter; never a horizontal scroll
+  padding-block: var(--slab-pad) var(--space-8);
+}
+
+.strata {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+// Backlight behind the glass: the hero's warm halo, blurred by the pieces in front of it.
+.strata::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--space-8) * -1) 0;
+  background-image: var(--hero-backlight);
+  pointer-events: none;
+}
+
+// ---- Portrait: the lens. The figure is filled with the accent and cut to the outline; the photo is cut one vein
+// inside it, so the lit cut edge travels with every outline (lens, slit, panel). ----
+.strata__lens {
+  // Below md: a 3:2 lens on top of the stack. --k0 is the closed cut it opens from (_motion.scss).
+  --k0: #{shape(slit("50%", $lc, $lc))};
+  position: relative;
+  z-index: 3; // above every course: a mistimed frame can hide a course, never the face
+  grid-row: 1;
+  margin: 0;
+  aspect-ratio: 3 / 2;
+  background-color: var(--s-accent);
+  clip-path: #{oct-cut($lc, $lc, $lc, $lc)};
+}
+
+.strata__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--intro-face-pos);
+  clip-path: #{shape(oct("0px", "0px", "100%", "100%", $lc, $lc, $lc, $lc, $w))};
+}
+
+// ---- Courses: one glass course per pillar; glass on ::before, cut-edge ring on ::after, both cut to --cut/--ring. ----
+.strata__courses {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-row: 2;
+  margin: calc(#{$w} * -1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course {
+  --cut: #{oct-cut("0px", "0px", "0px", "0px")};
+  --ring: #{oct-ring("0px", "0px", "0px", "0px")};
+  position: relative;
+}
+
+.course + .course {
+  margin-top: calc(#{$w} * -1);
+}
+
+.course::before,
+.course::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.course::before {
+  background-color: var(--s-surface-2);
+  box-shadow: var(--glass-shadow);
+  clip-path: var(--cut);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: color-mix(in srgb, var(--s-surface-2) var(--intro-glass-mix), transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+.course::after {
+  background-color: var(--s-accent);
+  clip-path: var(--ring);
+}
+
+.course__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-2);
+  align-content: center;
+  padding: var(--intro-pad);
+}
+
+.course__label {
+  font-size: var(--step-2);
+}
+
+.course__line {
+  max-width: 44ch;
+  color: var(--s-muted);
+  line-height: var(--leading-snug);
+}
+
+// ---- Forged panel: glass cut from the base course, holding the tagline, blurb and link; it carries the
+// composition's lower corners (chamfer left, the tiles' wide cut right). ----
+.strata__forged,
+.strata__sheen {
+  --k0: #{shape(slit("0px", $c, $cw))};
+  grid-column: 1;
+  grid-row: 3 / 5;
+  margin-top: calc(#{$w} * -1);
+  pointer-events: none;
+  clip-path: #{oct-cut("0px", "0px", $cw, $c)};
+}
+
+.strata__forged {
+  position: relative;
+  background-color: var(--s-surface-2);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: color-mix(in srgb, var(--s-surface-2) var(--intro-glass-mix), transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+.strata__forged::after {
+  --k0: #{ring(slit("0px", $c, $cw), slit("0px", $c, $cw))};
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--s-accent);
+  clip-path: #{oct-ring("0px", "0px", $cw, $c)};
+}
+
+// Polished sheen across the Forged panel on hover or focus (as on the tile frames).
+.strata__sheen {
+  position: relative;
+  z-index: 2;
+  overflow: clip;
+}
+
+.strata__sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--sheen);
+  translate: -100% 0;
+}
+
+.strata__tagline,
+.strata__joint {
+  position: relative;
+  z-index: 2;
+  grid-column: 1;
+  padding-inline: var(--intro-pad);
+}
+
+.strata__tagline {
+  grid-row: 3;
+  padding-top: var(--intro-pad);
+  font-size: var(--step-3);
+}
+
+.strata__joint {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  align-content: start;
+  grid-row: 4;
+  padding-block: var(--space-4) var(--intro-pad);
+}
+
+.strata__blurb {
+  max-width: 52ch;
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+}
+
+// From md: the portrait as a wide panel beside the courses and as tall as they are (tl chamfer; no inset inlay: at this
+// crop it would cross the hair); Hardware carries the composition's top-right chamfer; the Forged panel runs under
+// both, tagline under the portrait, blurb and link under the courses.
+@media (min-width: $bp-md) {
+  .strata {
+    grid-template-columns: var(--intro-p) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .strata__lens {
+    --k0: #{shape(slit("50%", $c, "0px"))};
+    grid-column: 1;
+    grid-row: 1;
+    aspect-ratio: auto;
+    clip-path: #{oct-cut($c, "0px", "0px", "0px")};
+  }
+
+  .strata__img {
+    position: absolute;
+    inset: 0;
+    clip-path: #{shape(oct("0px", "0px", "100%", "100%", $c, "0px", "0px", "0px", $w))};
+  }
+
+  .strata__courses {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+  }
+
+  // The glass reaches one vein under the portrait, so the two cut edges meet as one line.
+  .course::before,
+  .course::after {
+    left: calc(#{$w} * -1);
+  }
+
+  .course:first-child {
+    --cut: #{oct-cut("0px", $c, "0px", "0px")};
+    --ring: #{oct-ring("0px", $c, "0px", "0px")};
+  }
+
+  .strata__forged,
+  .strata__sheen {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .strata__tagline {
+    grid-column: 1;
+    grid-row: 2;
+    padding-block: var(--intro-pad);
+  }
+
+  .strata__joint {
+    grid-column: 2;
+    grid-row: 2;
+    padding-block: var(--intro-pad);
+    padding-inline-end: var(--intro-cut-wide); // the link clears the wide lower cut
+  }
+}
+
+// From lg: label beside line, a spec-sheet course.
+@media (min-width: $bp-lg) {
+  .course__body {
+    grid-template-columns: var(--intro-label-w) minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: var(--space-5);
+  }
+}
+
+// ---- Act-1 outlines for the pinned two-act intro (read only by the scrub in _motion.scss). In the pinned layout each
+// course's glass and ring run from the composition's left edge (x 0) across its full width --intro-w; Software's reach
+// down to the lens midline beside the lens and People's up to it, both notched to the lens's octagon. --a15-* is the
+// same course closed flat against the lens (the first half of the shear), --a2-* the piece settled in the right column
+// (x from --intro-p); all three share a vertex count. Hardware has no notch, so its --a15-* is its act-1 outline. ----
+.course:nth-child(1) {
+  --a1-cut: #{shape(oct("0px", "0px", $W, $hc, $c, $c, "0px", "0px"))};
+  --a1-ring: #{ring(oct("0px", "0px", $W, $hc, $c, $c, "0px", "0px"), oct("0px", "0px", $W, $hc, $c, $c, "0px", "0px", $w))};
+  --a15-cut: var(--a1-cut);
+  --a15-ring: var(--a1-ring);
+  --a2-cut: #{shape(oct("#{$P} - #{$w}", "0px", $W, $hc, "0px", $c, "0px", "0px"))};
+  --a2-ring: #{ring(oct("#{$P} - #{$w}", "0px", $W, $hc, "0px", $c, "0px", "0px"), oct("#{$P} - #{$w}", "0px", $W, $hc, "0px", $c, "0px", "0px", $w))};
+}
+
+$s-a1: (pt("0px", "0px"), pt($W, "0px"), pt($W, $mS), pt($xR, $mS), pt($xR, "#{$hc} + #{$lc}"), pt("#{$xR} - #{$lc}", $hc), pt("#{$xL} + #{$lc}", $hc), pt($xL, "#{$hc} + #{$lc}"), pt($xL, $mS), pt("0px", $mS));
+$s-a1-in: (pt($w, $w), pt("#{$W} - #{$w}", $w), pt("#{$W} - #{$w}", "#{$mS} - #{$w}"), pt("#{$xR} + #{$w}", "#{$mS} - #{$w}"), pt("#{$xR} + #{$w}", "#{$hc} + #{$lc} - #{$w} * var(--intro-miter)"), pt("#{$xR} - #{$lc} + #{$w} * var(--intro-miter)", "#{$hc} - #{$w}"), pt("#{$xL} + #{$lc} - #{$w} * var(--intro-miter)", "#{$hc} - #{$w}"), pt("#{$xL} - #{$w}", "#{$hc} + #{$lc} - #{$w} * var(--intro-miter)"), pt("#{$xL} - #{$w}", "#{$mS} - #{$w}"), pt($w, "#{$mS} - #{$w}"));
+$s-a2: (pt("#{$P} - #{$w}", "0px"), pt($W, "0px"), pt($W, $hc), pt($xR, $hc), pt($xR, $hc), pt("#{$xR} - #{$lc}", $hc), pt("#{$xL} + #{$lc}", $hc), pt("#{$P} - #{$w}", $hc), pt("#{$P} - #{$w}", $hc), pt("#{$P} - #{$w}", $hc));
+$s-a2-in: (pt($P, $w), pt("#{$W} - #{$w}", $w), pt("#{$W} - #{$w}", "#{$hc} - #{$w}"), pt($xR, "#{$hc} - #{$w}"), pt($xR, "#{$hc} - #{$w}"), pt("#{$xR} - #{$lc}", "#{$hc} - #{$w}"), pt("#{$xL} + #{$lc}", "#{$hc} - #{$w}"), pt($P, "#{$hc} - #{$w}"), pt($P, "#{$hc} - #{$w}"), pt($P, "#{$hc} - #{$w}"));
+
+$s-mid: (pt("0px", "0px"), pt($W, "0px"), pt($W, $hc), pt($xR, $hc), pt($xR, $hc), pt("#{$xR} - #{$lc}", $hc), pt("#{$xL} + #{$lc}", $hc), pt($xL, $hc), pt($xL, $hc), pt("0px", $hc));
+$s-mid-in: (pt($w, $w), pt("#{$W} - #{$w}", $w), pt("#{$W} - #{$w}", "#{$hc} - #{$w}"), pt($xR, "#{$hc} - #{$w}"), pt($xR, "#{$hc} - #{$w}"), pt("#{$xR} - #{$lc}", "#{$hc} - #{$w}"), pt("#{$xL} + #{$lc}", "#{$hc} - #{$w}"), pt($xL, "#{$hc} - #{$w}"), pt($xL, "#{$hc} - #{$w}"), pt($w, "#{$hc} - #{$w}"));
+
+.course:nth-child(2) {
+  --a15-cut: #{shape($s-mid)};
+  --a15-ring: #{ring($s-mid, $s-mid-in)};
+  --a1-cut: #{shape($s-a1)};
+  --a1-ring: #{ring($s-a1, $s-a1-in)};
+  --a2-cut: #{shape($s-a2)};
+  --a2-ring: #{ring($s-a2, $s-a2-in)};
+}
+
+$b: "#{$t} + #{$hc}"; // People's bottom
+$p-a1: (pt("0px", "0px"), pt($xL, "0px"), pt($xL, "#{$t} - #{$lc}"), pt("#{$xL} + #{$lc}", $t), pt("#{$xR} - #{$lc}", $t), pt($xR, "#{$t} - #{$lc}"), pt($xR, "0px"), pt($W, "0px"), pt($W, "#{$b} - #{$cw}"), pt("#{$W} - #{$cw}", $b), pt($c, $b), pt("0px", "#{$b} - #{$c}"));
+$p-a1-in: (pt($w, $w), pt("#{$xL} - #{$w}", $w), pt("#{$xL} - #{$w}", "#{$t} - #{$lc} + #{$w} * var(--intro-miter)"), pt("#{$xL} + #{$lc} - #{$w} * var(--intro-miter)", "#{$t} + #{$w}"), pt("#{$xR} - #{$lc} + #{$w} * var(--intro-miter)", "#{$t} + #{$w}"), pt("#{$xR} + #{$w}", "#{$t} - #{$lc} + #{$w} * var(--intro-miter)"), pt("#{$xR} + #{$w}", $w), pt("#{$W} - #{$w}", $w), pt("#{$W} - #{$w}", "#{$b} - #{$cw} - #{$w} * var(--intro-miter)"), pt("#{$W} - #{$cw} - #{$w} * var(--intro-miter)", "#{$b} - #{$w}"), pt("#{$c} + #{$w} * var(--intro-miter)", "#{$b} - #{$w}"), pt($w, "#{$b} - #{$c} - #{$w} * var(--intro-miter)"));
+$p-a2: (pt("#{$P} - #{$w}", $t), pt("#{$P} - #{$w}", $t), pt("#{$P} - #{$w}", $t), pt("#{$xL} + #{$lc}", $t), pt("#{$xR} - #{$lc}", $t), pt($xR, $t), pt($xR, $t), pt($W, $t), pt($W, $b), pt($W, $b), pt("#{$P} - #{$w}", $b), pt("#{$P} - #{$w}", $b));
+$p-a2-in: (pt($P, "#{$t} + #{$w}"), pt($P, "#{$t} + #{$w}"), pt($P, "#{$t} + #{$w}"), pt("#{$xL} + #{$lc}", "#{$t} + #{$w}"), pt("#{$xR} - #{$lc}", "#{$t} + #{$w}"), pt($xR, "#{$t} + #{$w}"), pt($xR, "#{$t} + #{$w}"), pt("#{$W} - #{$w}", "#{$t} + #{$w}"), pt("#{$W} - #{$w}", "#{$b} - #{$w}"), pt("#{$W} - #{$w}", "#{$b} - #{$w}"), pt($P, "#{$b} - #{$w}"), pt($P, "#{$b} - #{$w}"));
+
+$p-mid: (pt("0px", $t), pt($xL, $t), pt($xL, $t), pt("#{$xL} + #{$lc}", $t), pt("#{$xR} - #{$lc}", $t), pt($xR, $t), pt($xR, $t), pt($W, $t), pt($W, "#{$b} - #{$cw}"), pt("#{$W} - #{$cw}", $b), pt($c, $b), pt("0px", "#{$b} - #{$c}"));
+$p-mid-in: (pt($w, "#{$t} + #{$w}"), pt($xL, "#{$t} + #{$w}"), pt($xL, "#{$t} + #{$w}"), pt("#{$xL} + #{$lc}", "#{$t} + #{$w}"), pt("#{$xR} - #{$lc}", "#{$t} + #{$w}"), pt($xR, "#{$t} + #{$w}"), pt($xR, "#{$t} + #{$w}"), pt("#{$W} - #{$w}", "#{$t} + #{$w}"), pt("#{$W} - #{$w}", "#{$b} - #{$cw} - #{$w} * var(--intro-miter)"), pt("#{$W} - #{$cw} - #{$w} * var(--intro-miter)", "#{$b} - #{$w}"), pt("#{$c} + #{$w} * var(--intro-miter)", "#{$b} - #{$w}"), pt($w, "#{$b} - #{$c} - #{$w} * var(--intro-miter)"));
+
+.course:nth-child(3) {
+  --a15-cut: #{shape($p-mid)};
+  --a15-ring: #{ring($p-mid, $p-mid-in)};
+  --a1-cut: #{shape($p-a1)};
+  --a1-ring: #{ring($p-a1, $p-a1-in)};
+  --a2-cut: #{shape($p-a2)};
+  --a2-ring: #{ring($p-a2, $p-a2-in)};
+}
+
+// The portrait in the pinned scrub: the lens (the panel's own box, cut as an octagon) opens from its midline slit
+// (--a0), then re-cuts into the settled panel. --k1/--k2 are the lens and the panel; -in the photo's cut one vein inside.
+.strata__lens {
+  --a0: #{shape(slit("50%", $lc, $lc))};
+  --k1: #{oct-cut($lc, $lc, $lc, $lc)};
+  --k1-in: #{shape(oct("0px", "0px", "100%", "100%", $lc, $lc, $lc, $lc, $w))};
+  --k2: #{oct-cut($c, "0px", "0px", "0px")};
+  --k2-in: #{shape(oct("0px", "0px", "100%", "100%", $c, "0px", "0px", "0px", $w))};
+}
+
+.work__head {
+  padding-block: var(--space-7) var(--slab-pad);
+}
+
+.work__title {
+  font-size: var(--step-4);
+  font-stretch: calc(var(--width-display) * 1%);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}

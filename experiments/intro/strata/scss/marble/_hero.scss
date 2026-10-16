@@ -1,0 +1,96 @@
+// Home hero (_partials/home-hero.html): full-viewport transparent slab over the page stone (night face in the dark theme, honey
+// face in the light theme), a warm backlight
+// behind one centred display line, the positioning line, a scroll cue. The bottom edge is cut on the diagonal and lit along
+// the cut like a polished onyx edge. Motion: _motion.scss (hero block).
+
+.hero {
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding-block: var(--header-height) calc(var(--cut) + var(--space-9));
+  overflow: clip;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--cut)));
+}
+
+// Backlight wrapper (the canvas that used to sit here is now the page stone, _layout.scss .stone).
+.hero__field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+// Backlight: light through the stone behind the name. Over the canvas scrim, under the copy.
+.hero__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(72rem, 130vw);
+  aspect-ratio: 2 / 1;
+  background-image: var(--hero-backlight);
+  translate: -50% -50%;
+}
+
+// Lit edge on the diagonal cut; the slab's clip-path trims the outer half of the stroke, the glow bleeds inward.
+.hero__edge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--cut);
+  overflow: visible;
+  stroke: var(--s-accent);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 0.5rem var(--s-glow));
+}
+
+.hero__copy {
+  position: relative;
+  text-align: center;
+}
+
+.hero__name {
+  font-size: var(--step-display);
+  font-stretch: calc(var(--width-display) * 1%);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-shadow: var(--hero-name-glow); // glyphs lit from behind
+}
+
+.hero__positioning {
+  max-width: 34ch;
+  margin: var(--space-6) auto 0;
+  color: var(--s-muted);
+  font-size: var(--step-2);
+  line-height: var(--leading-snug);
+}
+
+// Scroll cue: label plus a vein that keeps dropping (loop in _motion.scss). Anchor to the intro, 44px target.
+.hero__cue {
+  position: absolute;
+  bottom: calc(var(--cut) + var(--space-4));
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-4);
+  color: var(--s-muted);
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-decoration: none;
+  transform: translateX(-50%);
+}
+
+.hero__cue:hover {
+  color: var(--s-text);
+}
+
+.hero__cue-line {
+  width: var(--vein-width-strong);
+  height: var(--space-8);
+  background-color: var(--s-vein);
+  background-image: linear-gradient(var(--s-accent), var(--s-accent));
+  background-repeat: no-repeat;
+  background-size: 100% 40%;
+}

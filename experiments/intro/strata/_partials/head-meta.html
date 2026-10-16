@@ -1,0 +1,25 @@
+{%- comment -%}
+  <head> contents for index.html, in load order: meta, pre-paint theme + js class, font preloads, inline CSS, deferred page scripts, JSON-LD.
+  Preloads: the display face paints the hero name (LCP); the text face paints the positioning line.
+  page.scripts (optional list) = deferred scripts for that page only.
+  Title: site title alone on Home, "Page · Site" elsewhere. Description: page, then site.
+{%- endcomment -%}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{%- assign doc_title = site.title -%}
+{%- assign doc_description = page.description | default: site.description %}
+<title>{{ doc_title | escape }}</title>
+<meta name="description" content="{{ doc_description | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ doc_title | escape }}">
+<meta property="og:description" content="{{ doc_description | escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+{% include_relative _partials/theme-init.html %}
+<link rel="preload" href="{{ '/assets/fonts/cormorant-garamond-600-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/eb-garamond-400-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+{% include_relative _partials/styles.html %}
+{%- for script in page.scripts %}
+<script src="{{ script | relative_url }}" defer></script>
+{%- endfor %}
+{% include_relative _partials/schema-person.html %}

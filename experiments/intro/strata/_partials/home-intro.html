@@ -1,0 +1,41 @@
+{%- comment -%}
+  Home intro, strata: two acts on one pinned stage. Act 1: the three pillars are horizontal courses the full width of
+  the composition, Hardware and Software above the portrait, People the base course below it; the portrait is a lens cut
+  through them. Act 2: the courses shear into the right column, the lens slides left and opens into the portrait panel,
+  People rises, and the Forged panel (tagline, blurb, link) is cut down from the base course. The markup is the settled
+  layout; act 1 is a translate and a clip of the same boxes (scss/marble/_intro.scss, _motion.scss). No JS geometry.
+  Copy renders only from _data/experiments/intro/strata/pillars.yml (contract in its header); the portrait from include.portrait (index.md front
+  matter, rendered by responsive-image.html). DOM order is heading, portrait, pillars, blurb, link; the grid places them.
+  data-reveal gives the IntersectionObserver fallback in js/home.js §2.
+{%- endcomment -%}
+{%- assign d = site.data.experiments.intro.strata.pillars -%}
+<section class="intro slab slab--base slab--cut" id="intro" aria-labelledby="intro-title">
+  <div class="intro__track">
+    <div class="intro__stage container">
+      <div class="strata" data-reveal>
+        <h2 class="strata__tagline" id="intro-title">{{ d.tagline }}</h2>
+        {%- if include.portrait %}
+        <figure class="strata__lens">
+          {% include_relative _partials/responsive-image.html image=include.portrait class="strata__img" sizes=include.portrait.sizes %}
+        </figure>
+        {%- endif %}
+        <span class="strata__forged" aria-hidden="true"></span>
+        <ul class="strata__courses" aria-label="Pillars">
+          {%- for p in d.pillars %}
+          <li class="course course--{{ p.id }}">
+            <div class="course__body">
+              <h3 class="course__label">{{ p.label }}</h3>
+              <p class="course__line">{{ p.line }}</p>
+            </div>
+          </li>
+          {%- endfor %}
+        </ul>
+        <div class="strata__joint">
+          <p class="strata__blurb">{{ d.blurb }}</p>
+          <a class="btn btn--line strata__cta" href="{{ d.cta.url | relative_url }}">{{ d.cta.label }}</a>
+        </div>
+        <span class="strata__sheen" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,635 @@
+// Motion layer: every animation on Home lives here (motion map: PILOT_REPORT.md §0.3).
+// Rules:
+// - Hidden-until-revealed states only under html.js (set pre-paint by _partials/theme-init.html): JS off = everything visible.
+// - Technique order: CSS scroll-driven (view()/scroll(), incl. the pinned tiles via sticky + named view-timeline)
+//   -> IntersectionObserver class fallback (html.no-sda, set by js/home.js) -> no library.
+// - Only transform/translate/scale, opacity, clip-path, filter and background-position animate.
+// - Everything is inside (prefers-reduced-motion: no-preference); the reduce block at the end states the static result.
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+}
+
+// Hero name: a focus pull. Opacity stays 1 so the LCP text paints on the first frame.
+@keyframes focus-in {
+  from {
+    filter: blur(0.3em);
+    transform: translateY(0.15em) scale(1.04);
+  }
+}
+
+@keyframes draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+// Both ends are insets so the clip interpolates (against the implicit "none" it would flip at 50 %); the negative
+// insets leave room for glows and shadows. Users fill backwards only: a finished wipe must leave no clip-path, which
+// would make the element a backdrop root and cut the glass chips inside it off from the photo they blur.
+@keyframes wipe-in {
+  from {
+    clip-path: inset(-2rem 100% -2rem -2rem);
+  }
+
+  to {
+    clip-path: inset(-2rem);
+  }
+}
+
+@keyframes cue-drop {
+  from {
+    background-position: 0 -67%;
+  }
+
+  to {
+    background-position: 0 167%;
+  }
+}
+
+@keyframes field-recede {
+  to {
+    opacity: 0.35;
+    transform: translateY(18%) scale(1.08);
+  }
+}
+
+@keyframes copy-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12vh);
+  }
+}
+
+// Tile frame opens from a small cut stone to the fitted panel; same eight vertices as .tile__frame's resting polygon
+// (and its mirror on even tiles from md). Ported from Emperador.
+@keyframes frame-open {
+  from {
+    clip-path: polygon(18% 12%, 82% 12%, 84% 15%, 84% 76%, 77% 88%, 18% 88%, 16% 85%, 16% 15%);
+    transform: scale(0.94);
+  }
+
+  to {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 86.5%, 91% 100%, 2% 100%, 0 97%, 0 3%);
+    transform: none;
+  }
+}
+
+@keyframes frame-open-mirror {
+  from {
+    clip-path: polygon(18% 12%, 82% 12%, 84% 15%, 84% 85%, 82% 88%, 23% 88%, 16% 76%, 16% 15%);
+    transform: scale(0.94);
+  }
+
+  to {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 97%, 98% 100%, 9% 100%, 0 86.5%, 0 3%);
+    transform: none;
+  }
+}
+
+// Backlight switching on behind the name.
+@keyframes glow-on {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes media-settle {
+  from {
+    transform: scale(1.22);
+  }
+}
+
+// Intro strata (_intro.scss). A course is laid: slides in from --lay-dx and fades up, its cut and ring attached.
+@keyframes lay-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--lay-dx));
+  }
+}
+
+// A course shears (contain 42-56%): its notch closes flat against the lens (--from to --mid, first 40%), then its
+// left run is cut away (--mid to --to). Same vertex count throughout, glass and ring alike.
+@keyframes cut-morph {
+  from {
+    clip-path: var(--from);
+  }
+
+  40% {
+    clip-path: var(--mid);
+  }
+
+  to {
+    clip-path: var(--to);
+  }
+}
+
+// A piece opens from its closed cut (--k0: its vertices on one line) to its resting outline.
+@keyframes cut-open {
+  from {
+    clip-path: var(--k0);
+  }
+}
+
+// The lens over the whole pinned run (contain 12-72%): slit (--c0) opens to the lens (--c1) by 24%, holds, and re-cuts
+// into the panel (--c2) from 63%.
+@keyframes lens-cut {
+  0% {
+    clip-path: var(--c0);
+  }
+
+  20%,
+  85% {
+    clip-path: var(--c1);
+  }
+
+  100% {
+    clip-path: var(--c2);
+  }
+}
+
+// The lens travels (contain 56-72%): left along its own band first (to 63%), then up into the panel as it opens.
+@keyframes lens-travel {
+  0% {
+    translate: var(--a1-dx) var(--a1-dy);
+  }
+
+  43.75% {
+    translate: 0 var(--a1-dy);
+  }
+
+  100% {
+    translate: 0 0;
+  }
+}
+
+// Course copy shears right into its column; People rises into its cell.
+@keyframes shift-in {
+  from {
+    translate: var(--a1-shift) 0;
+  }
+}
+
+@keyframes course-rise {
+  from {
+    translate: 0 var(--a1-dy);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  // ---- Load (time-based) ----
+  .js .hero__name {
+    animation: focus-in var(--dur-slow) var(--ease-out) both;
+  }
+
+  .js .hero__positioning {
+    animation: rise-in var(--dur-slow) var(--ease-out) calc(var(--stagger) * 3) both;
+  }
+
+  .js .hero__glow {
+    animation: glow-on calc(var(--dur-slow) * 2) var(--ease-out) calc(var(--stagger) * 2) both;
+  }
+
+  .js .hero__edge {
+    animation: wipe-in calc(var(--dur-slow) * 2) var(--ease-in-out) calc(var(--stagger) * 6) backwards;
+  }
+
+  .hero__cue-line {
+    animation: cue-drop var(--dur-loop) var(--ease-in-out) infinite;
+  }
+
+  // ---- Hover and focus (user-initiated) ----
+  .btn,
+  .theme-toggle {
+    transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .btn:hover,
+  .btn:focus-visible {
+    transform: translateY(var(--hover-lift));
+  }
+
+  .site-nav__link::after {
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .tile__frame {
+    transition: translate var(--dur-base) var(--ease-out);
+  }
+
+  .tile__img,
+  .tile__video {
+    transition: scale var(--dur-slow) var(--ease-out);
+  }
+
+  .tile__media:hover .tile__frame,
+  .tile:focus-within .tile__frame {
+    translate: 0 var(--hover-lift);
+  }
+
+  // Polished sheen: one pass of light across the frame on hover or focus.
+  .tile__frame::before {
+    transition: translate var(--dur-slow) var(--ease-in-out);
+  }
+
+  .tile__media:hover .tile__frame::before,
+  .tile:focus-within .tile__frame::before {
+    translate: 100% 0;
+  }
+
+  // Signal bubble floats up a little further than the frame, so the two layers separate on hover.
+  .signal-bubble {
+    transition: translate var(--dur-base) var(--ease-out);
+  }
+
+  .tile__media:hover .signal-bubble,
+  .tile:focus-within .signal-bubble {
+    translate: 0 calc(var(--hover-lift) * 2);
+  }
+
+  .strata__sheen::before {
+    transition: translate var(--dur-slow) var(--ease-in-out);
+  }
+
+  .strata:hover .strata__sheen::before,
+  .strata:focus-within .strata__sheen::before {
+    translate: 100% 0;
+  }
+
+  .tile__media:hover .tile__img,
+  .tile__media:hover .tile__video,
+  .tile:focus-within .tile__img,
+  .tile:focus-within .tile__video {
+    scale: var(--hover-scale);
+  }
+
+  // ---- Scroll-driven (CSS first) ----
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    // Hero: the copy lifts away over the first viewport of scroll (the stone itself flows on under the page).
+    .js .hero__copy {
+      animation: copy-out linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 70svh;
+    }
+
+    // Generic entrance for single blocks (work heading, footer email).
+    .js [data-reveal] {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+
+    // ---- Intro strata, one act (every width without the pin): the lens opens from its midline slit, the courses are
+    // laid in from the right one by one, the Forged panel is cut down, its copy rises. Each piece on its own timeline
+    // and complete by the time the piece is wholly in view, so a reader never stops on a half-cut piece.
+    .js .strata[data-reveal] {
+      animation: none;
+    }
+
+    .strata__lens {
+      view-timeline: --lens block;
+    }
+
+    .strata__forged {
+      view-timeline: --forge block;
+    }
+
+    .js .strata::before {
+      animation: glow-on linear both;
+      animation-timeline: --lens;
+      animation-range: entry 0% cover 40%;
+    }
+
+    .js .strata__lens,
+    .js .strata__img {
+      animation: cut-open linear both;
+      animation-timeline: --lens;
+      animation-range: entry 0% entry 100%;
+    }
+
+    .js .course {
+      --lay-dx: var(--intro-travel);
+      animation: lay-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+
+    .js .strata__forged,
+    .js .strata__forged::after,
+    .js .strata__sheen {
+      animation: cut-open linear both;
+      animation-timeline: --forge;
+      animation-range: entry 0% entry 80%;
+    }
+
+    .js .strata__tagline,
+    .js .strata__blurb,
+    .js .strata__cta {
+      animation: rise-in linear both;
+      animation-timeline: --forge;
+      animation-range: entry 30% entry 90%;
+    }
+
+    .js .strata__blurb {
+      animation-range: entry 40% entry 95%;
+    }
+
+    .js .strata__cta {
+      animation-range: entry 50% entry 100%;
+    }
+
+    // ---- Intro strata, two acts, pinned (wide and tall enough for act 1 under the header): the track is
+    // --intro-track long and the stage sticks for all but its first viewport; every range is on --strata
+    // (entry 100% = contain 0% = pin starts). Act 1: Hardware, Software and People are laid (to 14%), the lens opens
+    // between them (12-24%), held to 42%. Act 2: the courses close flat against the lens (42-47%) and shear into the right column (47-56%), the lens slides
+    // left along its band (56-63%) and rises into its place, re-cut as the panel (63-72%), as People rises (63-73%), the Forged panel is cut
+    // down from the base course (72-82%), its copy rises (76-90%), held to the release. The act-1 outlines are the
+    // --a1-* polygons in _intro.scss; nothing is measured in JS.
+    @media (min-width: $bp-intro-wide) and (min-height: $bp-intro-tall) {
+      .js .intro__track {
+        height: var(--intro-track);
+        view-timeline: --strata block;
+      }
+
+      // Act 1 is centred under the fixed glass header.
+      .js .intro__stage {
+        position: sticky;
+        top: 0;
+        display: grid;
+        align-content: safe center;
+        min-height: 100svh;
+        padding-block: calc(var(--header-height) + var(--space-3)) var(--space-3);
+      }
+
+      // As tall as act 1 (three courses and the lens), so both acts share one box; the Forged panel takes the rest.
+      .js .strata {
+        width: var(--intro-w);
+        min-height: calc(3 * var(--intro-course) + var(--intro-lens-h));
+        margin-inline: auto;
+      }
+
+      .js .strata__tagline,
+      .js .strata__joint {
+        align-self: center;
+      }
+
+      .js .strata::before {
+        animation-timeline: --strata;
+        animation-range: entry 40% contain 10%;
+      }
+
+      .js .course {
+        height: var(--intro-course);
+        animation: lay-in linear both, course-rise linear both;
+        animation-timeline: --strata;
+      }
+
+      .js .course:nth-child(1) {
+        --lay-dx: calc(var(--intro-travel) * -1);
+        --a1-dy: 0px;
+        animation-range: entry 40% contain 6%, contain 63% contain 73%;
+      }
+
+      .js .course:nth-child(2) {
+        --a1-dy: 0px;
+        animation-range: entry 55% contain 10%, contain 63% contain 73%;
+      }
+
+      .js .course:nth-child(3) {
+        --lay-dx: calc(var(--intro-travel) * -1);
+        --a1-dy: calc(var(--intro-lens-h) + var(--vein-width));
+        animation-range: entry 70% contain 14%, contain 63% contain 73%;
+      }
+
+      .js .course::before,
+      .js .course::after {
+        left: calc(var(--intro-p) * -1);
+        animation: cut-morph linear both;
+        animation-timeline: --strata;
+        animation-range: contain 42% contain 56%;
+      }
+
+      .js .course::before {
+        --from: var(--a1-cut);
+        --mid: var(--a15-cut);
+        --to: var(--a2-cut);
+        clip-path: var(--a2-cut);
+      }
+
+      .js .course::after {
+        --from: var(--a1-ring);
+        --mid: var(--a15-ring);
+        --to: var(--a2-ring);
+        clip-path: var(--a2-ring);
+      }
+
+      .js .course:nth-child(2)::before,
+      .js .course:nth-child(2)::after {
+        bottom: calc(var(--intro-lens-h) / -2);
+      }
+
+      .js .course:nth-child(3)::before,
+      .js .course:nth-child(3)::after {
+        top: calc((var(--intro-lens-h) / 2 + var(--vein-width)) * -1);
+      }
+
+      .js .course__body {
+        --a1-shift: calc(var(--intro-p) / -2);
+        height: 100%;
+        animation: shift-in linear both;
+        animation-timeline: --strata;
+        animation-range: contain 47% contain 56%;
+      }
+
+      .js .strata__lens {
+        --a1-dx: calc((var(--intro-w) - var(--intro-p)) / 2);
+        --a1-dy: calc(2 * var(--intro-course) - var(--vein-width));
+        --c0: var(--a0);
+        --c1: var(--k1);
+        --c2: var(--k2);
+        animation: lens-cut linear both, lens-travel linear both;
+        animation-timeline: --strata;
+        animation-range: contain 12% contain 72%, contain 56% contain 72%;
+      }
+
+      .js .strata__img {
+        --c0: var(--a0);
+        --c1: var(--k1-in);
+        --c2: var(--k2-in);
+        animation: lens-cut linear both;
+        animation-timeline: --strata;
+        animation-range: contain 12% contain 72%;
+      }
+
+      .js .strata__forged,
+      .js .strata__forged::after,
+      .js .strata__sheen {
+        animation-timeline: --strata;
+        animation-range: contain 72% contain 82%;
+      }
+
+      .js .strata__tagline,
+      .js .strata__blurb,
+      .js .strata__cta {
+        animation-timeline: --strata;
+        animation-range: contain 76% contain 84%;
+      }
+
+      .js .strata__blurb {
+        animation-range: contain 79% contain 87%;
+      }
+
+      .js .strata__cta {
+        animation-range: contain 82% contain 90%;
+      }
+    }
+
+    // Pinned, scrubbed flagship: the track is 220svh, the stage sticks for the middle 120svh.
+    // Only on viewports tall enough to hold the stage; short landscape screens scroll the static layout.
+    @media (min-height: $bp-tall) {
+      .js .tile__track {
+        height: var(--pin-track);
+        view-timeline: --tile block;
+      }
+
+      // min-height, not height: a stage taller than the viewport (small screens) grows inside its track instead of
+      // overflowing into the next slab, and its lower part scrolls into view as the pin releases.
+      .js .tile__stage {
+        position: sticky;
+        top: 0;
+        min-height: 100svh;
+      }
+
+      .js .tile__frame {
+        animation: frame-open linear both;
+        animation-timeline: --tile;
+        animation-range: entry 45% contain 40%;
+      }
+
+      @media (min-width: $bp-md) {
+        .js .tile:nth-of-type(even) .tile__frame {
+          animation-name: frame-open-mirror;
+        }
+      }
+
+      // The inlay draws on once the panel has opened.
+      .js .tile__inlay {
+        animation: wipe-in linear backwards;
+        animation-timeline: --tile;
+        animation-range: contain 0% contain 35%;
+      }
+
+      .js .tile__img,
+      .js .tile__video {
+        animation: media-settle linear both;
+        animation-timeline: --tile;
+        animation-range: entry 45% contain 55%;
+      }
+
+      .js .tile__copy > * {
+        animation: rise-in linear both;
+        animation-timeline: --tile;
+        animation-range: contain 5% contain 30%;
+      }
+
+      .js .tile__copy > :nth-child(2) {
+        animation-range: contain 10% contain 35%;
+      }
+
+      .js .tile__copy > :nth-child(3) {
+        animation-range: contain 15% contain 40%;
+      }
+
+      .js .tile__copy > :nth-child(4) {
+        animation-range: contain 20% contain 45%;
+      }
+
+      .js .tile__copy > :nth-child(5) {
+        animation-range: contain 25% contain 50%;
+      }
+
+      .js .tile__tags {
+        animation: wipe-in linear backwards;
+        animation-timeline: --tile;
+        animation-range: contain 30% contain 55%;
+      }
+
+      .js .tile .signal-bubble {
+        animation: rise-in linear both;
+        animation-timeline: --tile;
+        animation-range: contain 25% contain 50%;
+      }
+    }
+
+    // Keyboard safety: focus can scroll a control into view before its scrub has revealed it,
+    // so any block holding focus drops its entrance and shows at rest.
+    .js .tile:focus-within .tile__copy > *,
+    .js .tile:focus-within .tile__frame,
+    .js .tile:focus-within .tile__tags,
+    .js .tile:focus-within .signal-bubble,
+    .js [data-reveal]:focus-within,
+    .js [data-reveal]:focus,
+    .js .strata:focus-within::before,
+    .js .strata:focus-within *,
+    .js .strata:focus-within *::before,
+    .js .strata:focus-within *::after {
+      animation: none;
+    }
+
+  }
+
+  // ---- Fallback: no scroll-driven animations (html.no-sda); home.js adds .is-in when a block enters ----
+  .js.no-sda [data-reveal],
+  .js.no-sda .tile__frame,
+  .js.no-sda .tile__copy > * {
+    transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out), translate var(--dur-base) var(--ease-out);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(2) {
+    transition-delay: var(--stagger);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(3) {
+    transition-delay: calc(var(--stagger) * 2);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(4) {
+    transition-delay: calc(var(--stagger) * 3);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(5) {
+    transition-delay: calc(var(--stagger) * 4);
+  }
+
+  .js.no-sda [data-reveal]:not(.is-in):not(:focus-within),
+  .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__frame,
+  .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__copy > * {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+}
+
+// Reduced motion: nothing above applies (all of it sits in no-preference), so every block is visible and in place,
+// the pin collapses, and home.js paints one static vein frame and never autoplays video. What remains is made static here.
+@media (prefers-reduced-motion: reduce) {
+  .hero__cue-line {
+    background-position: 0 0;
+  }
+
+  .btn,
+  .theme-toggle,
+  .site-nav__link::after,
+  .signal-bubble,
+  .tile__frame::before,
+  .strata__sheen::before {
+    transition: none;
+  }
+}

@@ -1,0 +1,16 @@
+{%- comment -%}
+  JSON-LD Person for the home page. Reads _config.yml author and _data/experiments/intro/strata/social.yml; no hardcoded identity.
+  No employer or job title by design (CLAUDE.md §2).
+{%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": {{ site.author.name | jsonify }},
+  "url": {{ "/" | absolute_url | jsonify }},
+  "email": {{ site.author.email | prepend: "mailto:" | jsonify }},
+  "image": {{ site.author.image | absolute_url | jsonify }},
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": {{ site.author.alumni_of | jsonify }} },
+  "sameAs": {{ site.data.experiments.intro.strata.social.profiles | map: "url" | jsonify }}
+}
+</script>
