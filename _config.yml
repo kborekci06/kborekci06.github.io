@@ -47,6 +47,7 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vercel.json
+  - skills-lock.json
   - vendor
   - node_modules
   - .bundle
