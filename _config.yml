@@ -45,6 +45,7 @@ exclude:
   - ROADMAP.md
   - Gemfile
   - Gemfile.lock
+  - vercel.json
   - vendor
   - node_modules
   - .bundle
