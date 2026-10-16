@@ -3,6 +3,12 @@
 # preview.webp (1200x750 screenshot of the page) beside it. Adding a design = its folder plus one entry here.
 # A design hosted elsewhere sets url: (absolute) and preview: (a path under /assets/img/gallery/) instead.
 # status: working (being developed) | candidate (in the running for the final site) | archived (kept for the record)
+- slug: taste
+  short: T
+  title: Taste
+  summary: "Runs of the taste-skill: a researched direction dealt by script, an idea taken from the subject, a no-slop house style checked in a real browser. Built on Next.js, Tailwind and Motion."
+  designs:
+    - { slug: boundary, name: Boundary, direction: "The name split to two corners; everything he built passes between the halves", date: 2026-10, status: candidate, preview: /assets/img/gallery/boundary.webp }
 - slug: marble
   short: M
   title: Marble
