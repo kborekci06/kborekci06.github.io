@@ -12,3 +12,14 @@
       direction: "Dark onyx stone under glass slabs"
       date: 2026-09
       status: working
+- slug: intro
+  short: I
+  title: Intro
+  summary: "Rounds 2 to 4 of the Home intro on the marble base: how the three pillars (Hardware, Software, People) and the portrait assemble into one fitted stone. Six variants, one branch each, September 2026."
+  designs:
+    - { slug: morph,    name: Morph,    direction: "Three facets slide off the portrait and join into one row",         date: 2026-09, status: archived }
+    - { slug: keystone, name: Keystone, direction: "The portrait as the keystone of an arch of three stones",           date: 2026-09, status: archived }
+    - { slug: regroup,  name: Regroup,  direction: "Three stones lock around the face, then regroup into a row",        date: 2026-09, status: archived }
+    - { slug: strata,   name: Strata,   direction: "Three horizontal courses with the portrait as a lens through them", date: 2026-09, status: archived }
+    - { slug: prism,    name: Prism,    direction: "A hexagonal gem cut into three facets that unfold around the face", date: 2026-09, status: archived }
+    - { slug: shard,    name: Shard,    direction: "Shards on a diagonal vein, butted against the portrait",            date: 2026-09, status: archived }
