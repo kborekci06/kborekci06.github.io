@@ -1,0 +1,483 @@
+// Home intro (_partials/home-intro.html): the portrait and three fitted glass panels (facets). Scrolling, the facets
+// join into a trifecta that covers the portrait, slide off it and close into one panel holding the tagline, the blurb
+// and the link; then the work heading that follows on the same base slab.
+// Static state here is the settled one (JS off, reduced motion): the portrait and the joined panel, butt-jointed.
+// The apart, trifecta and morph states are in _motion.scss; they read the per-facet properties set here:
+//   --facet-apart / --facet-trio / --facet-fit   glass outline apart, joined over the whole slab, settled
+//   --facet-dx / -dy / -rot                      apart offset and tilt (transform)
+//   --morph-x / -y                               trifecta offset from the settled place (translate)
+//   --morph-grow                                 extra glass width at the trifecta (the portrait's share, lg only)
+// Grid: below md one column (portrait, three stacked pillars, tagline, joint; the last facet runs on under the joint);
+// md: portrait above, pillars in three columns; lg: portrait in its own column beside the joined panel.
+
+// Chamfered octagon, corners clockwise from top-left; $w insets every edge (the inner outline of a hairline ring);
+// $r moves the right edge in from 100% (the settled edge of a facet whose glass is wider than its column).
+@function facet-points($tl, $tr, $br, $bl, $w: 0px, $r: 0px) {
+  $R: "(100% - #{$r})";
+  @if $w == 0px {
+    @return unquote("#{$tl} 0, calc(#{$R} - #{$tr}) 0, calc(#{$R}) #{$tr}, calc(#{$R}) calc(100% - #{$br}), calc(#{$R} - #{$br}) 100%, #{$bl} 100%, 0 calc(100% - #{$bl}), 0 #{$tl}");
+  }
+  $t: "#{$w} * var(--intro-miter)";
+  @return unquote("calc(#{$tl} + #{$t}) #{$w}, calc(#{$R} - #{$tr} - #{$t}) #{$w}, calc(#{$R} - #{$w}) calc(#{$tr} + #{$t}), calc(#{$R} - #{$w}) calc(100% - #{$br} - #{$t}), calc(#{$R} - #{$br} - #{$t}) calc(100% - #{$w}), calc(#{$bl} + #{$t}) calc(100% - #{$w}), #{$w} calc(100% - #{$bl} - #{$t}), #{$w} calc(#{$tl} + #{$t})");
+}
+
+@function facet-start($tl, $w: 0px) {
+  @if $w == 0px {
+    @return unquote("#{$tl} 0");
+  }
+  @return unquote("calc(#{$tl} + #{$w} * var(--intro-miter)) #{$w}");
+}
+
+@function facet-shape($tl, $tr, $br, $bl, $r: 0px) {
+  @return unquote("polygon(#{facet-points($tl, $tr, $br, $bl, 0px, $r)})");
+}
+
+// Hairline ring: the outline and the outline inset by one vein, even-odd filled. Both loops close on their first point,
+// so the bridge between them is traversed there and back and has no area.
+@function facet-ring($tl, $tr, $br, $bl, $w: var(--vein-width)) {
+  @return unquote("polygon(evenodd, #{facet-points($tl, $tr, $br, $bl)}, #{facet-start($tl)}, #{facet-points($tl, $tr, $br, $bl, $w)}, #{facet-start($tl, $w)})");
+}
+
+// The portrait closed to a line: the same eight vertices as facet-points, every x on the left edge (side by side) or
+// every y on the top edge (stacked), so the open edge sweeps across in step with the facet that uncovers it.
+@function portrait-closed-x($tl, $tr, $br, $bl) {
+  @return unquote("polygon(0 0, 0 0, 0 #{$tr}, 0 calc(100% - #{$br}), 0 100%, 0 100%, 0 calc(100% - #{$bl}), 0 #{$tl})");
+}
+
+@function portrait-closed-y($tl, $tr, $br, $bl) {
+  @return unquote("polygon(#{$tl} 0, calc(100% - #{$tr}) 0, 100% 0, 100% 0, calc(100% - #{$br}) 0, #{$bl} 0, 0 0, 0 0)");
+}
+
+$c: var(--intro-chamfer);
+$cw: var(--intro-cut-wide);
+$g: var(--morph-grow);
+$rc: unquote("calc(var(--intro-chamfer) - var(--intro-inset) * var(--intro-miter))");
+$rw: unquote("calc(var(--intro-cut-wide) - var(--intro-inset) * var(--intro-miter))");
+// The portrait ring's halo: a channel two veins either side of the ring, so the ring keeps its contrast
+// at any sub-pixel position over any part of the photo.
+$hc: unquote("calc(var(--intro-chamfer) - (var(--intro-inset) - var(--vein-width) * 2) * var(--intro-miter))");
+$hw: unquote("calc(var(--intro-cut-wide) - (var(--intro-inset) - var(--vein-width) * 2) * var(--intro-miter))");
+$h3: unquote("calc(var(--vein-width-strong) + var(--vein-width) * 4)");
+$vs: var(--vein-width-strong); // the portrait ring is a strong vein: a full pixel of accent at any sub-pixel offset
+
+.intro {
+  overflow-x: clip; // apart facets may reach past the gutter on narrow screens; never a horizontal scroll
+  padding-block: var(--slab-pad) var(--space-8);
+}
+
+.facets {
+  --morph-grow: 0px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(6, auto);
+}
+
+// Backlight behind the glass: the hero's warm halo, blurred by the panels in front of it.
+.facets::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--space-8) * -1) 0;
+  background-image: var(--hero-backlight);
+  pointer-events: none;
+}
+
+// Portrait: the first piece of the fitted stone. The figure sets the row height (5:4 of its width, at least); the image
+// fills it, so side by side the panel beside it can be taller without letterboxing. Settled cut and ring per layout.
+.intro-portrait {
+  --portrait-fit: #{facet-shape($c, $c, 0px, 0px)};
+  --portrait-closed: #{portrait-closed-y($c, $c, 0px, 0px)};
+  --portrait-ring: #{facet-ring($rc, $rc, 0px, 0px, $vs)};
+  --portrait-halo: #{facet-ring($hc, $hc, 0px, 0px, $h3)};
+  position: relative;
+  z-index: 0;
+  grid-row: 1;
+  justify-self: start;
+  width: var(--intro-portrait-w);
+  min-height: calc(var(--intro-portrait-w) * var(--intro-portrait-tall));
+  margin: 0;
+  overflow: clip;
+  background-color: var(--s-surface-2);
+  clip-path: var(--portrait-fit);
+}
+
+.intro-portrait__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--intro-face-pos);
+}
+
+// Inlay hairline around the portrait, at the edge only (never across the face): glow on the holder, a surface-coloured
+// channel on ::before that borders the ring on both sides (the photo behind it runs from sky to shirt, so the ring alone
+// fell to 1:1 against it), the ring itself on ::after.
+.intro-portrait__inlay {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+  pointer-events: none;
+}
+
+.intro-portrait__inlay::before,
+.intro-portrait__inlay::after {
+  content: "";
+  position: absolute;
+}
+
+.intro-portrait__inlay::before {
+  inset: calc(var(--intro-inset) - var(--vein-width) * 2);
+  background-color: var(--s-surface);
+  clip-path: var(--portrait-halo);
+}
+
+.intro-portrait__inlay::after {
+  inset: var(--intro-inset);
+  background-color: var(--s-accent);
+  clip-path: var(--portrait-ring);
+}
+
+.facets__set {
+  --set-shape: #{facet-shape(0px, $c, $cw, $c)};
+  position: relative;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-row: 2 / -1;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  padding: 0;
+  list-style: none;
+}
+
+// One blur sheet under the joined panel. Each facet blurs its own backdrop, and where two facets meet the two blurs
+// do not agree (each clamps at its edge), which showed as soft vertical bands through the joint. The sheet blurs the
+// stone once for the whole panel, so the facets on top blur an already smooth backdrop. It is hidden until the facets
+// have settled (_motion.scss) and has no tint of its own.
+.facets__set::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: var(--set-shape);
+  pointer-events: none;
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+// One facet: glass on ::before (cut to --facet-fit, the settled shape), its own inlay ring on ::after (seen only apart).
+// The glass reaches --morph-grow past the facet's right edge; the settled cut trims it back to the column.
+.facet {
+  --facet-apart: #{facet-shape($c, $c, $c, $c)};
+  --facet-ring: #{facet-ring($rc, $rc, $rc, $rc)};
+  --morph-x: 0px;
+  --morph-y: calc(var(--intro-portrait-w) * var(--intro-portrait-tall) * -1);
+  position: relative;
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+.facet::before,
+.facet::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.facet::before {
+  inset: 0 calc(var(--morph-grow) * -1) 0 0;
+  background-color: var(--s-surface-2);
+  box-shadow: var(--glass-shadow);
+  clip-path: var(--facet-fit);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: color-mix(in srgb, var(--s-surface-2) var(--intro-glass-mix), transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+.facet::after {
+  inset: var(--intro-inset) calc(var(--intro-inset) - var(--morph-grow)) var(--intro-inset) var(--intro-inset);
+  background-color: var(--s-accent);
+  clip-path: var(--facet-ring);
+  opacity: 0;
+}
+
+// Stacked: the portrait sits on the first facet's top edge, left-aligned and narrower than the panel, so that facet
+// keeps its outer top chamfer only.
+.facet:nth-child(1) {
+  --facet-trio: #{facet-shape($c, $c, 0px, 0px)};
+  --facet-fit: #{facet-shape(0px, $c, 0px, 0px)};
+  --facet-dx: calc(var(--intro-shift) * -1);
+  --facet-dy: calc(var(--intro-spread) * -1);
+  --facet-rot: calc(var(--intro-tilt) * -1);
+  grid-row: 1 / 2;
+}
+
+.facet:nth-child(2) {
+  --facet-trio: #{facet-shape(0px, 0px, 0px, 0px)};
+  --facet-fit: var(--facet-trio);
+  --facet-dx: var(--intro-shift);
+  --facet-dy: 0px;
+  --facet-rot: var(--intro-tilt);
+  grid-row: 2 / 3;
+}
+
+// The last facet carries the tiles' wide lower-outer cut and, stacked, runs on under the tagline and joint.
+.facet:nth-child(3) {
+  --facet-apart: #{facet-shape($c, $c, $cw, $c)};
+  --facet-ring: #{facet-ring($rc, $rc, $rw, $rc)};
+  --facet-trio: #{facet-shape(0px, 0px, $cw, $c)};
+  --facet-fit: var(--facet-trio);
+  --facet-dx: calc(var(--intro-shift) * -1);
+  --facet-dy: var(--intro-spread);
+  --facet-rot: calc(var(--intro-tilt) * -1);
+  grid-row: 3 / -1;
+}
+
+.facet__body {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--intro-pad);
+}
+
+// Seams: inlay hairlines where two facets meet and above the tagline, drawn on as they join (_motion.scss scales
+// them from --seam-sx/--seam-sy). Horizontal when stacked, vertical between columns from md.
+.facet + .facet > .facet__body::before,
+.facets__tagline::before {
+  --seam-sx: 0;
+  --seam-sy: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: var(--intro-inset);
+  left: var(--intro-inset);
+  height: var(--vein-width);
+  background-color: var(--s-accent);
+  box-shadow: 0 0 var(--space-1) var(--inlay-glow);
+  transform-origin: left center;
+}
+
+.facet__label {
+  font-size: var(--step-2);
+}
+
+.facet__line {
+  max-width: 34ch;
+  color: var(--s-muted);
+  line-height: var(--leading-snug);
+}
+
+.facets__tagline,
+.facets__joint {
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / -1;
+  padding-inline: var(--intro-pad);
+}
+
+.facets__tagline {
+  grid-row: 5;
+  padding-top: var(--intro-pad);
+  font-size: var(--step-3);
+}
+
+.facets__joint {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  grid-row: 6;
+  padding-block: var(--space-4) var(--intro-pad);
+}
+
+.facets__blurb {
+  max-width: 52ch;
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+}
+
+// Joined inlay: one ring around the joined panel, glowing like the tile inlays (filter on the holder, ring on ::before).
+.facets__inlay,
+.facets__sheen {
+  position: relative;
+  z-index: 2;
+  grid-area: 2 / 1 / -1 / -1;
+  pointer-events: none;
+}
+
+.facets__inlay {
+  --set-ring: #{facet-ring(0px, $rc, $rw, $rc)};
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+}
+
+.facets__inlay::before {
+  content: "";
+  position: absolute;
+  inset: var(--intro-inset);
+  background-color: var(--s-accent);
+  clip-path: var(--set-ring);
+}
+
+// Polished sheen across the joined panel on hover or focus (as on the tile frames).
+.facets__sheen {
+  overflow: clip;
+  clip-path: #{facet-shape(0px, $c, $cw, $c)};
+}
+
+.facets__sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--sheen);
+  translate: -100% 0;
+}
+
+.work__head {
+  padding-block: var(--space-7) var(--slab-pad);
+}
+
+.work__title {
+  font-size: var(--step-4);
+  font-stretch: calc(var(--width-display) * 1%);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+// Three columns: pillars side by side, tagline and joint across all three; seams turn vertical. The portrait stays
+// above, now over the first facet and part of the second, so the first facet loses its top outer chamfer.
+@media (min-width: $bp-md) {
+  .facets {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+  }
+
+  .intro-portrait {
+    grid-column: 1 / -1;
+  }
+
+  .facet:nth-child(n) {
+    grid-row: 1 / -1;
+  }
+
+  .facet:nth-child(1) {
+    --facet-trio: #{facet-shape($c, 0px, 0px, $c)};
+    --facet-fit: #{facet-shape(0px, 0px, 0px, $c)};
+    --facet-dx: calc(var(--intro-spread) * -1);
+    --facet-dy: calc(var(--intro-drop) / 2);
+  }
+
+  .facet:nth-child(2) {
+    --facet-dx: 0px;
+    --facet-dy: var(--intro-drop);
+    --facet-rot: 0deg;
+  }
+
+  .facet:nth-child(3) {
+    --facet-trio: #{facet-shape(0px, $c, $cw, 0px)};
+    --facet-dx: var(--intro-spread);
+    --facet-dy: calc(var(--intro-drop) / 2);
+    --facet-rot: var(--intro-tilt);
+  }
+
+  .facet + .facet > .facet__body::before {
+    --seam-sx: 1;
+    --seam-sy: 0;
+    top: var(--intro-inset);
+    right: auto;
+    bottom: 0;
+    left: 0;
+    width: var(--vein-width);
+    height: auto;
+    transform-origin: center top;
+  }
+
+  .facets__tagline {
+    grid-row: 3;
+  }
+
+  .facets__joint {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    grid-row: 4;
+    padding-inline-end: var(--intro-cut-wide); // the link clears the wide lower cut
+  }
+}
+
+// Side by side: the portrait takes the first column and the whole height; the joined panel the other three. At the
+// trifecta the facets span the slab (portrait column included): each is offset left by its share and its glass is
+// a third of the portrait wider, so the three tile the full width; settling, they slide right and narrow.
+@media (min-width: $bp-lg) {
+  .facets {
+    grid-template-columns: var(--intro-portrait-w) repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, auto);
+    --morph-grow: calc(var(--intro-portrait-w) / 3);
+  }
+
+  .intro-portrait {
+    --portrait-fit: #{facet-shape($c, 0px, 0px, $cw)};
+    --portrait-closed: #{portrait-closed-x($c, 0px, 0px, $cw)};
+    --portrait-ring: #{facet-ring($rc, 0px, 0px, $rw, $vs)};
+    --portrait-halo: #{facet-ring($hc, 0px, 0px, $hw, $h3)};
+    grid-column: 1;
+    grid-row: 1 / -1;
+    justify-self: stretch;
+    width: auto;
+    min-height: var(--intro-portrait-w); // square at least; the panel sets the height, so no gap opens in its rows
+  }
+
+  .facets__set {
+    --set-shape: #{facet-shape(0px, $c, $cw, 0px)};
+    grid-column: 2 / -1;
+    grid-row: 1 / -1;
+  }
+
+  .facet {
+    --morph-y: 0px;
+  }
+
+  .facet:nth-child(1) {
+    --facet-fit: #{facet-shape(0px, 0px, 0px, 0px, $g)};
+    --morph-x: calc(var(--intro-portrait-w) * -1);
+  }
+
+  .facet:nth-child(2) {
+    --facet-fit: #{facet-shape(0px, 0px, 0px, 0px, $g)};
+    --morph-x: calc(var(--intro-portrait-w) * -2 / 3);
+  }
+
+  .facet:nth-child(3) {
+    --facet-fit: #{facet-shape(0px, $c, $cw, 0px, $g)};
+    --morph-x: calc(var(--intro-portrait-w) * -1 / 3);
+  }
+
+  .facets__tagline,
+  .facets__joint {
+    grid-column: 2 / -1;
+  }
+
+  .facets__tagline {
+    grid-row: 2;
+  }
+
+  .facets__joint {
+    grid-row: 3;
+  }
+
+  .facets__inlay,
+  .facets__sheen {
+    grid-area: 1 / 2 / -1 / -1;
+  }
+
+  .facets__inlay {
+    --set-ring: #{facet-ring(0px, $rc, $rw, 0px)};
+  }
+
+  .facets__sheen {
+    clip-path: #{facet-shape(0px, $c, $cw, 0px)};
+  }
+}

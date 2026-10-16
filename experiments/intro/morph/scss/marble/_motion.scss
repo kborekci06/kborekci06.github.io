@@ -1,0 +1,633 @@
+// Motion layer: every animation on Home lives here (motion map: PILOT_REPORT.md §0.3).
+// Rules:
+// - Hidden-until-revealed states only under html.js (set pre-paint by _partials/theme-init.html): JS off = everything visible.
+// - Technique order: CSS scroll-driven (view()/scroll(), incl. the pinned tiles via sticky + named view-timeline)
+//   -> IntersectionObserver class fallback (html.no-sda, set by js/home.js) -> no library.
+// - Only transform/translate/scale, opacity, clip-path, filter and background-position animate.
+// - Everything is inside (prefers-reduced-motion: no-preference); the reduce block at the end states the static result.
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+}
+
+// Hero name: a focus pull. Opacity stays 1 so the LCP text paints on the first frame.
+@keyframes focus-in {
+  from {
+    filter: blur(0.3em);
+    transform: translateY(0.15em) scale(1.04);
+  }
+}
+
+@keyframes draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+// Both ends are insets so the clip interpolates (against the implicit "none" it would flip at 50 %); the negative
+// insets leave room for glows and shadows. Users fill backwards only: a finished wipe must leave no clip-path, which
+// would make the element a backdrop root and cut the glass chips inside it off from the photo they blur.
+@keyframes wipe-in {
+  from {
+    clip-path: inset(-2rem 100% -2rem -2rem);
+  }
+
+  to {
+    clip-path: inset(-2rem);
+  }
+}
+
+@keyframes cue-drop {
+  from {
+    background-position: 0 -67%;
+  }
+
+  to {
+    background-position: 0 167%;
+  }
+}
+
+@keyframes field-recede {
+  to {
+    opacity: 0.35;
+    transform: translateY(18%) scale(1.08);
+  }
+}
+
+@keyframes copy-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12vh);
+  }
+}
+
+// Tile frame opens from a small cut stone to the fitted panel; same eight vertices as .tile__frame's resting polygon
+// (and its mirror on even tiles from md). Ported from Emperador.
+@keyframes frame-open {
+  from {
+    clip-path: polygon(18% 12%, 82% 12%, 84% 15%, 84% 76%, 77% 88%, 18% 88%, 16% 85%, 16% 15%);
+    transform: scale(0.94);
+  }
+
+  to {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 86.5%, 91% 100%, 2% 100%, 0 97%, 0 3%);
+    transform: none;
+  }
+}
+
+@keyframes frame-open-mirror {
+  from {
+    clip-path: polygon(18% 12%, 82% 12%, 84% 15%, 84% 85%, 82% 88%, 23% 88%, 16% 76%, 16% 15%);
+    transform: scale(0.94);
+  }
+
+  to {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 97%, 98% 100%, 9% 100%, 0 86.5%, 0 3%);
+    transform: none;
+  }
+}
+
+// Backlight switching on behind the name.
+@keyframes glow-on {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes media-settle {
+  from {
+    transform: scale(1.22);
+  }
+}
+
+// Intro facets (per-facet custom properties, _intro.scss). Step 1: each panel arrives from its apart offset and tilt
+// and its glass closes the inner chamfers into the trifecta. Step 2: the trifecta slides off the portrait (translate,
+// composed with step 1's transform) and each glass narrows to its settled column; the portrait opens behind it.
+@keyframes facet-join {
+  from {
+    transform: translate(var(--facet-dx), var(--facet-dy)) rotate(var(--facet-rot));
+  }
+}
+
+@keyframes facet-cut {
+  from {
+    clip-path: var(--facet-apart);
+  }
+
+  to {
+    clip-path: var(--facet-trio);
+  }
+}
+
+@keyframes facet-slide {
+  from {
+    translate: var(--morph-x) var(--morph-y);
+  }
+}
+
+// Explicit end: an implicit one would be the underlying value, which here is facet-cut's filled trifecta.
+@keyframes facet-settle-cut {
+  from {
+    clip-path: var(--facet-trio);
+  }
+
+  to {
+    clip-path: var(--facet-fit);
+  }
+}
+
+// The portrait opens from a line on its edge to its fitted cut, at the facets' pace (same range, linear): the open
+// edge is the trailing edge of the first facet.
+@keyframes portrait-open {
+  from {
+    clip-path: var(--portrait-closed);
+  }
+}
+
+@keyframes face-settle {
+  from {
+    transform: scale(var(--intro-face-scale));
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes facet-ring-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes seam-draw {
+  from {
+    transform: scale(var(--seam-sx), var(--seam-sy));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  // ---- Load (time-based) ----
+  .js .hero__name {
+    animation: focus-in var(--dur-slow) var(--ease-out) both;
+  }
+
+  .js .hero__positioning {
+    animation: rise-in var(--dur-slow) var(--ease-out) calc(var(--stagger) * 3) both;
+  }
+
+  .js .hero__glow {
+    animation: glow-on calc(var(--dur-slow) * 2) var(--ease-out) calc(var(--stagger) * 2) both;
+  }
+
+  .js .hero__edge {
+    animation: wipe-in calc(var(--dur-slow) * 2) var(--ease-in-out) calc(var(--stagger) * 6) backwards;
+  }
+
+  .hero__cue-line {
+    animation: cue-drop var(--dur-loop) var(--ease-in-out) infinite;
+  }
+
+  // ---- Hover and focus (user-initiated) ----
+  .btn,
+  .theme-toggle {
+    transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .btn:hover,
+  .btn:focus-visible {
+    transform: translateY(var(--hover-lift));
+  }
+
+  .site-nav__link::after {
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .tile__frame {
+    transition: translate var(--dur-base) var(--ease-out);
+  }
+
+  .tile__img,
+  .tile__video {
+    transition: scale var(--dur-slow) var(--ease-out);
+  }
+
+  .tile__media:hover .tile__frame,
+  .tile:focus-within .tile__frame {
+    translate: 0 var(--hover-lift);
+  }
+
+  // Polished sheen: one pass of light across the frame on hover or focus.
+  .tile__frame::before {
+    transition: translate var(--dur-slow) var(--ease-in-out);
+  }
+
+  .tile__media:hover .tile__frame::before,
+  .tile:focus-within .tile__frame::before {
+    translate: 100% 0;
+  }
+
+  // Signal bubble floats up a little further than the frame, so the two layers separate on hover.
+  .signal-bubble {
+    transition: translate var(--dur-base) var(--ease-out);
+  }
+
+  .tile__media:hover .signal-bubble,
+  .tile:focus-within .signal-bubble {
+    translate: 0 calc(var(--hover-lift) * 2);
+  }
+
+  .facets__sheen::before {
+    transition: translate var(--dur-slow) var(--ease-in-out);
+  }
+
+  .facets:hover .facets__sheen::before,
+  .facets:focus-within .facets__sheen::before {
+    translate: 100% 0;
+  }
+
+  .tile__media:hover .tile__img,
+  .tile__media:hover .tile__video,
+  .tile:focus-within .tile__img,
+  .tile:focus-within .tile__video {
+    scale: var(--hover-scale);
+  }
+
+  // ---- Scroll-driven (CSS first) ----
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    // Hero: the copy lifts away over the first viewport of scroll (the stone itself flows on under the page).
+    .js .hero__copy {
+      animation: copy-out linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 70svh;
+    }
+
+    // Generic entrance for single blocks (work heading, footer email).
+    .js [data-reveal] {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+
+    // Intro: the facets join into a trifecta over the slab (step 1), slide off the portrait into the joined panel
+    // (step 2), then the inlays draw and the joint fills. Every range is on the block view timeline of .facets.
+    .facets {
+      view-timeline: --facets block;
+    }
+
+    .js .facets[data-reveal] {
+      animation: none;
+    }
+
+    // Stacked (below lg) the slab is tall, so the join and the slide run early, while the portrait slot is in the lower
+    // half of the screen; side by side (lg) the ranges widen. The joint text keeps one range: it is low in the slab.
+    .js .facet {
+      animation: facet-join linear both, facet-slide linear both;
+      animation-timeline: --facets, --facets;
+      animation-range: entry 0% cover 12%, cover 13% cover 28%;
+    }
+
+    // Two clip-path animations: the second fills forwards only, so it takes over once step 2 starts.
+    .js .facet::before {
+      animation: facet-cut linear both, facet-settle-cut linear forwards;
+      animation-timeline: --facets, --facets;
+      animation-range: cover 6% cover 12%, cover 13% cover 28%;
+    }
+
+    .js .facet::after {
+      animation: facet-ring-out linear both;
+      animation-timeline: --facets;
+      animation-range: cover 8% cover 12%;
+    }
+
+    .js .intro-portrait {
+      animation: portrait-open linear both;
+      animation-timeline: --facets;
+      animation-range: cover 13% cover 28%;
+    }
+
+    .js .intro-portrait__img {
+      animation: face-settle linear both;
+      animation-timeline: --facets;
+      animation-range: cover 13% cover 32%;
+    }
+
+    .js .facets__set::before {
+      animation: fade-in linear both;
+      animation-timeline: --facets;
+      animation-range: cover 24% cover 28%;
+    }
+
+    .js .facets::before {
+      animation: glow-on linear both;
+      animation-timeline: --facets;
+      animation-range: entry 40% cover 30%;
+    }
+
+    .js .intro-portrait__inlay {
+      animation: wipe-in linear backwards;
+      animation-timeline: --facets;
+      animation-range: cover 26% cover 34%;
+    }
+
+    .js .facets__inlay {
+      animation: wipe-in linear backwards;
+      animation-timeline: --facets;
+      animation-range: cover 28% cover 40%;
+    }
+
+    .js .facet + .facet > .facet__body::before,
+    .js .facets__tagline::before {
+      animation: seam-draw linear both;
+      animation-timeline: --facets;
+      animation-range: cover 28% cover 40%;
+    }
+
+    @media (min-width: $bp-lg) {
+      .js .facet {
+        animation-range: entry 0% cover 20%, cover 22% cover 40%;
+      }
+
+      .js .facet::before {
+        animation-range: cover 10% cover 20%, cover 22% cover 40%;
+      }
+
+      .js .facet::after {
+        animation-range: cover 12% cover 20%;
+      }
+
+      .js .intro-portrait {
+        animation-range: cover 22% cover 40%;
+      }
+
+      .js .intro-portrait__img {
+        animation-range: cover 22% cover 44%;
+      }
+
+      .js .facets__set::before {
+        animation-range: cover 34% cover 40%;
+      }
+
+      .js .facets::before {
+        animation-range: entry 40% cover 40%;
+      }
+
+      .js .intro-portrait__inlay,
+      .js .facets__inlay,
+      .js .facet + .facet > .facet__body::before,
+      .js .facets__tagline::before {
+        animation-range: cover 38% cover 48%;
+      }
+    }
+
+    .js .facets__tagline,
+    .js .facets__blurb,
+    .js .facets__cta {
+      animation: rise-in linear both;
+      animation-timeline: --facets;
+      animation-range: cover 40% cover 48%;
+    }
+
+    .js .facets__blurb {
+      animation-range: cover 43% cover 51%;
+    }
+
+    .js .facets__cta {
+      animation-range: cover 46% cover 54%;
+    }
+
+    // Pinned, scrubbed flagship: the track is 220svh, the stage sticks for the middle 120svh.
+    // Only on viewports tall enough to hold the stage; short landscape screens scroll the static layout.
+    @media (min-height: $bp-tall) {
+      .js .tile__track {
+        height: var(--pin-track);
+        view-timeline: --tile block;
+      }
+
+      // min-height, not height: a stage taller than the viewport (small screens) grows inside its track instead of
+      // overflowing into the next slab, and its lower part scrolls into view as the pin releases.
+      .js .tile__stage {
+        position: sticky;
+        top: 0;
+        min-height: 100svh;
+      }
+
+      .js .tile__frame {
+        animation: frame-open linear both;
+        animation-timeline: --tile;
+        animation-range: entry 45% contain 40%;
+      }
+
+      @media (min-width: $bp-md) {
+        .js .tile:nth-of-type(even) .tile__frame {
+          animation-name: frame-open-mirror;
+        }
+      }
+
+      // The inlay draws on once the panel has opened.
+      .js .tile__inlay {
+        animation: wipe-in linear backwards;
+        animation-timeline: --tile;
+        animation-range: contain 0% contain 35%;
+      }
+
+      .js .tile__img,
+      .js .tile__video {
+        animation: media-settle linear both;
+        animation-timeline: --tile;
+        animation-range: entry 45% contain 55%;
+      }
+
+      .js .tile__copy > * {
+        animation: rise-in linear both;
+        animation-timeline: --tile;
+        animation-range: contain 5% contain 30%;
+      }
+
+      .js .tile__copy > :nth-child(2) {
+        animation-range: contain 10% contain 35%;
+      }
+
+      .js .tile__copy > :nth-child(3) {
+        animation-range: contain 15% contain 40%;
+      }
+
+      .js .tile__copy > :nth-child(4) {
+        animation-range: contain 20% contain 45%;
+      }
+
+      .js .tile__copy > :nth-child(5) {
+        animation-range: contain 25% contain 50%;
+      }
+
+      .js .tile__tags {
+        animation: wipe-in linear backwards;
+        animation-timeline: --tile;
+        animation-range: contain 30% contain 55%;
+      }
+
+      .js .tile .signal-bubble {
+        animation: rise-in linear both;
+        animation-timeline: --tile;
+        animation-range: contain 25% contain 50%;
+      }
+    }
+
+    // Keyboard safety: focus can scroll a control into view before its scrub has revealed it,
+    // so any block holding focus drops its entrance and shows at rest.
+    .js .tile:focus-within .tile__copy > *,
+    .js .tile:focus-within .tile__frame,
+    .js .tile:focus-within .tile__tags,
+    .js .tile:focus-within .signal-bubble,
+    .js [data-reveal]:focus-within,
+    .js [data-reveal]:focus,
+    .js .facets:focus-within .facet,
+    .js .facets:focus-within .facet::before,
+    .js .facets:focus-within .intro-portrait,
+    .js .facets:focus-within .intro-portrait__img,
+    .js .facets:focus-within .intro-portrait__inlay,
+    .js .facets:focus-within .facet::after,
+    .js .facets:focus-within .facets__set::before,
+    .js .facets:focus-within::before,
+    .js .facets:focus-within .facets__inlay,
+    .js .facets:focus-within .facet__body::before,
+    .js .facets:focus-within .facets__tagline,
+    .js .facets:focus-within .facets__tagline::before,
+    .js .facets:focus-within .facets__blurb,
+    .js .facets:focus-within .facets__cta {
+      animation: none;
+    }
+  }
+
+  // ---- Fallback: no scroll-driven animations (html.no-sda); home.js adds .is-in when a block enters ----
+  .js.no-sda [data-reveal],
+  .js.no-sda .tile__frame,
+  .js.no-sda .tile__copy > * {
+    transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out), translate var(--dur-base) var(--ease-out);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(2) {
+    transition-delay: var(--stagger);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(3) {
+    transition-delay: calc(var(--stagger) * 2);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(4) {
+    transition-delay: calc(var(--stagger) * 3);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(5) {
+    transition-delay: calc(var(--stagger) * 4);
+  }
+
+  // Facets fallback: the apart state until .is-in, then one timed join; the joint fills after it.
+  .js.no-sda .facet,
+  .js.no-sda .facet::before,
+  .js.no-sda .intro-portrait__img,
+  .js.no-sda .intro-portrait__inlay,
+  .js.no-sda .facet::after,
+  .js.no-sda .facets__set::before,
+  .js.no-sda .facets::before,
+  .js.no-sda .facets__inlay,
+  .js.no-sda .facet__body::before,
+  .js.no-sda .facets__tagline::before {
+    transition: transform var(--dur-slow) var(--ease-out), opacity var(--dur-slow) var(--ease-out), clip-path var(--dur-slow) var(--ease-out);
+  }
+
+  // Step 2 of the fallback: the slide off the portrait starts as the join lands.
+  .js.no-sda .facet {
+    transition: transform var(--dur-slow) var(--ease-out), translate var(--dur-slow) var(--ease-in-out) var(--dur-base);
+  }
+
+  .js.no-sda .intro-portrait {
+    transition: clip-path var(--dur-slow) var(--ease-in-out) var(--dur-base);
+  }
+
+  .js.no-sda .facets__tagline,
+  .js.no-sda .facets__blurb,
+  .js.no-sda .facets__cta {
+    transition: opacity var(--dur-slow) var(--ease-out) var(--dur-slow), transform var(--dur-slow) var(--ease-out) var(--dur-slow);
+  }
+
+  .js.no-sda .facets:not(.is-in):not(:focus-within) {
+    .facet {
+      transform: translate(var(--facet-dx), var(--facet-dy)) rotate(var(--facet-rot));
+      translate: var(--morph-x) var(--morph-y);
+    }
+
+    .intro-portrait {
+      clip-path: var(--portrait-closed);
+    }
+
+    .intro-portrait__img {
+      transform: scale(var(--intro-face-scale));
+    }
+
+    .facet::before {
+      clip-path: var(--facet-apart);
+    }
+
+    .facet::after {
+      opacity: 1;
+    }
+
+    &::before,
+    .facets__set::before,
+    .facets__inlay,
+    .intro-portrait__inlay {
+      opacity: 0;
+    }
+
+    .facet + .facet > .facet__body::before,
+    .facets__tagline::before {
+      transform: scale(var(--seam-sx), var(--seam-sy));
+    }
+
+    .facets__tagline,
+    .facets__blurb,
+    .facets__cta {
+      opacity: 0;
+      transform: translateY(var(--rise));
+    }
+  }
+
+  .js.no-sda [data-reveal]:not(.is-in):not(:focus-within),
+  .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__frame,
+  .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__copy > * {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+}
+
+// Reduced motion: nothing above applies (all of it sits in no-preference), so every block is visible and in place,
+// the pin collapses, and home.js paints one static vein frame and never autoplays video. What remains is made static here.
+@media (prefers-reduced-motion: reduce) {
+  .hero__cue-line {
+    background-position: 0 0;
+  }
+
+  .btn,
+  .theme-toggle,
+  .site-nav__link::after,
+  .signal-bubble,
+  .tile__frame::before,
+  .facets__sheen::before {
+    transition: none;
+  }
+}
