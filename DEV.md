@@ -58,7 +58,7 @@ Then open http://127.0.0.1:4000.
 
 ## Branches
 
-`design` is the working branch: commit here, preview locally. `dev` is the latest known-good backup of `design`: fast-forward it whenever `design` is in a working state. `main` is the live site: merge `dev` into `main` only when the site is ready to publish. Experiment branches (`stone/*`, `intro/*`, `chore/*`) start from `design` and merge back into `design`.
+`main` is the working branch and the deployed site: commit here, preview locally. `legacy` holds the pre-redesign site and is not developed further. `dev` is a stale backup from the earlier `design` branch. Experiment branches (`stone/*`, `intro/*`, `chore/*`) start from `main` and merge back into `main`.
 
 ```zsh
 git switch dev && git merge --ff-only design && git switch design      # back up design
