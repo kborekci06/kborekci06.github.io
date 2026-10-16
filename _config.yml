@@ -9,7 +9,6 @@ author:
   image: "/assets/img/portrait/kaan-borekci-720.webp"
   alumni_of: "Northwestern University"
 
-theme: minima
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
@@ -26,12 +25,6 @@ sass:
     - global-builtin
     - if-function
 
-# Tell minima which pages to put in the header nav:
-header_pages:
-  - index.md
-  - experience.md
-  - resume.md
-  - contact.md
 
 webrick:
   mime_types:
