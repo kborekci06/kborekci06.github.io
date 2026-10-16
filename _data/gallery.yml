@@ -1,6 +1,7 @@
 # Registry read by index.html (the gallery). Named gallery.yml because _data/experiments/ (the per-design data folders) already owns site.data.experiments.
 # One entry per design folder experiments/<group>/<slug>/ (the page is /experiments/<group>/<slug>/), with
 # preview.webp (1200x750 screenshot of the page) beside it. Adding a design = its folder plus one entry here.
+# A design hosted elsewhere sets url: (absolute) and preview: (a path under /assets/img/gallery/) instead.
 # status: working (being developed) | candidate (in the running for the final site) | archived (kept for the record)
 - slug: marble
   short: M
@@ -23,3 +24,9 @@
     - { slug: strata,   name: Strata,   direction: "Three horizontal courses with the portrait as a lens through them", date: 2026-09, status: archived }
     - { slug: prism,    name: Prism,    direction: "A hexagonal gem cut into three facets that unfold around the face", date: 2026-09, status: archived }
     - { slug: shard,    name: Shard,    direction: "Shards on a diagonal vein, butted against the portrait",            date: 2026-09, status: archived }
+- slug: legacy
+  short: L
+  title: Legacy
+  summary: "The portfolio as it stood before the redesign: minima-based, Montserrat, a circular portrait, project cards with hover video. Source on the legacy branch, served by GitHub Pages."
+  designs:
+    - { slug: site, name: "2025 site", direction: "The original portfolio, live at kborekci06.github.io", date: 2026-09, status: archived, url: "https://kborekci06.github.io/", preview: /assets/img/gallery/legacy-site.webp }
