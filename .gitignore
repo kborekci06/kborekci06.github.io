@@ -20,3 +20,10 @@ pilot-shots/
 .agents/
 skills-lock.json
 SKILLGUIDE.md
+.taste-skill/
+plan.md
+node_modules/
+.next/
+public/
+next-env.d.ts
+*.tsbuildinfo

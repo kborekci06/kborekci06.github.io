@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Tokens are per experiment: each page sets its own on a wrapper. The root carries nothing but the reset Tailwind ships. */
+@theme {
+  --font-sans: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+}
+
+html { scroll-behavior: auto; }

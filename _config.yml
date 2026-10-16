@@ -31,7 +31,21 @@ webrick:
     mp4: video/mp4
 
 # Root files that must never be published to the site
+destination: public # Next.js serves this folder as static files; next build copies it into the deployment
 exclude:
+  - app
+  - node_modules
+  - public
+  - .next
+  - package.json
+  - package-lock.json
+  - next.config.ts
+  - postcss.config.mjs
+  - tsconfig.json
+  - next-env.d.ts
+  - plan.md
+  - SKILLGUIDE.md
+  - .taste-skill
   - README.md
   - DEV.md
   - CLAUDE.md
