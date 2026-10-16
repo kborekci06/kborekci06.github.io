@@ -1,5 +1,5 @@
 {%- comment -%}
-  JSON-LD Person for the home page. Reads _config.yml author and _data/social.yml; no hardcoded identity.
+  JSON-LD Person for the home page. Reads _config.yml author and _data/experiments/marble/onyx/social.yml; no hardcoded identity.
   No employer or job title by design (CLAUDE.md §2).
 {%- endcomment -%}
 <script type="application/ld+json">
@@ -11,6 +11,6 @@
   "email": {{ site.author.email | prepend: "mailto:" | jsonify }},
   "image": {{ site.author.image | absolute_url | jsonify }},
   "alumniOf": { "@type": "CollegeOrUniversity", "name": {{ site.author.alumni_of | jsonify }} },
-  "sameAs": {{ site.data.social.profiles | map: "url" | jsonify }}
+  "sameAs": {{ site.data.experiments.marble.onyx.social.profiles | map: "url" | jsonify }}
 }
 </script>

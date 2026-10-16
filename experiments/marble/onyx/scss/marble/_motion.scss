@@ -1,8 +1,8 @@
 // Motion layer: every animation on Home lives here (motion map: PILOT_REPORT.md §0.3).
 // Rules:
-// - Hidden-until-revealed states only under html.js (set pre-paint by _includes/theme-init.html): JS off = everything visible.
+// - Hidden-until-revealed states only under html.js (set pre-paint by _partials/theme-init.html): JS off = everything visible.
 // - Technique order: CSS scroll-driven (view()/scroll(), incl. the pinned tiles via sticky + named view-timeline)
-//   -> IntersectionObserver class fallback (html.no-sda, set by assets/js/home.js) -> no library.
+//   -> IntersectionObserver class fallback (html.no-sda, set by js/home.js) -> no library.
 // - Only transform/translate/scale, opacity, clip-path, filter and background-position animate.
 // - Everything is inside (prefers-reduced-motion: no-preference); the reduce block at the end states the static result.
 

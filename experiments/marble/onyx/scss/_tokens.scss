@@ -121,7 +121,7 @@ $grain-url: string.unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w
   --glass-blur: var(--blur-md);
   --glass-saturate: 1.4;
 
-  // Signal bubble (_includes/signal-bubble.html): size only; colours come from the slab context (--s-accent, --s-vein).
+  // Signal bubble (_partials/signal-bubble.html): size only; colours come from the slab context (--s-accent, --s-vein).
   --signal-height: 3rem;
   --signal-dash: 2 4;           // baseline grid dash (SVG user units)
   --signal-ease: 250ms;         // time constant JS uses to glide between rest and active (read from computed style)
@@ -166,7 +166,7 @@ $grain-url: string.unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w
   --color-inverse-glass-border: color-mix(in srgb, var(--p-onyx-honey-400) 30%, transparent);
   --color-inverse-glass-edge: color-mix(in srgb, var(--p-onyx-umber-950) 55%, transparent);
   --color-inverse-glass-glow: color-mix(in srgb, var(--p-onyx-glow-300) 12%, transparent);
-  // Stone (assets/js/home.js, page-fixed canvas): the honey face of the slab. Bed families: ivory ground, honey and
+  // Stone (js/home.js, page-fixed canvas): the honey face of the slab. Bed families: ivory ground, honey and
   // amber beds; laminae and cracks dark. The backlight is a soft white brightening; the vignette a caramel fall-off.
   --stone-a: var(--p-onyx-cream-0);
   --stone-a-core: var(--p-onyx-ivory-0);
@@ -343,7 +343,7 @@ $grain-url: string.unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w
 :root {
   // Stone behind Home: slabs sit on it as glass (_layout.scss .has-hero .slab); the stone shows through at 1 - alpha.
   --stone-slab-alpha: 86%;
-  --stone-parallax: 0.18;   // slab shift per px scrolled (read by assets/js/home.js)
+  --stone-parallax: 0.18;   // slab shift per px scrolled (read by js/home.js)
   // Backlight behind the name: a warm halo (hero__glow) and a glyph glow; both theme-invariant like the night slab.
   --hero-backlight:
     radial-gradient(closest-side, color-mix(in srgb, var(--color-night-glow) 22%, transparent), color-mix(in srgb, var(--color-night-glow) 8%, transparent) 55%, transparent);
@@ -351,7 +351,7 @@ $grain-url: string.unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w
   --inlay-glow: color-mix(in srgb, var(--p-onyx-glow-300) 55%, transparent);
   // Polished-edge sheen swept across frames on hover.
   --sheen: linear-gradient(105deg, transparent 38%, color-mix(in srgb, var(--p-onyx-glow-300) 26%, transparent) 48%, color-mix(in srgb, var(--p-onyx-cream-0) 30%, transparent) 50%, transparent 60%);
-  // Intro facets (_sass/marble/_intro.scss): fitted glass panels cut like the tile frames, in fixed units because the
+  // Intro facets (scss/marble/_intro.scss): fitted glass panels cut like the tile frames, in fixed units because the
   // panels change aspect between layouts. The inlay sits --intro-inset inside the edge; its chamfers shrink by
   // inset x tan(22.5deg) so they stay parallel to the cut. Apart state: --intro-spread/-drop/-shift/-tilt.
   --intro-chamfer: var(--space-4);

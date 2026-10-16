@@ -2,7 +2,7 @@
   Story teaser: inverse slab with an angled top cut and a lit band drawn along it, the onyx band layer behind;
   portrait in a fitted panel with an inlay hairline and scroll parallax, one sentence, one link.
   Params: teaser = { title, text, link_label, url }, portrait = { src, widths, width, height, sizes, alt } (index.md front matter).
-  Styles: _sass/marble/_teaser.scss; motion: _sass/marble/_motion.scss.
+  Styles: scss/marble/_teaser.scss; motion: scss/marble/_motion.scss.
 {%- endcomment -%}
 {%- assign t = include.teaser -%}
 <section class="teaser slab slab--inverse slab--cut" aria-labelledby="story-title">
@@ -10,7 +10,7 @@
   <div class="container teaser__inner">
     {%- if include.portrait %}
     <figure class="teaser__portrait">
-      {% include responsive-image.html image=include.portrait class="teaser__img" sizes=include.portrait.sizes %}
+      {% include_relative _partials/responsive-image.html image=include.portrait class="teaser__img" sizes=include.portrait.sizes %}
       <svg class="inlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="3,2.4 97,2.4 97,86.18 81.96,97.6 3,97.6" vector-effect="non-scaling-stroke"/></svg>
     </figure>
     {%- endif %}

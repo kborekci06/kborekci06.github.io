@@ -292,7 +292,7 @@
     }
   }
 
-  // ---- 4. Signal bubble (_includes/signal-bubble.html; shapes: _data/signal-shapes.yml) ----
+  // ---- 4. Signal bubble (_partials/signal-bubble.html; shapes: _data/experiments/marble/onyx/signal-shapes.yml) ----
   // Same geometry as the Liquid path: one period of points repeated freq x window times across 400 units,
   // scaled around origin by amp, y = 50 - 40 * value. Phase is integrated so a change of freq never jumps.
   function signalBubble(box) {

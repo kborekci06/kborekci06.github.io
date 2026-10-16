@@ -1,17 +1,15 @@
 ---
-layout: home
-body_class: has-hero # header lies over the hero (_sass/marble/_header.scss)
-scripts: [/assets/js/home.js] # deferred; vein field, reveal fallback, tile video
+scripts: [/experiments/marble/onyx/js/home.js] # deferred; vein field, reveal fallback, tile video
 title: "Home"
 description: "Kaan Borekci: engineering and AI for improving quality of life for all."
-# Home copy. Sources: CONTEXT.md §1 (positioning, identity facts) and §3 (arc). Rendered by _layouts/home.html.
+# Home copy. Sources: CONTEXT.md §1 (positioning, identity facts) and §3 (arc). Rendered by the shell below.
 positioning: "Engineering and AI for improving quality of life for all."
 portrait:
   src: /assets/img/portrait/kaan-borekci-720.webp
   widths: [400, 720]
   width: 720
   height: 900
-  sizes: "(min-width: 64em) 26rem, (min-width: 48em) 22rem, 78vw" # mirrors --portrait-width in _sass/_tokens.scss
+  sizes: "(min-width: 64em) 26rem, (min-width: 48em) 22rem, 78vw" # mirrors --portrait-width in scss/_tokens.scss
   alt: "Kaan Borekci on a tree-lined campus path, wearing a light blue shirt"
 work_heading: "Selected work"
 story_teaser:
@@ -20,3 +18,29 @@ story_teaser:
   link_label: "Read the full story"
   url: /story/
 ---
+{%- comment -%}
+  Marble / Onyx: a Home design. Self-contained: _partials/, scss/, js/ and _data/experiments/marble/onyx/ are this experiment's only sources;
+  shared with other experiments are only /assets (media, fonts, documents) and _config.yml author.
+  Slab by slab, all as glass over the page stone (.stone canvas, js/home.js): hero (base, transparent), intro (base, cut),
+  flagship tiles (alternating), story teaser (inverse), footer (base). Copy: front matter above and the data folder.
+  Motion map: scss/marble/_motion.scss and js/home.js.
+{%- endcomment -%}
+<!doctype html>
+<html lang="en">
+<head>
+{% include_relative _partials/head-meta.html %}
+</head>
+<body class="has-hero">
+<a class="skip-link" href="#main">Skip to content</a>
+{% include_relative _partials/site-header.html %}
+<main id="main" tabindex="-1">
+<canvas class="stone" data-stone-field aria-hidden="true"></canvas>
+{% include_relative _partials/home-hero.html %}
+{% include_relative _partials/home-intro.html %}
+{% include_relative _partials/featured-work.html title=page.work_heading %}
+{% include_relative _partials/story-teaser.html teaser=page.story_teaser portrait=page.portrait %}
+</main>
+{% include_relative _partials/site-footer.html %}
+{% include_relative _partials/theme-toggle-script.html %}
+</body>
+</html>

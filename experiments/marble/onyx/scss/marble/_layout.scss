@@ -1,5 +1,5 @@
 // Page frame and slabs. A slab is a full-width section whose context (--s-*) is base or inverse;
-// every component inside reads --s-*, so one class flips a whole section (tokens: _sass/_tokens.scss component layer).
+// every component inside reads --s-*, so one class flips a whole section (tokens: scss/_tokens.scss component layer).
 
 .container {
   width: 100%;
@@ -29,7 +29,7 @@
   @include slab-night;
 }
 
-// The stone: a page-fixed canvas behind everything on Home (assets/js/home.js paints generated onyx strata and a
+// The stone: a page-fixed canvas behind everything on Home (js/home.js paints generated onyx strata and a
 // travelling backlight). Slabs above it are glass, so the pattern flows on under the whole page as it scrolls.
 .stone {
   position: fixed;

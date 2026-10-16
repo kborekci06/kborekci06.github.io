@@ -1,12 +1,12 @@
 {%- comment -%}
   Signal bubble: illustrative traces in a floating glass panel. Definition comes from data, never hand-drawn SVG:
-  include.signals = a project's signals list (contract: _data/schema/project.yml), shapes from _data/signal-shapes.yml.
+  include.signals = a project's signals list (contract: _data/schema/project.yml), shapes from _data/experiments/marble/onyx/signal-shapes.yml.
   Liquid draws each trace at its rest state, so the bubble is complete with JS off and under reduced motion.
-  assets/js/home.js redraws the same path each frame from the same data attributes: slow at rest, and on tile hover or
+  js/home.js redraws the same path each frame from the same data attributes: slow at rest, and on tile hover or
   focus it eases to the active freq/amp. The caption always says the trace is not data (CLAUDE.md §5).
-  Styles: _sass/marble/_signal.scss; placement on a tile: _sass/marble/_tile.scss.
+  Styles: scss/marble/_signal.scss; placement on a tile: scss/marble/_tile.scss.
 {%- endcomment -%}
-{%- assign shapes = site.data.signal-shapes -%}
+{%- assign shapes = site.data.experiments.marble.onyx.signal-shapes -%}
 {%- assign win = shapes.window -%}
 <figure class="signal-bubble" data-signal-bubble data-window="{{ win }}">
   {%- for s in include.signals %}

@@ -1,4 +1,4 @@
-# Primary navigation, read by _includes/site-header.html. List order is display order.
+# Primary navigation, read by _partials/site-header.html. List order is display order.
 # aria-current="page" is set when page.url equals url.
 - title: Home
   url: /

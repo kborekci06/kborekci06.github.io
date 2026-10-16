@@ -1,5 +1,5 @@
 @use "sass:string";
-// Home intro (_includes/home-intro.html): three fitted glass panels (facets) that join into one panel holding the
+// Home intro (_partials/home-intro.html): three fitted glass panels (facets) that join into one panel holding the
 // tagline, the blurb and the link; then the work heading that follows on the same base slab.
 // Static state here is the settled one (JS off, reduced motion); the apart state and the join are in _motion.scss.
 // Grid: pillars on the top row(s), tagline and joint below. Each facet spans its rows through subgrid, so the glass of

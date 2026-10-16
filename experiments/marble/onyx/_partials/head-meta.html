@@ -1,16 +1,12 @@
 {%- comment -%}
-  <head> contents for _layouts/base.html, in load order: meta, pre-paint theme + js class, font preloads, inline CSS, deferred page scripts, JSON-LD.
+  <head> contents for ../index.html, in load order: meta, pre-paint theme + js class, font preloads, inline CSS, deferred page scripts, JSON-LD.
   Preloads: the display face paints the hero name (LCP); the text face paints the positioning line.
   page.scripts (optional list) = deferred scripts for that page only.
-  Title: site title alone on Home, "Page · Site" elsewhere. Description: page, then site.
+  Title: the site title (this is a Home design). Description: page, then site.
 {%- endcomment -%}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-{%- if page.url == "/" -%}
-  {%- assign doc_title = site.title -%}
-{%- else -%}
-  {%- assign doc_title = page.title | append: " · " | append: site.title -%}
-{%- endif -%}
+{%- assign doc_title = site.title -%}
 {%- assign doc_description = page.description | default: site.description %}
 <title>{{ doc_title | escape }}</title>
 <meta name="description" content="{{ doc_description | escape }}">
@@ -19,13 +15,11 @@
 <meta property="og:title" content="{{ doc_title | escape }}">
 <meta property="og:description" content="{{ doc_description | escape }}">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
-{% include theme-init.html %}
+{% include_relative _partials/theme-init.html %}
 <link rel="preload" href="{{ '/assets/fonts/cormorant-garamond-600-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ '/assets/fonts/eb-garamond-400-latin.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
-{% include styles.html %}
+{% include_relative _partials/styles.html %}
 {%- for script in page.scripts %}
 <script src="{{ script | relative_url }}" defer></script>
 {%- endfor %}
-{%- if page.url == "/" %}
-{% include schema-person.html %}
-{%- endif %}
+{% include_relative _partials/schema-person.html %}

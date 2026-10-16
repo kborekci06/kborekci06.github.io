@@ -1,4 +1,4 @@
-# Home intro (_includes/home-intro.html): three pillars that join into one panel holding the tagline, blurb and link.
+# Home intro (_partials/home-intro.html): three pillars that join into one panel holding the tagline, blurb and link.
 # Placeholder wording from CONTEXT.md §1 and §3; not final (owner rewrites with /story-craft).
 # Contract: tagline; pillars [{id, label, line <= 12 words}] x3; blurb <= 45 words, first person; cta {label, url}.
 tagline: "Forged through craft and legacy."

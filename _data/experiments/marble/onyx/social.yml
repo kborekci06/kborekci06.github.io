@@ -1,4 +1,4 @@
-# Profile links and resume, read by _includes/site-footer.html and _includes/schema-person.html (sameAs).
+# Profile links and resume, read by _partials/site-footer.html and _partials/schema-person.html (sameAs).
 # Email lives in _config.yml author.email so it is defined once.
 profiles:
   - label: LinkedIn

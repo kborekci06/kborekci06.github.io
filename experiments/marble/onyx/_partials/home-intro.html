@@ -1,10 +1,10 @@
 {%- comment -%}
   Home intro: three fitted glass panels, one per pillar, that slide together on scroll into one panel holding the tagline,
-  the blurb and the story link. Renders only from _data/pillars.yml (contract in its header); markup never changes with copy.
-  DOM order is heading, pillars, blurb, link; the grid shows the pillars on top. Styles: _sass/marble/_intro.scss;
-  motion: _sass/marble/_motion.scss (data-reveal gives the IntersectionObserver fallback in assets/js/home.js §2).
+  the blurb and the story link. Renders only from _data/experiments/marble/onyx/pillars.yml (contract in its header); markup never changes with copy.
+  DOM order is heading, pillars, blurb, link; the grid shows the pillars on top. Styles: scss/marble/_intro.scss;
+  motion: scss/marble/_motion.scss (data-reveal gives the IntersectionObserver fallback in js/home.js §2).
 {%- endcomment -%}
-{%- assign d = site.data.pillars -%}
+{%- assign d = site.data.experiments.marble.onyx.pillars -%}
 <section class="intro slab slab--base slab--cut" id="intro" aria-labelledby="intro-title">
   <div class="container intro__inner">
     <div class="facets" data-reveal>

@@ -1,9 +1,9 @@
 {%- comment -%}
-  Featured work: every page with featured: true, sorted by order (contract: _data/schema/project.yml).
-  Tiles alternate slabs, starting inverse after the base intro. Adding a tile = front matter on a project page; this file never changes.
-  Param: title = section heading. Styles: _sass/marble/_tile.scss; motion: _sass/marble/_motion.scss.
+  Featured work: the tiles in _data/experiments/marble/onyx/flagships.yml, sorted by order (contract: _data/schema/project.yml).
+  Tiles alternate slabs, starting inverse after the base intro. Adding a tile = one entry in that file; this file never changes.
+  Param: title = section heading. Styles: scss/marble/_tile.scss; motion: scss/marble/_motion.scss.
 {%- endcomment -%}
-{%- assign flagships = site.pages | where_exp: "p", "p.featured == true" | sort: "order" -%}
+{%- assign flagships = site.data.experiments.marble.onyx.flagships | sort: "order" -%}
 <section class="work" aria-labelledby="work-title">
   <div class="work__head slab slab--base">
     <div class="container">
@@ -13,6 +13,6 @@
   {%- for project in flagships %}
   {%- assign odd = forloop.index | modulo: 2 -%}
   {%- if odd == 1 %}{% assign tone = "inverse" %}{% else %}{% assign tone = "base" %}{% endif %}
-  {% include flagship-tile.html project=project tone=tone %}
+  {% include_relative _partials/flagship-tile.html project=project tone=tone %}
   {%- endfor %}
 </section>

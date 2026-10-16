@@ -1,11 +1,11 @@
 {%- comment -%}
   One flagship tile: a mini-hero on its own slab. The track is the scroll length of the pinned, scrubbed sequence;
-  the stage is what pins (CSS sticky + view-timeline, _sass/marble/_motion.scss). Without scroll-driven animation support
+  the stage is what pins (CSS sticky + view-timeline, scss/marble/_motion.scss). Without scroll-driven animation support
   or with reduced motion the track collapses and the tile is a plain section.
   Params: project = page with _data/schema/project.yml front matter; tone = "inverse" | "base".
   Media: project.tile.video (hover/in-view loop, poster required) or project.thumbnail (image).
   Frame: a fitted stone panel (chamfered corners, one wide cut, mirrored on alternate tiles) with an inlay hairline.
-  project.signals (optional) floats a glass signal bubble over the media (_includes/signal-bubble.html).
+  project.signals (optional) floats a glass signal bubble over the media (_partials/signal-bubble.html).
   Meta row: project.role and project.dates (years only; "(inferred)" when dates.inferred).
   Actions: case study link, then project.tile.secondary {label, url} or, for video tiles, a play/pause button.
 {%- endcomment -%}
@@ -19,7 +19,7 @@
           {%- if t.video %}
           <video class="tile__video" src="{{ t.video | relative_url }}" poster="{{ t.poster.src | relative_url }}" width="{{ t.poster.width }}" height="{{ t.poster.height }}" muted loop playsinline preload="none" controls aria-label="{{ t.poster.alt | escape }}"></video>
           {%- else %}
-          {% include responsive-image.html image=p.thumbnail class="tile__img" sizes="(min-width: 48em) 58vw, 92vw" %}
+          {% include_relative _partials/responsive-image.html image=p.thumbnail class="tile__img" sizes="(min-width: 48em) 58vw, 92vw" %}
           {%- endif %}
           <svg class="inlay tile__inlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polygon points="3.54,2.4 96.46,2.4 98.4,5.26 98.4,84.75 89.69,97.6 3.54,97.6 1.6,94.74 1.6,5.26" vector-effect="non-scaling-stroke"/></svg>
         </div>
@@ -31,7 +31,7 @@
         </ul>
         {%- endif %}
         {%- if p.signals and p.signals.size > 0 %}
-        {% include signal-bubble.html signals=p.signals %}
+        {% include_relative _partials/signal-bubble.html signals=p.signals %}
         {%- endif %}
       </div>
       <div class="tile__copy">

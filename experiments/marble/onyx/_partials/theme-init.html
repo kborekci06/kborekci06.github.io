@@ -1,6 +1,6 @@
 {%- comment -%}
   Pre-paint script, the only script that runs before first render (CLAUDE.md §4 budgets).
-  1. Stored theme choice wins; no stored choice = no data-theme = dark, the default (_sass/_tokens.scss).
+  1. Stored theme choice wins; no stored choice = no data-theme = dark, the default (scss/_tokens.scss).
   2. Adds the "js" class that gates every hidden-until-revealed state, so content stays visible with JS off.
 {%- endcomment -%}
 <script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>

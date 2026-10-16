@@ -1,4 +1,4 @@
-# Waveform library for _includes/signal-bubble.html and assets/js/home.js (both read this file; one source).
+# Waveform library for _partials/signal-bubble.html and js/home.js (both read this file; one source).
 # A shape is one period: points [x, y] with x in [0, 1) and y in [-1, 1], joined by straight lines and repeated.
 # origin = the y the amplitude scales around (a capnogram flattens onto its baseline; a motion trace around zero).
 # Illustrative shapes only, drawn to read like the signal type; never recorded data (CLAUDE.md §5).

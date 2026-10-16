@@ -1,7 +1,7 @@
-// Signal panel (_includes/signal-bubble.html): a fitted amber glass instrument panel of illustrative traces plus a caption
+// Signal panel (_partials/signal-bubble.html): a fitted amber glass instrument panel of illustrative traces plus a caption
 // that says so. Honey rim (glass shadow) and a second inlay hairline inside it, as on the fitted-stone frames (Emperador).
 // Traces side by side when the panel is wide, stacked in a narrow float (Emperador's grid).
-// Placement on a tile lives in _tile.scss; entrance and hover lift in _motion.scss; path animation in assets/js/home.js.
+// Placement on a tile lives in _tile.scss; entrance and hover lift in _motion.scss; path animation in js/home.js.
 
 .signal-bubble {
   @include glass(var(--glass-surface-strong)); // strong glass: the bubble floats over a photo, muted caption must hold 4.5:1
