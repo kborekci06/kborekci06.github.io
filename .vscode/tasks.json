@@ -4,7 +4,7 @@
     {
       "label": "Jekyll Serve (Clean)",
       "type": "shell",
-      "command": "export PATH=\"$HOME/.rbenv/bin:$PATH\" && eval \"$(rbenv init - zsh)\" && rbenv local 3.2.4 && bundle exec jekyll clean && rm -rf .jekyll-cache .sass-cache && bundle exec jekyll serve --livereload --watch --trace",
+      "command": "export PATH=\"$HOME/.rbenv/bin:$PATH\" && eval \"$(rbenv init - zsh)\" && bundle exec jekyll clean && rm -rf .jekyll-cache .sass-cache && bundle exec jekyll serve --livereload --watch --trace",
       "isBackground": true,
       "problemMatcher": []
     },
