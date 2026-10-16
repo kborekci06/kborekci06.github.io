@@ -1,0 +1,17 @@
+{%- comment -%}
+  Responsive WebP <img> with intrinsic size (no CLS).
+  Params: image  = { src, widths[], width, height, alt } (see _data/schema/project.yml thumbnail)
+          sizes  = CSS sizes string matching the element's rendered width
+          class  = optional class
+          priority = "high" for the single LCP candidate (eager, fetchpriority=high); otherwise lazy.
+  Convention: files are <stem>-<width>.webp and src names the widest file.
+{%- endcomment -%}
+{%- assign img = include.image -%}
+{%- assign suffix = "-" | append: img.width | append: ".webp" -%}
+{%- assign stem = img.src | remove: suffix -%}
+{%- capture srcset -%}
+  {%- for w in img.widths -%}
+    {{ stem | append: "-" | append: w | append: ".webp" | relative_url }} {{ w }}w{% unless forloop.last %}, {% endunless %}
+  {%- endfor -%}
+{%- endcapture -%}
+<img{% if include.class %} class="{{ include.class }}"{% endif %} src="{{ img.src | relative_url }}" srcset="{{ srcset }}" sizes="{{ include.sizes }}" width="{{ img.width }}" height="{{ img.height }}" alt="{{ img.alt | escape }}" decoding="async"{% if include.priority == "high" %} fetchpriority="high"{% else %} loading="lazy"{% endif %}>

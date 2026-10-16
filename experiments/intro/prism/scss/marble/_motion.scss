@@ -1,0 +1,792 @@
+// Motion layer: every animation on Home lives here (motion map: PILOT_REPORT.md §0.3).
+// Rules:
+// - Hidden-until-revealed states only under html.js (set pre-paint by _partials/theme-init.html): JS off = everything visible.
+// - Technique order: CSS scroll-driven (view()/scroll(), incl. the pinned tiles via sticky + named view-timeline)
+//   -> IntersectionObserver class fallback (html.no-sda, set by js/home.js) -> no library.
+// - Only transform/translate/scale, opacity, clip-path, filter and background-position animate.
+// - Everything is inside (prefers-reduced-motion: no-preference); the reduce block at the end states the static result.
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+}
+
+// Hero name: a focus pull. Opacity stays 1 so the LCP text paints on the first frame.
+@keyframes focus-in {
+  from {
+    filter: blur(0.3em);
+    transform: translateY(0.15em) scale(1.04);
+  }
+}
+
+@keyframes draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+// Both ends are insets so the clip interpolates (against the implicit "none" it would flip at 50 %); the negative
+// insets leave room for glows and shadows. Users fill backwards only: a finished wipe must leave no clip-path, which
+// would make the element a backdrop root and cut the glass chips inside it off from the photo they blur.
+@keyframes wipe-in {
+  from {
+    clip-path: inset(-2rem 100% -2rem -2rem);
+  }
+
+  to {
+    clip-path: inset(-2rem);
+  }
+}
+
+@keyframes cue-drop {
+  from {
+    background-position: 0 -67%;
+  }
+
+  to {
+    background-position: 0 167%;
+  }
+}
+
+@keyframes field-recede {
+  to {
+    opacity: 0.35;
+    transform: translateY(18%) scale(1.08);
+  }
+}
+
+@keyframes copy-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12vh);
+  }
+}
+
+// Tile frame opens from a small cut stone to the fitted panel; same eight vertices as .tile__frame's resting polygon
+// (and its mirror on even tiles from md). Ported from Emperador.
+@keyframes frame-open {
+  from {
+    clip-path: polygon(18% 12%, 82% 12%, 84% 15%, 84% 76%, 77% 88%, 18% 88%, 16% 85%, 16% 15%);
+    transform: scale(0.94);
+  }
+
+  to {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 86.5%, 91% 100%, 2% 100%, 0 97%, 0 3%);
+    transform: none;
+  }
+}
+
+@keyframes frame-open-mirror {
+  from {
+    clip-path: polygon(18% 12%, 82% 12%, 84% 15%, 84% 85%, 82% 88%, 23% 88%, 16% 76%, 16% 15%);
+    transform: scale(0.94);
+  }
+
+  to {
+    clip-path: polygon(2% 0, 98% 0, 100% 3%, 100% 97%, 98% 100%, 9% 100%, 0 86.5%, 0 3%);
+    transform: none;
+  }
+}
+
+// Backlight switching on behind the name.
+@keyframes glow-on {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes media-settle {
+  from {
+    transform: scale(1.22);
+  }
+}
+
+// Intro facets arrive from their own side: text and glass travel (translate), only the glass turns (per-facet custom
+// properties, _intro.scss), so the text is upright in every frame.
+@keyframes facet-join {
+  from {
+    transform: translate(var(--facet-dx), var(--facet-dy)) rotate(var(--facet-rot));
+  }
+}
+
+@keyframes facet-come {
+  from {
+    transform: translate(var(--facet-dx), var(--facet-dy));
+  }
+}
+
+@keyframes glass-in {
+  from {
+    transform: rotate(var(--facet-rot));
+  }
+}
+
+// Act 2: a piece leaves its act-1 place (offsets written by home.js §5) for its settled box.
+@keyframes a1-place {
+  from {
+    translate: var(--a1-x, 0px) var(--a1-y, 0px);
+  }
+}
+
+// The face dips out of Hardware's way, slides into its column at that depth (Hardware crosses above it), then rises
+// into place once it is clear of Hardware's cell.
+@keyframes face-route {
+  0% {
+    translate: var(--a1-x, 0px) var(--a1-y, 0px);
+  }
+
+  33.333% {
+    translate: var(--a2-x1, 0px) var(--a2-y1, 0px);
+  }
+
+  83.333% {
+    translate: var(--a2-x2, 0px) var(--a2-y2, 0px);
+  }
+}
+
+// Hardware arcs over the face: up in its own column, across above the dipped face, (holds while the face lands) down.
+@keyframes h-route {
+  0% {
+    translate: var(--a1-x, 0px) var(--a1-y, 0px);
+  }
+
+  28.571% {
+    translate: var(--a2-x1, 0px) var(--a2-y1, 0px);
+  }
+
+  57.143%,
+  71.429% {
+    translate: var(--a2-x2, 0px) var(--a2-y2, 0px);
+  }
+}
+
+// People runs right under Software, waits for it to leave, then rises into its cell.
+@keyframes p-route {
+  0% {
+    translate: var(--a1-x, 0px) var(--a1-y, 0px);
+  }
+
+  37.5%,
+  75% {
+    translate: var(--a2-x1, 0px) var(--a2-y1, 0px);
+  }
+}
+
+@keyframes a1-cut {
+  from {
+    clip-path: var(--a1-cut);
+  }
+}
+
+// A facet's glass swings as it travels and lies flat again as it lands.
+@keyframes glass-swing {
+  50% {
+    rotate: var(--swing, 0deg);
+  }
+}
+
+// The face comes up in the middle of the gem.
+@keyframes face-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+// The Forged panel is cut down from the pillar row's lower edge.
+@keyframes forged-cut {
+  from {
+    clip-path: var(--forged-closed);
+  }
+}
+
+// A joint draws out of the face (transform-origin on the face, home.js §5).
+@keyframes draw-out {
+  from {
+    scale: 0;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes seam-draw {
+  from {
+    transform: scale(var(--seam-sx), var(--seam-sy));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  // ---- Load (time-based) ----
+  .js .hero__name {
+    animation: focus-in var(--dur-slow) var(--ease-out) both;
+  }
+
+  .js .hero__positioning {
+    animation: rise-in var(--dur-slow) var(--ease-out) calc(var(--stagger) * 3) both;
+  }
+
+  .js .hero__glow {
+    animation: glow-on calc(var(--dur-slow) * 2) var(--ease-out) calc(var(--stagger) * 2) both;
+  }
+
+  .js .hero__edge {
+    animation: wipe-in calc(var(--dur-slow) * 2) var(--ease-in-out) calc(var(--stagger) * 6) backwards;
+  }
+
+  .hero__cue-line {
+    animation: cue-drop var(--dur-loop) var(--ease-in-out) infinite;
+  }
+
+  // ---- Hover and focus (user-initiated) ----
+  .btn,
+  .theme-toggle {
+    transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .btn:hover,
+  .btn:focus-visible {
+    transform: translateY(var(--hover-lift));
+  }
+
+  .site-nav__link::after {
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .tile__frame {
+    transition: translate var(--dur-base) var(--ease-out);
+  }
+
+  .tile__img,
+  .tile__video {
+    transition: scale var(--dur-slow) var(--ease-out);
+  }
+
+  .tile__media:hover .tile__frame,
+  .tile:focus-within .tile__frame {
+    translate: 0 var(--hover-lift);
+  }
+
+  // Polished sheen: one pass of light across the frame on hover or focus.
+  .tile__frame::before {
+    transition: translate var(--dur-slow) var(--ease-in-out);
+  }
+
+  .tile__media:hover .tile__frame::before,
+  .tile:focus-within .tile__frame::before {
+    translate: 100% 0;
+  }
+
+  // Signal bubble floats up a little further than the frame, so the two layers separate on hover.
+  .signal-bubble {
+    transition: translate var(--dur-base) var(--ease-out);
+  }
+
+  .tile__media:hover .signal-bubble,
+  .tile:focus-within .signal-bubble {
+    translate: 0 calc(var(--hover-lift) * 2);
+  }
+
+  .facets__sheen::before {
+    transition: translate var(--dur-slow) var(--ease-in-out);
+  }
+
+  .facets:hover .facets__sheen::before,
+  .facets:focus-within .facets__sheen::before {
+    translate: 100% 0;
+  }
+
+  .tile__media:hover .tile__img,
+  .tile__media:hover .tile__video,
+  .tile:focus-within .tile__img,
+  .tile:focus-within .tile__video {
+    scale: var(--hover-scale);
+  }
+
+  // ---- Scroll-driven (CSS first) ----
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    // Hero: the copy lifts away over the first viewport of scroll (the stone itself flows on under the page).
+    .js .hero__copy {
+      animation: copy-out linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 70svh;
+    }
+
+    // Generic entrance for single blocks (work heading, footer email).
+    .js [data-reveal] {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+
+    // Intro, one act (below 1200px, or too short for the pin): every piece on its own view timeline, so each moves while
+    // it is on screen. The face comes in cut as a hexagon and squares into its panel; Hardware, Software and People
+    // arrive from 120 degrees apart (upper left, upper right, below) with their cut edges lit, the glass turning in and the
+    // text only travelling; the edges go as the seams draw; the Forged panel is cut as the next course; then the rings and
+    // the text.
+    .facets {
+      view-timeline: --facets block;
+    }
+
+    .intro-portrait {
+      view-timeline: --face block;
+    }
+
+    .facet {
+      view-timeline: --piece block;
+    }
+
+    .js .facets[data-reveal] {
+      animation: none;
+    }
+
+    .js .facets::before {
+      animation: glow-on linear both;
+      animation-timeline: --facets;
+      animation-range: entry 40% cover 30%;
+    }
+
+    .js .intro-portrait {
+      animation: face-in linear both, a1-cut linear both;
+      animation-timeline: --face;
+      animation-range: entry 0% entry 70%, entry 100% cover 55%; // the hexagon holds until the whole face is in view
+    }
+
+    .js .intro-portrait__img {
+      animation: media-settle linear both, a1-cut linear both;
+      animation-timeline: --face;
+      animation-range: entry 0% cover 50%, entry 100% cover 55%;
+    }
+
+    .js .intro-portrait__inlay {
+      animation: wipe-in linear backwards;
+      animation-timeline: --face;
+      animation-range: entry 80% cover 50%;
+    }
+
+    .js .facet::before {
+      animation: facet-join linear both;
+      animation-timeline: --piece;
+      animation-range: entry 0% entry 100%;
+    }
+
+    .js .facet::after {
+      animation: facet-join linear both, fade-out linear both;
+      animation-timeline: --piece;
+      animation-range: entry 0% entry 100%, entry 70% cover 40%;
+    }
+
+    .js .facet__body {
+      animation: facet-come linear both;
+      animation-timeline: --piece;
+      animation-range: entry 0% entry 100%;
+    }
+
+    .js .facet:nth-child(2)::before,
+    .js .facet:nth-child(2) > .facet__body {
+      animation-range: entry 15% entry 100%;
+    }
+
+    .js .facet:nth-child(2)::after {
+      animation-range: entry 15% entry 100%, entry 70% cover 40%;
+    }
+
+    .js .facet:nth-child(3)::before,
+    .js .facet:nth-child(3) > .facet__body {
+      animation-range: entry 30% entry 100%;
+    }
+
+    .js .facet:nth-child(3)::after {
+      animation-range: entry 30% entry 100%, entry 70% cover 40%;
+    }
+
+    .js .facet + .facet > .facet__body::before {
+      animation: seam-draw linear both;
+      animation-timeline: --piece;
+      animation-range: entry 70% cover 40%;
+    }
+
+    .js .facets__forged {
+      animation: forged-cut linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 80%;
+    }
+
+    .js .facets__sheet {
+      animation: fade-in linear both;
+      animation-timeline: view();
+      animation-range: entry 60% entry 100%;
+    }
+
+    .js .facets__tagline::before {
+      animation: seam-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 50% entry 100%;
+    }
+
+    .js .facets__inlay {
+      animation: wipe-in linear backwards;
+      animation-timeline: --facets;
+      animation-range: cover 40% cover 55%;
+    }
+
+    .js .facets__tagline,
+    .js .facets__blurb,
+    .js .facets__cta {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+
+    // Intro, two acts, pinned (wide and tall enough for the gem under the header): the track is --intro-track long, the
+    // stage sticks for all but its first viewport; every range is on --regroup (entry 100% = contain 0% = pin starts).
+    // Act 1 (to 32%): the facets arrive from 120 degrees apart, the face comes up in the middle, the joints draw out of
+    // it and the ring lights; held to 42%. Act 2 (42-74%): the joints and ring go out; People runs right under Software,
+    // Hardware rises in its own column, the face dips, Hardware crosses above it, the face slides into its column and
+    // squares, Software steps in, Hardware drops and People rises into the row; every facet keeps its cut edge and
+    // re-cuts from its sector to its cell as it travels, its glass swinging and lying flat again. Then the Forged panel,
+    // seams, rings and text land by 92%; the settled layout holds to the release.
+    @media (min-width: $bp-intro-wide) and (min-height: $bp-intro-tall) {
+      .js .intro__track {
+        height: var(--intro-track);
+        view-timeline: --regroup block;
+      }
+
+      .js .intro__stage {
+        position: sticky;
+        top: 0;
+        display: grid;
+        align-content: safe center;
+        min-height: 100svh;
+        padding-block: calc(var(--header-height) + var(--space-3)) var(--space-3); // clears the fixed glass header
+      }
+
+      .js .facets::before {
+        animation-timeline: --regroup;
+        animation-range: entry 40% contain 15%;
+      }
+
+      .js .intro-portrait {
+        animation: face-in linear both, face-route linear both, a1-cut linear both;
+        animation-timeline: --regroup;
+        animation-range: contain 8% contain 20%, contain 46% contain 64%, contain 52% contain 64%;
+      }
+
+      .js .intro-portrait__img {
+        animation: media-settle linear both, a1-cut linear both;
+        animation-timeline: --regroup;
+        animation-range: contain 8% contain 30%, contain 52% contain 64%;
+      }
+
+      .js .intro-portrait__inlay {
+        animation-timeline: --regroup;
+        animation-range: contain 76% contain 86%;
+      }
+
+      // A facet travels as one (li: text and glass), its glass and cut edge turn, re-cut and swing on their own.
+      .js .facet {
+        animation: facet-come linear both, a1-place linear both;
+        animation-timeline: --regroup;
+      }
+
+      .js .facet__body {
+        animation: none;
+      }
+
+      .js .facet::before {
+        animation: glass-in linear both, a1-cut linear both, glass-swing linear both;
+        animation-timeline: --regroup;
+      }
+
+      .js .facet::after {
+        animation: glass-in linear both, a1-cut linear both, glass-swing linear both, fade-out linear both;
+        animation-timeline: --regroup;
+      }
+
+      // Hardware: arrives entry 55% - 10%; up 44-52, across above the dipped face 52-60, down 64-72 once the face has
+      // landed (64%).
+      .js .facet:nth-child(1) {
+        --swing: var(--intro-swing-h);
+        animation-name: facet-come, h-route;
+        animation-range: entry 55% contain 10%, contain 44% contain 72%;
+      }
+
+      // Its glass re-cuts to the cell by the top of the arc (54%), so it never reaches up under the header.
+      .js .facet:nth-child(1)::before {
+        animation-range: entry 55% contain 10%, contain 44% contain 54%, contain 44% contain 72%;
+      }
+
+      .js .facet:nth-child(1)::after {
+        animation-range: entry 55% contain 10%, contain 44% contain 54%, contain 44% contain 72%, contain 70% contain 76%;
+      }
+
+      // Software: arrives entry 65% - 12%; straight into its cell 57-66, once the face's right edge has passed.
+      .js .facet:nth-child(2) {
+        --swing: var(--intro-swing-s);
+        animation-range: entry 65% contain 12%, contain 57% contain 66%;
+      }
+
+      .js .facet:nth-child(2)::before {
+        animation-range: entry 65% contain 12%, contain 57% contain 66%, contain 57% contain 66%;
+      }
+
+      .js .facet:nth-child(2)::after {
+        animation-range: entry 65% contain 12%, contain 57% contain 66%, contain 57% contain 66%, contain 70% contain 76%;
+      }
+
+      // People: arrives entry 75% - 16%; right under Software 42-54, waits, rises 66-74 once Software has left.
+      .js .facet:nth-child(3) {
+        --swing: var(--intro-swing-p);
+        animation-name: facet-come, p-route;
+        animation-range: entry 75% contain 16%, contain 42% contain 74%;
+      }
+
+      // Its glass re-cuts to the cell during the run (42-52), so it has left Software's glass before it waits beneath it.
+      .js .facet:nth-child(3)::before {
+        animation-range: entry 75% contain 16%, contain 42% contain 52%, contain 42% contain 74%;
+      }
+
+      .js .facet:nth-child(3)::after {
+        animation-range: entry 75% contain 16%, contain 42% contain 52%, contain 42% contain 74%, contain 72% contain 78%;
+      }
+
+      // The gem overlay: joints draw out of the face as the facets lock, the ring lights, both go before anything moves.
+      .js .gem {
+        display: block;
+      }
+
+      .js .facets:focus-within .gem {
+        display: none;
+      }
+
+      .js .gem__ring {
+        animation: wipe-in linear backwards, fade-out linear both;
+        animation-timeline: --regroup;
+        animation-range: contain 26% contain 32%, contain 40% contain 44%;
+      }
+
+      .js .gem__joint {
+        animation: draw-out linear both, fade-out linear both;
+        animation-timeline: --regroup;
+        animation-range: contain 18% contain 26%, contain 40% contain 44%;
+      }
+
+      .js .gem__joint:nth-of-type(2) {
+        animation-range: contain 20% contain 28%, contain 40% contain 44%;
+      }
+
+      .js .gem__joint:nth-of-type(3) {
+        animation-range: contain 22% contain 30%, contain 40% contain 44%;
+      }
+
+      .js .facet + .facet > .facet__body::before,
+      .js .facets__tagline::before {
+        animation-timeline: --regroup;
+        animation-range: contain 76% contain 84%;
+      }
+
+      .js .facets__forged {
+        animation-timeline: --regroup;
+        animation-range: contain 72% contain 80%;
+      }
+
+      .js .facets__sheet {
+        animation-timeline: --regroup;
+        animation-range: contain 76% contain 82%;
+      }
+
+      .js .facets__inlay {
+        animation-timeline: --regroup;
+        animation-range: contain 76% contain 86%;
+      }
+
+      .js .facets__tagline,
+      .js .facets__blurb,
+      .js .facets__cta {
+        animation-timeline: --regroup;
+        animation-range: contain 78% contain 86%;
+      }
+
+      .js .facets__blurb {
+        animation-range: contain 81% contain 89%;
+      }
+
+      .js .facets__cta {
+        animation-range: contain 84% contain 92%;
+      }
+    }
+
+    // Pinned, scrubbed flagship: the track is 220svh, the stage sticks for the middle 120svh.
+    // Only on viewports tall enough to hold the stage; short landscape screens scroll the static layout.
+    @media (min-height: $bp-tall) {
+      .js .tile__track {
+        height: var(--pin-track);
+        view-timeline: --tile block;
+      }
+
+      // min-height, not height: a stage taller than the viewport (small screens) grows inside its track instead of
+      // overflowing into the next slab, and its lower part scrolls into view as the pin releases.
+      .js .tile__stage {
+        position: sticky;
+        top: 0;
+        min-height: 100svh;
+      }
+
+      .js .tile__frame {
+        animation: frame-open linear both;
+        animation-timeline: --tile;
+        animation-range: entry 45% contain 40%;
+      }
+
+      @media (min-width: $bp-md) {
+        .js .tile:nth-of-type(even) .tile__frame {
+          animation-name: frame-open-mirror;
+        }
+      }
+
+      // The inlay draws on once the panel has opened.
+      .js .tile__inlay {
+        animation: wipe-in linear backwards;
+        animation-timeline: --tile;
+        animation-range: contain 0% contain 35%;
+      }
+
+      .js .tile__img,
+      .js .tile__video {
+        animation: media-settle linear both;
+        animation-timeline: --tile;
+        animation-range: entry 45% contain 55%;
+      }
+
+      .js .tile__copy > * {
+        animation: rise-in linear both;
+        animation-timeline: --tile;
+        animation-range: contain 5% contain 30%;
+      }
+
+      .js .tile__copy > :nth-child(2) {
+        animation-range: contain 10% contain 35%;
+      }
+
+      .js .tile__copy > :nth-child(3) {
+        animation-range: contain 15% contain 40%;
+      }
+
+      .js .tile__copy > :nth-child(4) {
+        animation-range: contain 20% contain 45%;
+      }
+
+      .js .tile__copy > :nth-child(5) {
+        animation-range: contain 25% contain 50%;
+      }
+
+      .js .tile__tags {
+        animation: wipe-in linear backwards;
+        animation-timeline: --tile;
+        animation-range: contain 30% contain 55%;
+      }
+
+      .js .tile .signal-bubble {
+        animation: rise-in linear both;
+        animation-timeline: --tile;
+        animation-range: contain 25% contain 50%;
+      }
+    }
+
+    // Keyboard safety: focus can scroll a control into view before its scrub has revealed it,
+    // so any block holding focus drops its entrance and shows at rest.
+    .js .tile:focus-within .tile__copy > *,
+    .js .tile:focus-within .tile__frame,
+    .js .tile:focus-within .tile__tags,
+    .js .tile:focus-within .signal-bubble,
+    .js [data-reveal]:focus-within,
+    .js [data-reveal]:focus,
+    .js .facets:focus-within::before,
+    .js .facets:focus-within .intro-portrait,
+    .js .facets:focus-within .intro-portrait__img,
+    .js .facets:focus-within .intro-portrait__inlay,
+    .js .facets:focus-within .facet,
+    .js .facets:focus-within .facet::before,
+    .js .facets:focus-within .facet::after,
+    .js .facets:focus-within .gem__ring,
+    .js .facets:focus-within .gem__joint,
+    .js .facets:focus-within .facet__body,
+    .js .facets:focus-within .facet__body::before,
+    .js .facets:focus-within .facets__forged,
+    .js .facets:focus-within .facets__sheet,
+    .js .facets:focus-within .facets__inlay,
+    .js .facets:focus-within .facets__tagline,
+    .js .facets:focus-within .facets__tagline::before,
+    .js .facets:focus-within .facets__blurb,
+    .js .facets:focus-within .facets__cta {
+      animation: none;
+    }
+  }
+
+  // ---- Fallback: no scroll-driven animations (html.no-sda); home.js adds .is-in when a block enters ----
+  .js.no-sda [data-reveal],
+  .js.no-sda .tile__frame,
+  .js.no-sda .tile__copy > * {
+    transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out), translate var(--dur-base) var(--ease-out);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(2) {
+    transition-delay: var(--stagger);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(3) {
+    transition-delay: calc(var(--stagger) * 2);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(4) {
+    transition-delay: calc(var(--stagger) * 3);
+  }
+
+  .js.no-sda .tile__copy > :nth-child(5) {
+    transition-delay: calc(var(--stagger) * 4);
+  }
+
+  .js.no-sda [data-reveal]:not(.is-in):not(:focus-within),
+  .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__frame,
+  .js.no-sda .tile:not(.is-in):not(:focus-within) .tile__copy > * {
+    opacity: 0;
+    transform: translateY(var(--rise));
+  }
+}
+
+// Reduced motion: nothing above applies (all of it sits in no-preference), so every block is visible and in place,
+// the pin collapses, and home.js paints one static vein frame and never autoplays video. What remains is made static here.
+@media (prefers-reduced-motion: reduce) {
+  .hero__cue-line {
+    background-position: 0 0;
+  }
+
+  .btn,
+  .theme-toggle,
+  .site-nav__link::after,
+  .signal-bubble,
+  .tile__frame::before,
+  .facets__sheen::before {
+    transition: none;
+  }
+}

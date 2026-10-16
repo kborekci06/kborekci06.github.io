@@ -1,0 +1,171 @@
+// Element defaults, links, focus, skip link, buttons. Components live in sibling partials; all motion lives in _motion.scss.
+
+// Glass: translucent tokenized surface, 1px light rim, edge ring plus drop shadow (--glass-* per slab context, _tokens.scss).
+// The solid fallback is the default and the translucent surface applies only where backdrop-filter is supported,
+// so text contrast never depends on blur. $surface picks the density: --glass-surface or --glass-surface-strong.
+@mixin glass($surface: var(--glass-surface)) {
+  border: var(--vein-width) solid var(--glass-border);
+  background-color: var(--glass-fallback);
+  box-shadow: var(--glass-shadow);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: $surface;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  @include slab-base;
+  scroll-padding-top: var(--header-height); // in-page anchors land below the sticky glass header
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-body);
+  text-align: left;
+  font-kerning: normal;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-stretch: calc(var(--width-heading) * 1%);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+p,
+ul,
+figure,
+address {
+  margin: 0;
+  font-style: normal;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+// Links are underlined at rest in the slab's accent (CLAUDE.md §4); hover thickens the line.
+a {
+  color: var(--s-accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--vein-width);
+  text-underline-offset: var(--underline-offset);
+}
+
+a:hover {
+  text-decoration-thickness: var(--vein-width-strong);
+}
+
+// One focus ring for every interactive element: the slab accent, >= 3:1 on both slab surfaces in both themes.
+:focus-visible {
+  outline: var(--focus-width) solid var(--s-accent);
+  outline-offset: var(--focus-offset);
+}
+
+main:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: var(--z-skip);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-text);
+  color: var(--color-surface);
+  font-weight: var(--weight-medium);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Buttons: two shapes shared by every slab. Solid = slab text colour as fill; line = hairline vein border.
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-5);
+  border: var(--vein-width) solid var(--s-text);
+  border-radius: var(--radius-control);
+  font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn--solid {
+  background-color: var(--s-text);
+  color: var(--s-surface);
+}
+
+.btn--line {
+  @include glass;
+  border-color: var(--s-vein-strong); // keeps the hairline outline over the glass rim: the button reads at rest
+  color: var(--s-text);
+}
+
+.btn--line:hover,
+.btn--line[aria-pressed="true"] {
+  border-color: var(--s-text);
+}
+
+.btn[hidden] {
+  display: none;
+}
+
+// Utility for markup that only needs the panel treatment (includes prefer the mixin inside their own class).
+.glass {
+  @include glass;
+}
