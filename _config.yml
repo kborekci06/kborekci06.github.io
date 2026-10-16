@@ -17,6 +17,7 @@ permalink: pretty
 
 sass:
   style: compressed
+  load_paths: ["."] # experiments import their own scss/ by path, e.g. @import "experiments/marble/onyx/scss/site"
   # @import -> @use migration is DES-010 work (minima retirement); color-functions and global-builtin are minima's
   silence_deprecations:
     - import
