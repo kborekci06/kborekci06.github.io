@@ -18,11 +18,13 @@ permalink: pretty
 sass:
   style: compressed
   load_paths: ["."] # experiments import their own scss/ by path, e.g. @import "experiments/marble/onyx/scss/site"
-  # @import -> @use migration is DES-010 work (minima retirement); color-functions and global-builtin are minima's
+  # @import -> @use migration is DES-010 work (minima retirement); color-functions and global-builtin are minima's;
+  # if-function is the archived intro variants' (experiments/intro/{shard,strata}), which are not maintained
   silence_deprecations:
     - import
     - color-functions
     - global-builtin
+    - if-function
 
 # Tell minima which pages to put in the header nav:
 header_pages:
@@ -48,6 +50,7 @@ exclude:
   - Gemfile.lock
   - vercel.json
   - skills-lock.json
+  - experiments/*/*/README.md
   - vendor
   - node_modules
   - .bundle
