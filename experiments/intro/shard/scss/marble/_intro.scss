@@ -1,0 +1,571 @@
+// Home intro (_partials/home-intro.html), shard: the portrait, three pillar shards and the Forged panel (tagline, blurb,
+// link) on one stone cut by a vein; then the work heading that follows on the same base slab.
+// Static state here is the settled one (act 2; JS off, reduced motion): portrait and panel butted on one seam, the
+// pillars as the panel's top course (their own glass fused into it, so hidden at rest).
+// Stacked (below lg) the seam is the vein itself: the portrait's lower edge and the panel's top edge rise at
+// --intro-vein-slope across the full width (100cqw: .facets is an inline-size container). Side by side (lg) the portrait
+// is a parallelogram leaning --intro-lean over its height; the panel's left edge is cut on the same line.
+// Side by side, each panel block is indented by the seam's x at its own bottom (home.js §5; flat --intro-lean without JS).
+// Act 1 (pinned) and every transition are in _motion.scss; they read, per piece (home.js §5 writes all but the shut ones):
+//   --a1-x / --a1-y / --a1-s     offset from the settled box to the act-1 place; the portrait's act-1 scale
+//   --a1-cut / --a1-edge         a course's act-1 outline and its lit cut edge; the settled ones are --fit / --fit-edge
+//                                (pinned: px polygons on a glass extended --a1-ext / --a1-ext-r left / right of the box)
+//   --a2-x1 / --a2-y1            Software's and People's waypoint in act 2 (their column, at their act-1 height)
+//   --a2-lean                    the seam's lean across Hardware's box (lg; its cell is widened and indented by it)
+//   --indent-t / --indent-j      the seam's x at the tagline's and the joint's bottom (lg)
+//   --vein-x / --vein-y / --vein-rot   the act-1 vein: a point on the seam and the seam's angle
+//   --shut / --shut-in           the portrait (and photo) closed onto its seam edge before it opens
+//   --forged-shut                the Forged glass closed onto the seam before it is cut open
+
+@function pts($list) {
+  $s: "";
+  @each $p in $list {
+    $s: if($s == "", $p, "#{$s}, #{$p}");
+  }
+  @return unquote($s);
+}
+
+@function poly($list) {
+  @return unquote("polygon(#{pts($list)})");
+}
+
+// Lit cut edge: the outline and the outline inset by one vein, even-odd filled; both loops close on their first point.
+@function edge($out, $in) {
+  @return unquote("polygon(evenodd, #{pts($out)}, #{nth($out, 1)}, #{pts($in)}, #{nth($in, 1)})");
+}
+
+// Open inlay ring: a band between the path at offset $o and the path at $o + $t, the second walked back, so the ring
+// stops short of the seam instead of running a second line beside it.
+@function band($out, $in) {
+  $back: ();
+  @for $i from length($in) through 1 {
+    $back: append($back, nth($in, $i), comma);
+  }
+  @return poly(join($out, $back, comma));
+}
+
+$c: var(--intro-chamfer);
+$cw: var(--intro-cut-wide);
+$m: var(--intro-miter);
+$d: var(--intro-inset);
+$v: var(--vein-width);
+$vs: var(--vein-width-strong);
+$L: var(--intro-lean);
+$hl: var(--a2-lean, var(--intro-lean)); // lg: the seam's lean across the Hardware cell (home.js §5), else the full lean
+$rc: unquote("calc(var(--intro-chamfer) - var(--intro-inset) * var(--intro-miter))");
+$rw: unquote("calc(var(--intro-cut-wide) - var(--intro-inset) * var(--intro-miter))");
+$rise: unquote("calc(var(--intro-portrait-w) * var(--intro-vein-slope))"); // stacked: the portrait's lower edge rises this much
+$kf: unquote("calc(100cqw * var(--intro-vein-slope))");                   // stacked: the panel's top edge rises this much
+$halo-o: unquote("calc(var(--vein-width) * -2)");
+$halo-t: unquote("calc(var(--vein-width-strong) + var(--vein-width) * 4)");
+
+// Portrait ring paths at offset $q inside the ring box (the portrait inset by --intro-inset). Stacked: open along the
+// lower edge (the seam); side by side: open along the right edge (the seam).
+@function ring-stacked($q) {
+  @return (
+    "#{$q} 100%",
+    "#{$q} calc(#{$rc} + #{$q} * #{$m})",
+    "calc(#{$rc} + #{$q} * #{$m}) #{$q}",
+    "calc(100% - #{$rc} - #{$q} * #{$m}) #{$q}",
+    "calc(100% - #{$q}) calc(#{$rc} + #{$q} * #{$m})",
+    "calc(100% - #{$q}) calc(100% - #{$rise})"
+  );
+}
+
+@function ring-lean($q) {
+  @return (
+    "calc(100% - #{$L}) #{$q}",
+    "calc(#{$rc} + #{$q} * #{$m}) #{$q}",
+    "#{$q} calc(#{$rc} + #{$q} * #{$m})",
+    "calc(#{$L} + #{$q}) calc(100% - #{$q})",
+    "100% calc(100% - #{$q})"
+  );
+}
+
+// Panel ring paths (the panel inset by --intro-inset), open along the seam: the top edge stacked, the left edge lg.
+@function panel-stacked($q) {
+  @return (
+    "calc(100% - #{$q}) 0px",
+    "calc(100% - #{$q}) calc(100% - #{$rw} - #{$q} * #{$m})",
+    "calc(100% - #{$rw} - #{$q} * #{$m}) calc(100% - #{$q})",
+    "calc(#{$rc} + #{$q} * #{$m}) calc(100% - #{$q})",
+    "#{$q} calc(100% - #{$rc} - #{$q} * #{$m})",
+    "#{$q} #{$kf}"
+  );
+}
+
+@function panel-lean($q) {
+  @return (
+    "0px #{$q}",
+    "calc(100% - #{$rc} - #{$q} * #{$m}) #{$q}",
+    "calc(100% - #{$q}) calc(#{$rc} + #{$q} * #{$m})",
+    "calc(100% - #{$q}) calc(100% - #{$rw} - #{$q} * #{$m})",
+    "calc(100% - #{$rw} - #{$q} * #{$m}) calc(100% - #{$q})",
+    "#{$L} calc(100% - #{$q})"
+  );
+}
+
+// Shard outlines, eight vertices each (clockwise from the top-left), so every outline interpolates into every other.
+// $i is the same outline inset by one vein (the lit cut edge).
+$rect: ("0 0", "100% 0", "100% 0", "100% 100%", "100% 100%", "0 100%", "0 100%", "0 0");
+$rect-i: ("#{$v} #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(100% - #{$v}) calc(100% - #{$v})", "#{$v} calc(100% - #{$v})", "#{$v} calc(100% - #{$v})", "#{$v} #{$v}");
+// Stacked arrival: a shard with two opposite corners cut.
+$sh: ("#{$c} 0", "100% 0", "100% 0", "100% calc(100% - #{$c})", "calc(100% - #{$c}) 100%", "0 100%", "0 100%", "0 #{$c}");
+$sh-i: ("calc(#{$c} + #{$v} * #{$m}) #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) calc(100% - #{$c} - #{$v} * #{$m})", "calc(100% - #{$c} - #{$v} * #{$m}) calc(100% - #{$v})", "#{$v} calc(100% - #{$v})", "#{$v} calc(100% - #{$v})", "#{$v} calc(#{$c} + #{$v} * #{$m})");
+
+.intro {
+  overflow-x: clip; // the vein and arriving shards may reach past the gutter; never a horizontal scroll
+  padding-block: var(--slab-pad) var(--space-8);
+}
+
+.facets {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(4, auto);
+  container-type: inline-size; // 100cqw: the stacked seam rises across the full width
+}
+
+// Backlight behind the glass: the hero's warm halo, blurred by the panels in front of it.
+.facets::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--space-8) * -1) 0;
+  background-image: var(--hero-backlight);
+  pointer-events: none;
+}
+
+// Portrait: the face. The figure is filled with the accent and the photo is cut one vein inside the figure's outline,
+// so the stone's cut edge shows as a lit hairline in every act. It sits above every other piece: nothing passes over it.
+.intro-portrait {
+  --fit: #{poly(("#{$c} 0", "calc(100% - #{$c}) 0", "100% #{$c}", "100% calc(100% - #{$rise})", "100% calc(100% - #{$rise})", "0 100%", "0 100%", "0 #{$c}"))};
+  --fit-in: #{poly(("calc(#{$c} + #{$v} * #{$m}) #{$v}", "calc(100% - #{$c} - #{$v} * #{$m}) #{$v}", "calc(100% - #{$v}) calc(#{$c} + #{$v} * #{$m})", "calc(100% - #{$v}) calc(100% - #{$rise} - #{$v})", "calc(100% - #{$v}) calc(100% - #{$rise} - #{$v})", "#{$v} calc(100% - #{$v})", "#{$v} calc(100% - #{$v})", "#{$v} calc(#{$c} + #{$v} * #{$m})"))};
+  --shut: #{poly(("#{$c} 100%", "calc(100% - #{$c}) calc(100% - #{$rise})", "100% calc(100% - #{$rise})", "100% calc(100% - #{$rise})", "100% calc(100% - #{$rise})", "0 100%", "0 100%", "0 100%"))};
+  --ring: #{band(ring-stacked(0px), ring-stacked($vs))};
+  --halo: #{band(ring-stacked($halo-o), ring-stacked(unquote("calc(#{$halo-o} + #{$halo-t})")))};
+  position: relative;
+  z-index: 3;
+  grid-area: 1 / 1;
+  justify-self: start;
+  width: var(--intro-portrait-w);
+  min-height: calc(var(--intro-portrait-w) * var(--intro-portrait-tall));
+  margin: 0;
+  overflow: clip;
+  background-color: var(--s-accent);
+  clip-path: var(--fit);
+}
+
+.intro-portrait__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--intro-face-pos);
+  clip-path: var(--fit-in);
+}
+
+// Inlay hairline inside the portrait's edge, open on the seam side (the seam is the one line there), never across the
+// face: glow on the holder, a surface-coloured channel on ::before either side of the ring, the ring on ::after.
+.intro-portrait__inlay {
+  position: absolute;
+  inset: var(--intro-inset);
+  filter: drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+  pointer-events: none;
+}
+
+.intro-portrait__inlay::before,
+.intro-portrait__inlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.intro-portrait__inlay::before {
+  background-color: var(--s-surface);
+  clip-path: var(--halo);
+}
+
+.intro-portrait__inlay::after {
+  background-color: var(--s-accent);
+  clip-path: var(--ring);
+}
+
+// The seam: the one lit line where the portrait and the panel butt (the vein, turned upright at lg).
+.facets__seam {
+  position: relative;
+  z-index: 4;
+  grid-area: 2 / 1 / 3 / -1;
+  align-self: start;
+  height: calc(#{$kf} + var(--space-3));
+  margin-top: calc(#{$kf} * -1);
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+  pointer-events: none;
+}
+
+.facets__seam::before {
+  content: "";
+  position: absolute;
+  inset: calc(#{$vs} * -1) 0 0;
+  background-color: var(--s-accent);
+  clip-path: polygon(0 calc(#{$kf} + #{$vs} / 2), 100% calc(#{$vs} / 2), 100% calc(#{$vs} * 1.5), 0 calc(#{$kf} + #{$vs} * 1.5));
+}
+
+// The act-1 vein: two lit halves along the seam, out of a point on it (--vein-x/-y/-rot from home.js §5), on to the
+// stage's edges. Shown only by the pinned scrub.
+.facets__vein {
+  position: absolute;
+  z-index: 1;
+  top: var(--vein-y, 50%);
+  left: var(--vein-x, 50%);
+  display: none;
+  width: 0;
+  height: 0;
+  rotate: var(--vein-rot, 90deg);
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+  pointer-events: none;
+}
+
+.facets__vein::before,
+.facets__vein::after {
+  content: "";
+  position: absolute;
+  top: calc(#{$vs} / -2);
+  width: 100vw;
+  height: $vs;
+  background-color: var(--s-accent);
+}
+
+.facets__vein::before {
+  left: 0;
+  transform-origin: left center;
+}
+
+.facets__vein::after {
+  right: 0;
+  transform-origin: right center;
+}
+
+// Glass: a shard's own (act 1 and the entrance, fused into the panel at rest) and the Forged stone's.
+.facet::before,
+.facets__forged {
+  background-color: var(--s-surface-2);
+  box-shadow: var(--glass-shadow);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: color-mix(in srgb, var(--s-surface-2) var(--intro-glass-mix), transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+// The Forged stone: the whole panel (one blur sheet), cut on the seam; the pillars are its top course, the tagline,
+// blurb and link its body.
+.facets__forged,
+.facets__inlay,
+.facets__sheen {
+  --panel: #{poly(("0 #{$kf}", "100% 0", "100% 0", "100% calc(100% - #{$cw})", "calc(100% - #{$cw}) 100%", "#{$c} 100%", "0 calc(100% - #{$c})", "0 #{$kf}"))};
+  position: relative;
+  grid-area: 2 / 1 / -1 / -1;
+  margin-top: calc(#{$kf} * -1);
+  pointer-events: none;
+}
+
+.facets__forged {
+  --forged-shut: #{poly(("0 #{$kf}", "100% 0", "100% 0", "100% 0", "calc(100% - #{$cw}) calc(#{$cw} * var(--intro-vein-slope))", "#{$c} calc(#{$kf} - #{$c} * var(--intro-vein-slope))", "0 #{$kf}", "0 #{$kf}"))};
+  clip-path: var(--panel);
+}
+
+.facets__set {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-area: 2 / 1 / 3 / -1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// One shard: its glass on ::before and its lit cut edge on ::after, both on the settled outline (--fit) at rest and
+// hidden (fused into the Forged stone); the entrance and the pinned scrub show them.
+.facet {
+  --fit: #{poly($rect)};
+  --fit-edge: #{edge($rect, $rect-i)};
+  --a1-cut: #{poly($sh)};
+  --a1-edge: #{edge($sh, $sh-i)};
+  position: relative;
+  display: grid;
+}
+
+.facet::before,
+.facet::after {
+  content: "";
+  position: absolute;
+  inset: 0 calc(var(--a1-ext-r, 0px) * -1) 0 calc(var(--a1-ext, 0px) * -1);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.facet::before {
+  clip-path: var(--fit);
+}
+
+.facet::after {
+  background-color: var(--s-accent);
+  clip-path: var(--fit-edge);
+}
+
+.facet__body {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--intro-pad);
+}
+
+// Seams between the pillars and above the tagline, drawn on as the panel settles (_motion.scss scales them from
+// --seam-sx/--seam-sy). Horizontal when stacked, vertical between columns from md.
+.facet + .facet > .facet__body::before,
+.facets__tagline::before {
+  --seam-sx: 0;
+  --seam-sy: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: var(--intro-inset);
+  left: var(--intro-inset);
+  height: var(--vein-width);
+  background-color: var(--s-accent);
+  box-shadow: 0 0 var(--space-1) var(--inlay-glow);
+  transform-origin: left center;
+}
+
+.facet__label {
+  font-size: var(--step-2);
+}
+
+.facet__line {
+  max-width: 34ch;
+  color: var(--s-muted);
+  line-height: var(--leading-snug);
+}
+
+.facets__tagline,
+.facets__joint {
+  position: relative;
+  z-index: 2;
+  grid-column: 1 / -1;
+  padding-inline: var(--intro-pad);
+}
+
+.facets__tagline {
+  grid-row: 3;
+  padding-top: var(--intro-pad);
+  font-size: var(--step-3);
+}
+
+.facets__joint {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  grid-row: 4;
+  padding-block: var(--space-4) var(--intro-pad);
+}
+
+.facets__blurb {
+  max-width: 52ch;
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+}
+
+// Panel inlay: one ring inside the panel's edge, open along the seam, glowing like the tile inlays.
+.facets__inlay,
+.facets__sheen {
+  z-index: 2;
+}
+
+.facets__inlay {
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+}
+
+.facets__inlay::before {
+  content: "";
+  position: absolute;
+  inset: var(--intro-inset);
+  background-color: var(--s-accent);
+  clip-path: #{band(panel-stacked(0px), panel-stacked($v))};
+}
+
+// Polished sheen across the panel on hover or focus (as on the tile frames).
+.facets__sheen {
+  overflow: clip;
+  clip-path: var(--panel);
+}
+
+.facets__sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--sheen);
+  translate: -100% 0;
+}
+
+.work__head {
+  padding-block: var(--space-7) var(--slab-pad);
+}
+
+.work__title {
+  font-size: var(--step-4);
+  font-stretch: calc(var(--width-display) * 1%);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+// Three columns: pillars side by side under the portrait; seams turn vertical.
+@media (min-width: $bp-md) {
+  .facets__set {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .facet + .facet > .facet__body::before {
+    --seam-sx: 1;
+    --seam-sy: 0;
+    top: var(--intro-inset);
+    right: auto;
+    bottom: 0;
+    left: 0;
+    width: var(--vein-width);
+    height: auto;
+    transform-origin: center top;
+  }
+
+  .facets__joint {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    padding-inline-end: var(--intro-cut-wide); // the link clears the wide lower cut
+  }
+}
+
+// Side by side: the portrait column is --intro-lean narrower than the portrait, whose parallelogram leans into the
+// panel's column by that much; the panel's left edge is cut on the same line. Hardware's cell is wider than the others
+// by the seam's lean across it (--a2-lean) and its text indented by that; the tagline and the joint are indented by
+// the seam's x at their own bottom, so every text column clears the seam and no more.
+// One-act arrival outlines (CSS; the pinned ones are measured): every course's left edge cut on the seam's lean,
+// Hardware with the panel's top-right chamfer, People with its wide lower-right cut.
+@media (min-width: $bp-lg) {
+  .facets {
+    grid-template-columns: calc(var(--intro-portrait-w) - var(--intro-lean)) minmax(0, 1fr);
+    grid-template-rows: repeat(3, auto);
+  }
+
+  .intro-portrait {
+    --fit: #{poly(("#{$c} 0", "calc(100% - #{$L}) 0", "calc(100% - #{$L}) 0", "100% 100%", "100% 100%", "#{$L} 100%", "#{$L} 100%", "0 #{$c}"))};
+    --fit-in: #{poly(("calc(#{$c} + #{$v} * #{$m}) #{$v}", "calc(100% - #{$L} - #{$v}) #{$v}", "calc(100% - #{$L} - #{$v}) #{$v}", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(#{$L} + #{$v}) calc(100% - #{$v})", "calc(#{$L} + #{$v}) calc(100% - #{$v})", "#{$v} calc(#{$c} + #{$v} * #{$m})"))};
+    --shut: #{poly(("calc(100% - #{$L}) 0", "calc(100% - #{$L}) 0", "calc(100% - #{$L}) 0", "100% 100%", "100% 100%", "100% 100%", "100% 100%", "calc(100% - #{$L}) 0"))};
+    --ring: #{band(ring-lean(0px), ring-lean($vs))};
+    --halo: #{band(ring-lean($halo-o), ring-lean(unquote("calc(#{$halo-o} + #{$halo-t})")))};
+    grid-column: 1;
+    grid-row: 1 / -1;
+    min-height: var(--intro-portrait-w); // square at least; the panel sets the height
+  }
+
+  .facets__seam {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: stretch;
+    justify-self: start;
+    width: var(--intro-portrait-w);
+    height: auto;
+    margin-top: 0;
+  }
+
+  .facets__seam::before {
+    inset: 0 calc(#{$vs} * -1) 0 0;
+    clip-path: polygon(calc(100% - #{$vs} * 1.5 - #{$L}) 0, calc(100% - #{$vs} / 2 - #{$L}) 0, calc(100% - #{$vs} / 2) 100%, calc(100% - #{$vs} * 1.5) 100%);
+  }
+
+  .facets__set {
+    grid-template-columns: calc((100% - #{$hl}) / 3 + #{$hl}) repeat(2, calc((100% - #{$hl}) / 3));
+  }
+
+  .facets__set,
+  .facets__tagline,
+  .facets__joint {
+    grid-column: 2;
+  }
+
+  .facets__set {
+    grid-row: 1;
+  }
+
+  .facets__tagline {
+    grid-row: 2;
+  }
+
+  .facets__joint {
+    grid-row: 3;
+  }
+
+  .facet:nth-child(1) > .facet__body {
+    padding-inline-start: calc(var(--intro-pad) + #{$hl});
+  }
+
+  .facets__tagline {
+    padding-inline-start: calc(var(--intro-pad) + var(--indent-t, #{$L}));
+  }
+
+  .facets__joint {
+    padding-inline-start: calc(var(--intro-pad) + var(--indent-j, #{$L}));
+  }
+
+  .facets__tagline::before {
+    left: calc(#{$hl} + var(--intro-inset)); // starts clear of the seam
+  }
+
+  .facets__forged,
+  .facets__inlay,
+  .facets__sheen {
+    --panel: #{poly(("0 0", "calc(100% - #{$c}) 0", "100% #{$c}", "100% calc(100% - #{$cw})", "calc(100% - #{$cw}) 100%", "#{$L} 100%", "#{$L} 100%", "0 0"))};
+    grid-area: 1 / 2 / -1 / -1;
+    margin-top: 0;
+  }
+
+  .facets__forged {
+    --forged-shut: #{poly(("0 0", "0 0", "0 0", "#{$L} 100%", "#{$L} 100%", "#{$L} 100%", "#{$L} 100%", "0 0"))};
+  }
+
+  .facets__inlay::before {
+    clip-path: #{band(panel-lean(0px), panel-lean($v))};
+  }
+
+  $h-fit: ("0 0", "100% 0", "100% 0", "100% 100%", "100% 100%", "var(--a2-lean, 0px) 100%", "var(--a2-lean, 0px) 100%", "0 0");
+  $h-fit-i: ("#{$v} #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(var(--a2-lean, 0px) + #{$v}) calc(100% - #{$v})", "calc(var(--a2-lean, 0px) + #{$v}) calc(100% - #{$v})", "#{$v} #{$v}");
+  $l: var(--a2-lean, 0px);
+  $h-a1: ("0 0", "calc(100% - #{$c}) 0", "100% #{$c}", "100% 100%", "100% 100%", "#{$l} 100%", "#{$l} 100%", "0 0");
+  $h-a1-i: ("#{$v} #{$v}", "calc(100% - #{$c} - #{$v} * #{$m}) #{$v}", "calc(100% - #{$v}) calc(#{$c} + #{$v} * #{$m})", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(#{$l} + #{$v}) calc(100% - #{$v})", "calc(#{$l} + #{$v}) calc(100% - #{$v})", "#{$v} #{$v}");
+  $s-a1: ("0 0", "100% 0", "100% 0", "100% 100%", "100% 100%", "#{$l} 100%", "#{$l} 100%", "0 0");
+  $s-a1-i: ("#{$v} #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(#{$l} + #{$v}) calc(100% - #{$v})", "calc(#{$l} + #{$v}) calc(100% - #{$v})", "#{$v} #{$v}");
+  $p-fit: ("0 0", "calc(100% - #{$c}) 0", "100% #{$c}", "100% 100%", "100% 100%", "0 100%", "0 100%", "0 0");
+  $p-fit-i: ("#{$v} #{$v}", "calc(100% - #{$c} - #{$v} * #{$m}) #{$v}", "calc(100% - #{$v}) calc(#{$c} + #{$v} * #{$m})", "calc(100% - #{$v}) calc(100% - #{$v})", "calc(100% - #{$v}) calc(100% - #{$v})", "#{$v} calc(100% - #{$v})", "#{$v} calc(100% - #{$v})", "#{$v} #{$v}");
+  $p-a1: ("0 0", "100% 0", "100% 0", "100% calc(100% - #{$cw})", "calc(100% - #{$cw}) 100%", "#{$l} 100%", "#{$l} 100%", "0 0");
+  $p-a1-i: ("#{$v} #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) #{$v}", "calc(100% - #{$v}) calc(100% - #{$cw} - #{$v} * #{$m})", "calc(100% - #{$cw} - #{$v} * #{$m}) calc(100% - #{$v})", "calc(#{$l} + #{$v}) calc(100% - #{$v})", "calc(#{$l} + #{$v}) calc(100% - #{$v})", "#{$v} #{$v}");
+
+  .facet:nth-child(1) {
+    --fit: #{poly($h-fit)};
+    --fit-edge: #{edge($h-fit, $h-fit-i)};
+    --a1-cut: #{poly($h-a1)};
+    --a1-edge: #{edge($h-a1, $h-a1-i)};
+  }
+
+  .facet:nth-child(2) {
+    --a1-cut: #{poly($s-a1)};
+    --a1-edge: #{edge($s-a1, $s-a1-i)};
+  }
+
+  .facet:nth-child(3) {
+    --fit: #{poly($p-fit)};
+    --fit-edge: #{edge($p-fit, $p-fit-i)};
+    --a1-cut: #{poly($p-a1)};
+    --a1-edge: #{edge($p-a1, $p-a1-i)};
+  }
+}

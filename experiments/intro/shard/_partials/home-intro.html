@@ -1,0 +1,47 @@
+{%- comment -%}
+  Home intro, shard: two acts on one pinned stage. Act 1: one fitted stone. The portrait (a parallelogram, its right
+  edge leaning on the vein) and a column of three level courses beside it, Hardware over Software over People, each
+  left edge cut on that leaning seam; the vein runs along the seam to the stage edges. Act 2: the vein draws back, the
+  portrait shrinks to its column, the column fans into one row beside it, the seam grows back along the portrait's
+  edge and the Forged panel (tagline, blurb, link) is cut open from it. The markup is the settled layout; act-1
+  places, outlines and the vein are written by js/home.js §5.
+  Copy renders only from _data/experiments/intro/shard/pillars.yml (contract in its header); the portrait from include.portrait (index.md front
+  matter, rendered by responsive-image.html). DOM order is heading, portrait, pillars, blurb, link; the grid places them.
+  Styles: scss/marble/_intro.scss; motion: scss/marble/_motion.scss (data-reveal gives the IntersectionObserver
+  fallback in js/home.js §2).
+{%- endcomment -%}
+{%- assign d = site.data.experiments.intro.shard.pillars -%}
+<section class="intro slab slab--base slab--cut" id="intro" aria-labelledby="intro-title">
+  <div class="intro__track">
+    <div class="intro__stage container">
+      <div class="facets" data-reveal data-shard>
+        <h2 class="facets__tagline" id="intro-title">{{ d.tagline }}</h2>
+        <span class="facets__forged" aria-hidden="true"></span>
+        <span class="facets__vein" aria-hidden="true"></span>
+        {%- if include.portrait %}
+        <figure class="intro-portrait">
+          {% include_relative _partials/responsive-image.html image=include.portrait class="intro-portrait__img" sizes=include.portrait.sizes %}
+          <span class="intro-portrait__inlay" aria-hidden="true"></span>
+        </figure>
+        {%- endif %}
+        <span class="facets__seam" aria-hidden="true"></span>
+        <ul class="facets__set" aria-label="Pillars">
+          {%- for p in d.pillars %}
+          <li class="facet facet--{{ p.id }}">
+            <div class="facet__body">
+              <h3 class="facet__label">{{ p.label }}</h3>
+              <p class="facet__line">{{ p.line }}</p>
+            </div>
+          </li>
+          {%- endfor %}
+        </ul>
+        <div class="facets__joint">
+          <p class="facets__blurb">{{ d.blurb }}</p>
+          <a class="btn btn--line facets__cta" href="{{ d.cta.url | relative_url }}">{{ d.cta.label }}</a>
+        </div>
+        <span class="facets__inlay" aria-hidden="true"></span>
+        <span class="facets__sheen" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</section>

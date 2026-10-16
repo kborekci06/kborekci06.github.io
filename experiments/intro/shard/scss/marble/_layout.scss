@@ -1,0 +1,90 @@
+// Page frame and slabs. A slab is a full-width section whose context (--s-*) is base or inverse;
+// every component inside reads --s-*, so one class flips a whole section (tokens: scss/_tokens.scss component layer).
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.slab {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--s-surface);
+  background-image: var(--s-gradient);
+  color: var(--s-text);
+}
+
+.slab--base {
+  @include slab-base;
+}
+
+.slab--inverse {
+  @include slab-inverse;
+}
+
+// Night: dark in both themes (header over media, etc.). The hero no longer uses it: it follows the theme.
+.slab--night {
+  @include slab-night;
+}
+
+// The stone: a page-fixed canvas behind everything on Home (js/home.js paints generated onyx strata and a
+// travelling backlight). Slabs above it are glass, so the pattern flows on under the whole page as it scrolls.
+.stone {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.has-hero .slab {
+  background-color: color-mix(in srgb, var(--s-surface) var(--stone-slab-alpha), transparent);
+}
+
+.has-hero .hero {
+  background: none;
+}
+
+// Grain: SVG noise at low opacity over every slab, under its content.
+.slab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--p-grain);
+  opacity: var(--s-grain-opacity);
+  pointer-events: none;
+}
+
+// Angled top edge: the slab cuts diagonally into the one above it (marble veined geometry).
+.slab--cut {
+  margin-top: calc(var(--cut) * -1);
+  padding-top: var(--cut);
+  clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+}
+
+// Inlay: the hairline inset from a fitted panel's edge (tile frames, the portrait), in the slab accent with a honey glow.
+// SVG so it follows the chamfers; the surface-coloured halo keeps it legible over bright and dark media.
+.inlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  stroke: var(--s-accent);
+  stroke-width: var(--vein-width);
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+}
+
+// Eyebrow-sized labels (<= 3 words): nav, org names. Sentence case; letterspacing only.
+.label {
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  line-height: var(--leading-snug);
+}

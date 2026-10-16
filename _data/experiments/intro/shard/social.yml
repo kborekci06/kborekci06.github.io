@@ -1,0 +1,10 @@
+# Profile links and resume, read by _partials/site-footer.html and _partials/schema-person.html (sameAs).
+# Email lives in _config.yml author.email so it is defined once.
+profiles:
+  - label: LinkedIn
+    url: https://www.linkedin.com/in/kborekci
+  - label: GitHub
+    url: https://github.com/kborekci06
+resume:
+  label: Resume (PDF, 73 KB)
+  url: /assets/KAAN-BOREKCI-RESUME.pdf

@@ -1,0 +1,19 @@
+{%- comment -%}
+  Site header: primary nav from _data/experiments/intro/shard/navigation.yml and the theme toggle (behaviour: theme-toggle-script.html).
+  On Home (body_class has-hero) it lies over the hero and scrolls away with it. Styles: scss/marble/_header.scss.
+{%- endcomment -%}
+<header class="site-header">
+  <div class="container site-header__inner">
+    <nav aria-label="Primary">
+      <ul class="site-nav__list">
+        {%- for item in site.data.experiments.intro.shard.navigation %}
+        <li><a class="site-nav__link" href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+    <button class="theme-toggle" type="button" aria-pressed="false" hidden>
+      <svg class="theme-toggle__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1a7 7 0 0 1 0 14z" fill="currentColor"/></svg>
+      <span class="theme-toggle__text">Dark theme</span>
+    </button>
+  </div>
+</header>

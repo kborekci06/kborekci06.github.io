@@ -1,0 +1,18 @@
+{%- comment -%}
+  Site footer: base slab with the onyx band layer. Name, email as display-size text, profiles and resume from _data/experiments/intro/shard/social.yml.
+  Styles: scss/marble/_footer.scss.
+{%- endcomment -%}
+<footer class="site-footer slab slab--base">
+  <div class="container site-footer__inner">
+    <p class="site-footer__name">{{ site.author.name }}</p>
+    <address class="site-footer__address">
+      <a class="site-footer__email" href="mailto:{{ site.author.email }}" data-reveal>{{ site.author.email }}</a>
+      <ul class="site-footer__list">
+        {%- for profile in site.data.experiments.intro.shard.social.profiles %}
+        <li><a class="site-footer__link" href="{{ profile.url }}">{{ profile.label }}</a></li>
+        {%- endfor %}
+        <li><a class="site-footer__link" href="{{ site.data.experiments.intro.shard.social.resume.url | relative_url }}" download>{{ site.data.experiments.intro.shard.social.resume.label }}</a></li>
+      </ul>
+    </address>
+  </div>
+</footer>

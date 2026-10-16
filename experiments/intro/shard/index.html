@@ -1,0 +1,47 @@
+---
+body_class: has-hero # header lies over the hero (scss/marble/_header.scss)
+scripts: [/experiments/intro/shard/js/home.js] # deferred; vein field, reveal fallback, tile video
+title: "Home"
+description: "Kaan Borekci: engineering and AI for improving quality of life for all."
+# Home copy. Sources: CONTEXT.md §1 (positioning, identity facts) and §3 (arc). Rendered by index.html.
+positioning: "Engineering and AI for improving quality of life for all."
+portrait:
+  src: /assets/img/portrait/kaan-borekci-720.webp
+  widths: [400, 720]
+  width: 720
+  height: 900
+  sizes: "(min-width: 64em) 26rem, (min-width: 48em) 22rem, 78vw" # mirrors --portrait-width in scss/_tokens.scss
+  alt: "Kaan Borekci on a tree-lined campus path, wearing a light blue shirt"
+work_heading: "Selected work"
+---
+<!doctype html>
+{%- comment -%}
+  Repo-owned base layout: skip link, header, main landmark, footer, toggle script.
+  Named base.html (not default.html) so the minima pages, which chain page -> default, keep rendering during the pilot.
+  page.body_class (optional) opts a page into a chrome variant, e.g. Home's header laid over the hero.
+  After sign-off and minima retirement: rename to default.html and update layout: keys.
+{%- endcomment %}
+<html lang="en">
+<head>
+{% include_relative _partials/head-meta.html %}
+</head>
+<body{% if page.body_class %} class="{{ page.body_class }}"{% endif %}>
+<a class="skip-link" href="#main">Skip to content</a>
+{% include_relative _partials/site-header.html %}
+<main id="main" tabindex="-1">
+{%- comment -%}
+  Home, slab by slab, all as glass over the page stone (.stone canvas, js/home.js): hero (base, transparent), intro (base, cut, portrait and pillars in two scrubbed acts), flagship tiles (alternating); footer from base.
+  Hero copy and the portrait come from index.md front matter, the intro from _data/experiments/intro/shard/pillars.yml; tiles from project front matter (_data/schema/project.yml).
+  Motion map: PILOT_REPORT.md §0.3, implemented in scss/marble/_motion.scss and js/home.js.
+{%- endcomment -%}
+<canvas class="stone" data-stone-field aria-hidden="true"></canvas>
+{% include_relative _partials/home-hero.html %}
+{% include_relative _partials/home-intro.html portrait=page.portrait %}
+{% include_relative _partials/featured-work.html title=page.work_heading %}
+
+
+</main>
+{% include_relative _partials/site-footer.html %}
+{% include_relative _partials/theme-toggle-script.html %}
+</body>
+</html>
