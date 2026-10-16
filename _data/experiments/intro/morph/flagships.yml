@@ -56,7 +56,7 @@
     active:
       freq: 0.5
       amp: 0.9
-  url: "/projects/diaphragm-control/"
+  url: "https://kborekci06.github.io/projects/diaphragm-control/"
 - title: Infant motion pipeline
   slug: infant-pose-pipeline
   description: Screening infant motor development from ordinary video, and a proposal
@@ -93,4 +93,4 @@
       height: 390
       alt: Video of an infant lying on its back, with pose-estimation keypoints, a
         skeleton and a bounding box tracking its movement
-  url: "/projects/infant-pose-pipeline/"
+  url: "https://kborekci06.github.io/projects/infant-pose-pipeline/"
