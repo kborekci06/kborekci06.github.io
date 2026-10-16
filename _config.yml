@@ -17,6 +17,10 @@ permalink: pretty
 
 sass:
   style: compressed
+  # @import -> @use migration is DES-010 work (minima retirement); color-functions are minima's
+  silence_deprecations:
+    - import
+    - color-functions
 
 # Tell minima which pages to put in the header nav:
 header_pages:
