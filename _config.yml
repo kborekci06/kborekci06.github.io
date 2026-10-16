@@ -37,6 +37,9 @@ exclude:
   - ROADMAP.md
   - Gemfile
   - Gemfile.lock
+  - vendor
+  - node_modules
+  - .bundle
   - RESUME_KAAN_BOREKCI_2026.pdf
   - onyx-pattern
   - PILOT_REPORT.md
