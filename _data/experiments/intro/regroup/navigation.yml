@@ -1,0 +1,10 @@
+# Primary navigation, read by _partials/site-header.html. List order is display order.
+# aria-current="page" is set when page.url equals url.
+- title: Home
+  url: /
+- title: Work
+  url: /experience/ # interim: the existing Experience page until the Work page (DES-013) lands at /work/
+- title: Story
+  url: /story/ # not built in the Phase 1 pilot; 404s until DES-014
+- title: Contact
+  url: /contact/

@@ -1,0 +1,54 @@
+// Site footer (_partials/site-footer.html): base slab with the band layer. Email as display-size text, profile links on a lit band.
+
+.site-footer {
+  padding-block: var(--slab-pad) var(--space-7);
+}
+
+.site-footer__inner {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.site-footer__name {
+  color: var(--s-muted);
+  font-size: var(--step-0);
+  font-weight: var(--weight-medium);
+}
+
+.site-footer__address {
+  display: grid;
+  gap: var(--space-7);
+}
+
+// The email is the footer's focal line: display face, underlined at rest like every link.
+.site-footer__email {
+  justify-self: start;
+  max-width: 100%;
+  padding-block: var(--space-2); // keeps the target >= 44px when the display size shrinks on phones
+  color: var(--s-text);
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: var(--weight-display);
+  font-stretch: calc(var(--width-heading) * 1%);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-heading);
+  text-decoration-color: var(--s-accent);
+  text-decoration-thickness: var(--vein-width-strong);
+  overflow-wrap: anywhere;
+}
+
+.site-footer__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  padding: var(--space-5) 0 0;
+  border-top: var(--vein-width) solid var(--s-vein-strong);
+  border-image: linear-gradient(90deg, var(--s-vein-strong), var(--s-accent) 30%, var(--s-vein) 85%) 1; // a caramel band lit toward the left
+  list-style: none;
+}
+
+.site-footer__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+}

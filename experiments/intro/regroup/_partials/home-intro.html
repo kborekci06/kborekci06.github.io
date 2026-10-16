@@ -1,0 +1,46 @@
+{%- comment -%}
+  Home intro, regroup: two acts on one pinned stage. Act 1: the three pillar stones lock around the portrait, cut as a
+  keystone (variant C's composite: side stones cut to its taper, People on the seat under it, one outer ring). Act 2:
+  every piece re-cuts to its settled outline as it travels into the settled layout (portrait left, pillars as a row, the
+  Forged panel with tagline, blurb and link cut under them). The markup is the settled layout;
+  act-1 places, routes and the ring are written by js/home.js §5.
+  Copy renders only from _data/experiments/intro/regroup/pillars.yml (contract in its header); the portrait from include.portrait (index.md front
+  matter, rendered by responsive-image.html). DOM order is heading, portrait, pillars, blurb, link; the grid places them.
+  Styles: scss/marble/_intro.scss; motion: scss/marble/_motion.scss (data-reveal gives the IntersectionObserver
+  fallback in js/home.js §2).
+{%- endcomment -%}
+{%- assign d = site.data.experiments.intro.regroup.pillars -%}
+<section class="intro slab slab--base slab--cut" id="intro" aria-labelledby="intro-title">
+  <div class="intro__track">
+    <div class="intro__stage container">
+      <div class="facets" data-reveal data-regroup>
+        <h2 class="facets__tagline" id="intro-title">{{ d.tagline }}</h2>
+        {%- if include.portrait %}
+        <figure class="intro-portrait">
+          {% include_relative _partials/responsive-image.html image=include.portrait class="intro-portrait__img" sizes=include.portrait.sizes %}
+          <span class="intro-portrait__inlay" aria-hidden="true"></span>
+        </figure>
+        {%- endif %}
+        <span class="facets__sheet" aria-hidden="true"></span>
+        <span class="facets__forged" aria-hidden="true"></span>
+        <ul class="facets__set" aria-label="Pillars">
+          {%- for p in d.pillars %}
+          <li class="facet facet--{{ p.id }}">
+            <div class="facet__body">
+              <h3 class="facet__label">{{ p.label }}</h3>
+              <p class="facet__line">{{ p.line }}</p>
+            </div>
+          </li>
+          {%- endfor %}
+        </ul>
+        <div class="facets__joint">
+          <p class="facets__blurb">{{ d.blurb }}</p>
+          <a class="btn btn--line facets__cta" href="{{ d.cta.url | relative_url }}">{{ d.cta.label }}</a>
+        </div>
+        <span class="facets__ring" aria-hidden="true"></span>
+        <span class="facets__inlay" aria-hidden="true"></span>
+        <span class="facets__sheen" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</section>

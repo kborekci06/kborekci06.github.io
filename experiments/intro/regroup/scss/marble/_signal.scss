@@ -1,0 +1,75 @@
+// Signal panel (_partials/signal-bubble.html): a fitted amber glass instrument panel of illustrative traces plus a caption
+// that says so. Honey rim (glass shadow) and a second inlay hairline inside it, as on the fitted-stone frames (Emperador).
+// Traces side by side when the panel is wide, stacked in a narrow float (Emperador's grid).
+// Placement on a tile lives in _tile.scss; entrance and hover lift in _motion.scss; path animation in js/home.js.
+
+.signal-bubble {
+  @include glass(var(--glass-surface-strong)); // strong glass: the bubble floats over a photo, muted caption must hold 4.5:1
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  position: relative;
+  gap: var(--space-3) var(--space-5);
+  width: var(--bubble-width);
+  padding: var(--bubble-pad);
+  border-radius: var(--radius-glass);
+  color: var(--s-text);
+}
+
+.signal-bubble::after {
+  content: "";
+  position: absolute;
+  inset: var(--space-1);
+  border: var(--vein-width) solid var(--glass-border);
+  pointer-events: none;
+}
+
+.signal-bubble__row {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.signal-bubble__label {
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-label);
+}
+
+.signal-bubble__unit,
+.signal-bubble__caption {
+  color: var(--s-muted);
+  font-weight: var(--weight-regular);
+  letter-spacing: normal;
+}
+
+.signal-bubble__plot {
+  width: 100%;
+  height: var(--signal-height);
+  overflow: hidden;
+}
+
+.signal-bubble__trace,
+.signal-bubble__grid {
+  fill: none;
+}
+
+.signal-bubble__trace {
+  stroke: var(--s-accent);
+  filter: drop-shadow(0 0 0.25rem var(--s-glow)); // the trace glows like a lit band
+  stroke-width: var(--vein-width-strong);
+  stroke-linejoin: round;
+}
+
+.signal-bubble__grid {
+  stroke: var(--s-vein-strong);
+  stroke-width: var(--vein-width);
+  stroke-dasharray: var(--signal-dash);
+}
+
+.signal-bubble__caption {
+  grid-column: 1 / -1;
+  padding-top: var(--space-3);
+  border-top: var(--vein-width) solid var(--s-vein);
+  font-size: var(--step--1);
+  line-height: var(--leading-snug);
+}

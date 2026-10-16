@@ -1,0 +1,516 @@
+// Home intro (_partials/home-intro.html), regroup: the portrait, three pillar stones and the Forged panel (tagline,
+// blurb, link); then the work heading that follows on the same base slab.
+// Static state here is the settled one (act 2; JS off, reduced motion): portrait and the joined panel, butt-jointed.
+// Act 1 (the stones locked around the face) and both transitions are in _motion.scss; they read, per piece:
+//   --a1-x / --a1-y          offset from the settled box to the act-1 place (written by js/home.js §5)
+//   --a1-cut                 outline in act 1 (lg); the settled outline is the element's own clip-path
+//   --facet-dx / -dy / -rot  where a stone arrives from (transform)
+//   --a1-cut-in              the photo's act-1 outline, one vein inside --a1-cut (the lit cut edge)
+//   --a1-kh / --a1-sh        keystone height and side-stone height (px, written by home.js §5 on .facets)
+//   --a1-widen               how far People's glass reaches past its cell in act 1 (home.js §5)
+//   --a1-ring                the outer ring round the act-1 composite (polygon, home.js §5)
+// Grid: below md one column (portrait, three stacked pillars, tagline, joint); md: portrait above, pillars in three
+// columns; lg: portrait in its own column beside the pillar row and the Forged panel under it.
+
+// Chamfered octagon, corners clockwise from top-left; $w insets every edge (the inner outline of a hairline ring).
+@function facet-points($tl, $tr, $br, $bl, $w: 0px) {
+  @if $w == 0px {
+    @return unquote("#{$tl} 0, calc(100% - #{$tr}) 0, 100% #{$tr}, 100% calc(100% - #{$br}), calc(100% - #{$br}) 100%, #{$bl} 100%, 0 calc(100% - #{$bl}), 0 #{$tl}");
+  }
+  $t: "#{$w} * var(--intro-miter)";
+  @return unquote("calc(#{$tl} + #{$t}) #{$w}, calc(100% - #{$tr} - #{$t}) #{$w}, calc(100% - #{$w}) calc(#{$tr} + #{$t}), calc(100% - #{$w}) calc(100% - #{$br} - #{$t}), calc(100% - #{$br} - #{$t}) calc(100% - #{$w}), calc(#{$bl} + #{$t}) calc(100% - #{$w}), #{$w} calc(100% - #{$bl} - #{$t}), #{$w} calc(#{$tl} + #{$t})");
+}
+
+@function facet-start($tl, $w: 0px) {
+  @if $w == 0px {
+    @return unquote("#{$tl} 0");
+  }
+  @return unquote("calc(#{$tl} + #{$w} * var(--intro-miter)) #{$w}");
+}
+
+@function facet-shape($tl, $tr, $br, $bl) {
+  @return unquote("polygon(#{facet-points($tl, $tr, $br, $bl)})");
+}
+
+// Hairline ring: the outline and the outline inset by one vein, even-odd filled. Both loops close on their first point,
+// so the bridge between them is traversed there and back and has no area.
+@function facet-ring($tl, $tr, $br, $bl, $w: var(--vein-width)) {
+  @return unquote("polygon(evenodd, #{facet-points($tl, $tr, $br, $bl)}, #{facet-start($tl)}, #{facet-points($tl, $tr, $br, $bl, $w)}, #{facet-start($tl, $w)})");
+}
+
+// The same eight vertices as facet-points, every y on the top edge: the Forged panel before it is cut down.
+@function closed-top($tl, $tr, $br, $bl) {
+  @return unquote("polygon(#{$tl} 0, calc(100% - #{$tr}) 0, 100% 0, 100% 0, calc(100% - #{$br}) 0, #{$bl} 0, 0 0, 0 0)");
+}
+
+// Keystone outline (variant C's cut) inside a box, inset by $w: chamfered top corners, sides straight down to the course
+// line ($kh - $sh), then tapered inward by --intro-key-taper to the base ($kh); $kl insets both sides, so the window is
+// centred in the box. Slanted edges are offset horizontally (C's approximation; sub-pixel at these angles). The vertex
+// order is facet-points', so the keystone interpolates into a fitted panel vertex by vertex.
+@function key-points($kl, $kh, $sh, $w: 0px) {
+  $m: "#{$w} * var(--intro-miter)";
+  $ch: var(--intro-chamfer);
+  $t: var(--intro-key-taper);
+  @return unquote("calc(#{$kl} + #{$ch} + #{$m}) #{$w}, calc(100% - #{$kl} - #{$ch} - #{$m}) #{$w}, calc(100% - #{$kl} - #{$w}) calc(#{$ch} + #{$m}), calc(100% - #{$kl} - #{$w}) calc(#{$kh} - #{$sh}), calc(100% - #{$kl} - #{$t} - #{$w}) calc(#{$kh} - #{$w}), calc(#{$kl} + #{$t} + #{$w}) calc(#{$kh} - #{$w}), calc(#{$kl} + #{$w}) calc(#{$kh} - #{$sh}), calc(#{$kl} + #{$w}) calc(#{$ch} + #{$m})");
+}
+
+$c: var(--intro-chamfer);
+$cw: var(--intro-cut-wide);
+$rc: unquote("calc(var(--intro-chamfer) - var(--intro-inset) * var(--intro-miter))");
+$rw: unquote("calc(var(--intro-cut-wide) - var(--intro-inset) * var(--intro-miter))");
+// The portrait ring's halo: a channel two veins either side of the ring, so the ring keeps its contrast at any
+// sub-pixel position over any part of the photo (variant B's measurement: the ring alone fell to 1:1 on sky).
+$hc: unquote("calc(var(--intro-chamfer) - (var(--intro-inset) - var(--vein-width) * 2) * var(--intro-miter))");
+$hw: unquote("calc(var(--intro-cut-wide) - (var(--intro-inset) - var(--vein-width) * 2) * var(--intro-miter))");
+$h3: unquote("calc(var(--vein-width-strong) + var(--vein-width) * 4)");
+$vs: var(--vein-width-strong);
+$vw: var(--vein-width);
+$kt: var(--intro-key-taper);
+
+.intro {
+  overflow-x: clip; // arriving stones may reach past the gutter; never a horizontal scroll
+  padding-block: var(--slab-pad) var(--space-8);
+}
+
+.facets {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(4, auto);
+}
+
+// Backlight behind the glass: the hero's warm halo, blurred by the panels in front of it.
+.facets::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--space-8) * -1) 0;
+  background-image: var(--hero-backlight);
+  pointer-events: none;
+}
+
+// Portrait: the face. The figure sets its row height (5:4 of its width, at least); the image fills it, so side by side
+// the panel beside it can be taller without letterboxing. The figure is filled with the accent and the photo is cut one
+// vein inside the figure's outline, so the stone's cut edge shows as a lit hairline in every act (variant C's keystone).
+.intro-portrait {
+  --portrait-ring: #{facet-ring($rc, $rc, 0px, 0px, $vs)};
+  --portrait-halo: #{facet-ring($hc, $hc, 0px, 0px, $h3)};
+  --fit-in: polygon(#{facet-points($c, $c, 0px, 0px, $vw)});
+  --a1-cut: polygon(#{key-points(0px, 100%, var(--intro-key-course))});
+  --a1-cut-in: polygon(#{key-points(0px, 100%, var(--intro-key-course), $vw)});
+  position: relative;
+  z-index: 3; // above every stone and ring: nothing ever passes over the face
+  grid-area: 1 / 1;
+  justify-self: start;
+  width: var(--intro-portrait-w);
+  min-height: calc(var(--intro-portrait-w) * var(--intro-portrait-tall));
+  margin: 0;
+  overflow: clip;
+  background-color: var(--s-accent);
+  clip-path: #{facet-shape($c, $c, 0px, 0px)};
+}
+
+.intro-portrait__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--intro-face-pos);
+  clip-path: var(--fit-in);
+  --a1-cut: var(--a1-cut-in); // the act-1 keyframe (_motion.scss) reads --a1-cut: here, the inset outline
+}
+
+// Inlay hairline around the portrait, at the edge only (never across the face): glow on the holder, a surface-coloured
+// channel on ::before either side of the ring, the ring on ::after.
+.intro-portrait__inlay {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+  pointer-events: none;
+}
+
+.intro-portrait__inlay::before,
+.intro-portrait__inlay::after {
+  content: "";
+  position: absolute;
+}
+
+.intro-portrait__inlay::before {
+  inset: calc(var(--intro-inset) - var(--vein-width) * 2);
+  background-color: var(--s-surface);
+  clip-path: var(--portrait-halo);
+}
+
+.intro-portrait__inlay::after {
+  inset: var(--intro-inset);
+  background-color: var(--s-accent);
+  clip-path: var(--portrait-ring);
+}
+
+// The joined panel (pillar row + Forged panel) and its parts share one outline per layout.
+.facets__sheet,
+.facets__inlay,
+.facets__sheen {
+  --panel-shape: #{facet-shape(0px, $c, $cw, $c)};
+  position: relative;
+  grid-area: 2 / 1 / -1 / -1;
+  pointer-events: none;
+}
+
+// One blur sheet under the joined panel: the stones and the Forged glass blur their backdrops separately, and where two
+// meet the blurs do not agree (soft bands through the joint). The sheet blurs the stone once; it has no tint and shows
+// only once the panel has settled (_motion.scss).
+.facets__sheet {
+  clip-path: var(--panel-shape);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+// Glass of a stone (a pillar) or of the Forged panel.
+.facet::before,
+.facets__forged {
+  background-color: var(--s-surface-2);
+  box-shadow: var(--glass-shadow);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: color-mix(in srgb, var(--s-surface-2) var(--intro-glass-mix), transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+// The Forged panel: the stone that forms last, under the pillar row, carrying the tagline, the blurb and the link.
+.facets__forged {
+  --forged-closed: #{closed-top(0px, 0px, $cw, $c)};
+  position: relative;
+  grid-area: 3 / 1 / -1 / -1;
+  clip-path: #{facet-shape(0px, 0px, $cw, $c)};
+  pointer-events: none;
+}
+
+.facets__set {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-area: 2 / 1 / 3 / -1; // explicit column: the sheet spans this cell too, so auto-placement would add a column
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// One stone: glass on ::before cut to --facet-fit (settled), the lit joint with the face on ::after (act 1 only).
+.facet {
+  position: relative;
+  display: grid;
+}
+
+.facet::before,
+.facet::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.facet::before {
+  inset: 0;
+  clip-path: var(--facet-fit);
+}
+
+// Joint: a lit hairline along the edge a stone shares with the keystone in act 1 (shaped in the pinned layout below).
+// Hidden at rest; only the pinned scrub draws it.
+.facet::after {
+  --joint-sx: 1;
+  --joint-sy: 0;
+  inset: 0;
+  background-color: var(--s-accent);
+  opacity: 0;
+}
+
+// Outer ring round the act-1 composite: one inlay hairline following its silhouette (polygon from home.js §5), under
+// the keystone, so the keystone breaks it. Only the pinned scrub shows it.
+.facets__ring {
+  position: absolute;
+  z-index: 2;
+  display: none;
+  inset: calc(var(--space-10) * -1);
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+  pointer-events: none;
+}
+
+.facets__ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--s-accent);
+  clip-path: var(--a1-ring, inset(50%));
+}
+
+.facet:nth-child(1) {
+  --facet-fit: #{facet-shape(0px, $c, 0px, 0px)};
+  --facet-dx: calc(var(--intro-travel) * -1);
+  --facet-dy: 0px;
+  --facet-rot: calc(var(--intro-tilt) * -1);
+}
+
+.facet:nth-child(2) {
+  --facet-fit: #{facet-shape(0px, 0px, 0px, 0px)};
+  --facet-dx: var(--intro-travel);
+  --facet-dy: 0px;
+  --facet-rot: var(--intro-tilt);
+}
+
+.facet:nth-child(3) {
+  --facet-fit: #{facet-shape(0px, 0px, 0px, 0px)};
+  --facet-dx: 0px;
+  --facet-dy: var(--intro-travel);
+  --facet-rot: 0deg;
+}
+
+.facet__body {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--intro-pad);
+}
+
+// Seams: inlay hairlines where two stones meet and above the tagline, drawn on as the panel settles (_motion.scss
+// scales them from --seam-sx/--seam-sy). Horizontal when stacked, vertical between columns from md.
+.facet + .facet > .facet__body::before,
+.facets__tagline::before {
+  --seam-sx: 0;
+  --seam-sy: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: var(--intro-inset);
+  left: var(--intro-inset);
+  height: var(--vein-width);
+  background-color: var(--s-accent);
+  box-shadow: 0 0 var(--space-1) var(--inlay-glow);
+  transform-origin: left center;
+}
+
+.facet__label {
+  font-size: var(--step-2);
+}
+
+.facet__line {
+  max-width: 34ch;
+  color: var(--s-muted);
+  line-height: var(--leading-snug);
+}
+
+.facets__tagline,
+.facets__joint {
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / -1;
+  padding-inline: var(--intro-pad);
+}
+
+.facets__tagline {
+  grid-row: 3;
+  padding-top: var(--intro-pad);
+  font-size: var(--step-3);
+}
+
+.facets__joint {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  grid-row: 4;
+  padding-block: var(--space-4) var(--intro-pad);
+}
+
+.facets__blurb {
+  max-width: 52ch;
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+}
+
+// Joined inlay: one ring around the joined panel, glowing like the tile inlays (filter on the holder, ring on ::before).
+.facets__inlay,
+.facets__sheen {
+  z-index: 2;
+}
+
+.facets__inlay {
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+}
+
+.facets__inlay::before {
+  content: "";
+  position: absolute;
+  inset: var(--intro-inset);
+  background-color: var(--s-accent);
+  clip-path: #{facet-ring(0px, $rc, $rw, $rc)};
+}
+
+// Polished sheen across the joined panel on hover or focus (as on the tile frames).
+.facets__sheen {
+  overflow: clip;
+  clip-path: var(--panel-shape);
+}
+
+.facets__sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--sheen);
+  translate: -100% 0;
+}
+
+.work__head {
+  padding-block: var(--space-7) var(--slab-pad);
+}
+
+.work__title {
+  font-size: var(--step-4);
+  font-stretch: calc(var(--width-display) * 1%);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+// Three columns: pillars side by side under the portrait; seams turn vertical.
+@media (min-width: $bp-md) {
+  .facets__set {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+
+  .facet:nth-child(1) {
+    --facet-fit: #{facet-shape(0px, 0px, 0px, 0px)};
+  }
+
+  .facet:nth-child(3) {
+    --facet-fit: #{facet-shape(0px, $c, 0px, 0px)};
+  }
+
+  .facet + .facet > .facet__body::before {
+    --seam-sx: 1;
+    --seam-sy: 0;
+    top: var(--intro-inset);
+    right: auto;
+    bottom: 0;
+    left: 0;
+    width: var(--vein-width);
+    height: auto;
+    transform-origin: center top;
+  }
+
+  .facets__joint {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    padding-inline-end: var(--intro-cut-wide); // the link clears the wide lower cut
+  }
+}
+
+// Side by side (settled = variant B): the portrait takes the first column and the whole height; the pillar row and
+// the Forged panel under it the second. Act-1 outlines (--a1-cut) are set here: each stone chamfers the corners it
+// shows when it stands alone beside the face.
+@media (min-width: $bp-lg) {
+  .facets {
+    grid-template-columns: var(--intro-portrait-w) minmax(0, 1fr);
+    grid-template-rows: repeat(3, auto);
+  }
+
+  .intro-portrait {
+    --fit-in: polygon(#{facet-points($c, 0px, 0px, $cw, $vw)});
+    --portrait-ring: #{facet-ring($rc, 0px, 0px, $rw, $vs)};
+    --portrait-halo: #{facet-ring($hc, 0px, 0px, $hw, $h3)};
+    grid-column: 1;
+    grid-row: 1 / -1;
+    justify-self: stretch;
+    width: auto;
+    min-height: var(--intro-portrait-w); // square at least; the panel sets the height
+    clip-path: #{facet-shape($c, 0px, 0px, $cw)};
+  }
+
+  .facets__set,
+  .facets__tagline,
+  .facets__joint {
+    grid-column: 2;
+  }
+
+  .facets__set {
+    grid-row: 1;
+  }
+
+  .facets__tagline {
+    grid-row: 2;
+  }
+
+  .facets__joint {
+    grid-row: 3;
+  }
+
+  .facets__forged {
+    --forged-closed: #{closed-top(0px, 0px, $cw, 0px)};
+    grid-area: 2 / 2 / -1 / -1;
+    clip-path: #{facet-shape(0px, 0px, $cw, 0px)};
+  }
+
+  .facets__sheet,
+  .facets__inlay,
+  .facets__sheen {
+    --panel-shape: #{facet-shape(0px, $c, $cw, 0px)};
+    grid-area: 1 / 2 / -1 / -1;
+  }
+
+  .facets__inlay::before {
+    clip-path: #{facet-ring(0px, $rc, $rw, 0px)};
+  }
+}
+
+// Act-1 composite (pinned two-act intro only; the scrub is in _motion.scss): the keystone is a --intro-key-width window
+// centred in the portrait's settled box, --a1-kh tall, tapering across the side stones' height --a1-sh. Hardware and
+// Software keep their settled cells, inner edges cut to the taper (C's voussoirs), outer corners chamfered. People
+// keeps its cell for the text, but its glass reaches --a1-widen past it either side, so it sits on a straight seat as
+// wide as the keystone; settled, the glass is cut back to the cell. Joints: slivers on the taper lines, a line on the seat.
+@media (min-width: $bp-intro-wide) and (min-height: $bp-intro-tall) {
+  .intro-portrait {
+    $kl: unquote("calc((100% - var(--intro-key-width)) / 2)");
+    --a1-cut: polygon(#{key-points($kl, var(--a1-kh, 100%), var(--a1-sh, 0px))});
+    --a1-cut-in: polygon(#{key-points($kl, var(--a1-kh, 100%), var(--a1-sh, 0px), $vw)});
+  }
+
+  .facet:nth-child(1) {
+    --a1-cut: polygon(#{$c} 0, calc(100% - #{$kt}) 0, calc(100% - #{$kt}) 0, 100% 100%, 100% 100%, #{$c} 100%, 0 calc(100% - #{$c}), 0 #{$c});
+  }
+
+  .facet:nth-child(1)::after {
+    clip-path: polygon(calc(100% - #{$kt} - #{$vs}) 0, calc(100% - #{$kt}) 0, 100% 100%, calc(100% - #{$vs}) 100%);
+    transform-origin: center top;
+  }
+
+  .facet:nth-child(2) {
+    --a1-cut: polygon(#{$kt} 0, calc(100% - #{$c}) 0, 100% #{$c}, 100% calc(100% - #{$c}), calc(100% - #{$c}) 100%, 0 100%, 0 100%, #{$kt} 0);
+  }
+
+  .facet:nth-child(2)::after {
+    clip-path: polygon(#{$kt} 0, calc(#{$kt} + #{$vs}) 0, #{$vs} 100%, 0 100%);
+    transform-origin: center top;
+  }
+
+  .facet:nth-child(3) {
+    $w: var(--a1-widen, 0px);
+    --facet-fit: polygon(#{$w} 0, calc(100% - #{$w} - #{$c}) 0, calc(100% - #{$w}) #{$c}, calc(100% - #{$w}) 100%, calc(100% - #{$w}) 100%, #{$w} 100%, #{$w} 100%, #{$w} 0);
+    --a1-cut: polygon(0 0, 100% 0, 100% 0, 100% calc(100% - #{$cw}), calc(100% - #{$cw}) 100%, #{$c} 100%, 0 calc(100% - #{$c}), 0 0);
+  }
+
+  .facet:nth-child(3)::before {
+    inset: 0 calc(var(--a1-widen, 0px) * -1);
+  }
+
+  .facet:nth-child(3)::after {
+    --joint-sx: 0;
+    --joint-sy: 1;
+    inset: 0 calc(var(--a1-widen, 0px) * -1) auto;
+    height: $vs;
+    box-shadow: 0 0 var(--space-2) var(--inlay-glow);
+  }
+}

@@ -1,0 +1,6 @@
+{%- comment -%}
+  Inline stylesheet. Compiles scss/_site.scss at build time (scssify) into one <style> in <head>:
+  zero render-blocking CSS requests. Edit styles in _sass/, never here.
+{%- endcomment -%}
+{%- capture scss -%}@import "experiments/intro/regroup/scss/site";{%- endcapture -%}
+<style>{{ scss | scssify }}</style>

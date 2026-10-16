@@ -1,0 +1,116 @@
+// Site header (_partials/site-header.html): primary nav and theme toggle, a sticky glass bar.
+// Default: base-slab glass, sticky. On Home (body.has-hero) it is fixed over the page in the base context, so it
+// follows the theme like the hero stone below it (honey face light, night face dark).
+// Strong glass: the bar passes over photos and light slabs, and nav text must hold >= 4.5:1 on the composite.
+
+.site-header {
+  @include slab-base;
+  @include glass(var(--glass-surface-strong));
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  border-width: 0 0 var(--vein-width);
+  color: var(--s-text);
+}
+
+.has-hero .site-header {
+  position: fixed;
+  inset: 0 0 auto;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--header-height);
+}
+
+.site-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: 0;
+  list-style: none;
+}
+
+// Nav links: a hairline underline at rest (distinguishable without hover); hover and focus draw an accent line over it.
+.site-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding-inline: var(--space-2);
+  color: var(--s-text);
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-decoration-color: var(--s-vein-strong);
+}
+
+.site-nav__link::after {
+  content: "";
+  position: absolute;
+  inset: auto var(--space-2) var(--space-2);
+  height: var(--vein-width-strong);
+  background-color: var(--s-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.site-nav__link:hover::after,
+.site-nav__link:focus-visible::after,
+.site-nav__link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  padding-inline: var(--space-3);
+  border: var(--vein-width) solid var(--s-vein-strong);
+  border-radius: var(--radius-control);
+  background-color: transparent;
+  color: var(--s-text);
+  font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.theme-toggle[hidden] {
+  display: none;
+}
+
+.theme-toggle:hover {
+  border-color: var(--s-text);
+}
+
+.theme-toggle__icon {
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.theme-toggle__text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (min-width: $bp-md) {
+  .theme-toggle__text {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+  }
+}

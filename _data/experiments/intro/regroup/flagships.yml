@@ -1,0 +1,96 @@
+# Flagship tiles for _partials/featured-work.html, copied from the two case-study pages' front matter
+# (contract: _data/schema/project.yml). url = the case study the tile links to.
+- title: Diaphragm pacing data platform
+  slug: diaphragm-control
+  description: A wearable that logs exhaled CO₂ and motion for children with CCHS,
+    the first step toward a diaphragm pacer that adjusts itself.
+  role: Technical and project lead
+  team:
+  - Shael
+  - Akash
+  - Jay
+  dates:
+    start: '2024'
+    end: present
+  org: Lurie Children’s Hospital
+  tags:
+  - Medical Device
+  - Embedded Systems
+  - PCB Design
+  thumbnail:
+    src: "/assets/img/diaphragm-control/card-1100.webp"
+    widths:
+    - 600
+    - 1100
+    width: 1100
+    height: 733
+    alt: Front and back of the custom data-logger board, labelled CO₂ sensor, LEDs
+      and start/stop buttons, microSD card reader, RP2040 microcontroller and IMU
+  figures: []
+  outcome: Provisional patent filed, IRB-approved data collection on healthy volunteers,
+    BMES 2025 poster
+  featured: true
+  order: 1
+  tile:
+    secondary:
+      label: BMES 2025 poster (PDF)
+      url: "/assets/img/projects/diaphragm-control/BMES-POSTER-2025.pdf"
+  signals:
+  - id: co2
+    label: CO₂
+    kind: co2
+    unit: a.u.
+    rest:
+      freq: 0.25
+      amp: 1
+    active:
+      freq: 0.6
+      amp: 0.55
+  - id: motion
+    label: Motion
+    kind: motion
+    unit: a.u.
+    rest:
+      freq: 0.2
+      amp: 0.45
+    active:
+      freq: 0.5
+      amp: 0.9
+  url: "/projects/diaphragm-control/"
+- title: Infant motion pipeline
+  slug: infant-pose-pipeline
+  description: Screening infant motor development from ordinary video, and a proposal
+    to put the physics of infant motion into the model.
+  role: R&D engineer (student intern)
+  team:
+  - Dr. Arun Jayaraman’s lab
+  dates:
+    start: '2024'
+    end: present
+  org: Shirley Ryan AbilityLab
+  tags:
+  - Computer Vision
+  - Pose Estimation and Lifting
+  - Python
+  thumbnail:
+    src: "/assets/img/infant-pose-pipeline/card-1100.webp"
+    widths:
+    - 600
+    - 1100
+    width: 1100
+    height: 733
+    alt: Video frame of an infant lying on its back, with pose-estimation keypoints,
+      a skeleton and a bounding box drawn over it
+  figures: []
+  outcome: "[confirm: sanitized Phase 1 finding, pending Kaan's project resources]"
+  featured: true
+  order: 2
+  tile:
+    video: "/assets/video/infant-pose-pipeline/pose-loop.mp4"
+    poster:
+      src: "/assets/video/infant-pose-pipeline/pose-loop-poster.webp"
+      width: 584
+      height: 390
+      alt: Video of an infant lying on its back, with pose-estimation keypoints, a
+        skeleton and a bounding box tracking its movement
+  url: "/projects/infant-pose-pipeline/"
