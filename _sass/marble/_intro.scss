@@ -1,3 +1,4 @@
+@use "sass:string";
 // Home intro (_includes/home-intro.html): three fitted glass panels (facets) that join into one panel holding the
 // tagline, the blurb and the link; then the work heading that follows on the same base slab.
 // Static state here is the settled one (JS off, reduced motion); the apart state and the join are in _motion.scss.
@@ -7,34 +8,34 @@
 // Chamfered octagon, corners clockwise from top-left; $w insets every edge (the inner outline of a hairline ring).
 @function facet-points($tl, $tr, $br, $bl, $w: 0px) {
   @if $w == 0px {
-    @return unquote("#{$tl} 0, calc(100% - #{$tr}) 0, 100% #{$tr}, 100% calc(100% - #{$br}), calc(100% - #{$br}) 100%, #{$bl} 100%, 0 calc(100% - #{$bl}), 0 #{$tl}");
+    @return string.unquote("#{$tl} 0, calc(100% - #{$tr}) 0, 100% #{$tr}, 100% calc(100% - #{$br}), calc(100% - #{$br}) 100%, #{$bl} 100%, 0 calc(100% - #{$bl}), 0 #{$tl}");
   }
   $t: "#{$w} * var(--intro-miter)";
-  @return unquote("calc(#{$tl} + #{$t}) #{$w}, calc(100% - #{$tr} - #{$t}) #{$w}, calc(100% - #{$w}) calc(#{$tr} + #{$t}), calc(100% - #{$w}) calc(100% - #{$br} - #{$t}), calc(100% - #{$br} - #{$t}) calc(100% - #{$w}), calc(#{$bl} + #{$t}) calc(100% - #{$w}), #{$w} calc(100% - #{$bl} - #{$t}), #{$w} calc(#{$tl} + #{$t})");
+  @return string.unquote("calc(#{$tl} + #{$t}) #{$w}, calc(100% - #{$tr} - #{$t}) #{$w}, calc(100% - #{$w}) calc(#{$tr} + #{$t}), calc(100% - #{$w}) calc(100% - #{$br} - #{$t}), calc(100% - #{$br} - #{$t}) calc(100% - #{$w}), calc(#{$bl} + #{$t}) calc(100% - #{$w}), #{$w} calc(100% - #{$bl} - #{$t}), #{$w} calc(#{$tl} + #{$t})");
 }
 
 @function facet-start($tl, $w: 0px) {
   @if $w == 0px {
-    @return unquote("#{$tl} 0");
+    @return string.unquote("#{$tl} 0");
   }
-  @return unquote("calc(#{$tl} + #{$w} * var(--intro-miter)) #{$w}");
+  @return string.unquote("calc(#{$tl} + #{$w} * var(--intro-miter)) #{$w}");
 }
 
 @function facet-shape($tl, $tr, $br, $bl) {
-  @return unquote("polygon(#{facet-points($tl, $tr, $br, $bl)})");
+  @return polygon(#{facet-points($tl, $tr, $br, $bl)});
 }
 
 // Hairline ring: the outline and the outline inset by one vein, even-odd filled. Both loops close on their first point,
 // so the bridge between them is traversed there and back and has no area.
 @function facet-ring($tl, $tr, $br, $bl) {
   $w: var(--vein-width);
-  @return unquote("polygon(evenodd, #{facet-points($tl, $tr, $br, $bl)}, #{facet-start($tl)}, #{facet-points($tl, $tr, $br, $bl, $w)}, #{facet-start($tl, $w)})");
+  @return string.unquote("polygon(evenodd, #{facet-points($tl, $tr, $br, $bl)}, #{facet-start($tl)}, #{facet-points($tl, $tr, $br, $bl, $w)}, #{facet-start($tl, $w)})");
 }
 
 $c: var(--intro-chamfer);
 $cw: var(--intro-cut-wide);
-$rc: unquote("calc(var(--intro-chamfer) - var(--intro-inset) * var(--intro-miter))");
-$rw: unquote("calc(var(--intro-cut-wide) - var(--intro-inset) * var(--intro-miter))");
+$rc: calc(var(--intro-chamfer) - var(--intro-inset) * var(--intro-miter));
+$rw: calc(var(--intro-cut-wide) - var(--intro-inset) * var(--intro-miter));
 
 .intro {
   overflow-x: clip; // apart facets may reach past the gutter on narrow screens; never a horizontal scroll

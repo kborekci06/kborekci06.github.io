@@ -1,3 +1,4 @@
+@use "sass:string";
 // Design tokens: the only file allowed to hold raw values (CLAUDE.md §4).
 // Three layers: primitive (--p-*) -> semantic (--color-*, per theme; --color-night-*, theme-invariant)
 // -> component (--s-*, --hero-*, --tile-*, --glass-*, --signal-*).
@@ -9,8 +10,8 @@ $bp-md: 48em;        // 768px: two-column tile stage
 $bp-lg: 64em;        // 1024px: wide gutters
 $bp-tall: 40em;      // min-height for the pinned sequence (landscape phones scroll normally)
 
-// Grain: SVG feTurbulence, no bitmap. Sass string because Ruby Sass cannot parse a raw data URI in a custom property.
-$grain-url: unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix values=%270 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")');
+// Grain: SVG feTurbulence, no bitmap. Sass string so the data URI survives as one token in a custom property.
+$grain-url: string.unquote('url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix values=%270 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")');
 
 :root {
   // ---- Primitive layer ----
