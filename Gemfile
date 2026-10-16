@@ -1,8 +1,12 @@
 source "https://rubygems.org"
 
-# Match GitHub Pages build environment as closely as possible
-gem "github-pages", group: :jekyll_plugins
+# Plain Jekyll; the github-pages meta-gem was retired with GitHub Pages
+gem "jekyll", "~> 4.4"
+gem "minima", "~> 2.5"  # legacy pages still chain page -> default (DES-010)
 
-# Needed on Ruby 3+ for local serving (some setups)
-gem "webrick", "~> 1.8"
+group :jekyll_plugins do
+  gem "jekyll-feed", "~> 0.17"     # minima's head.html calls feed_meta
+  gem "jekyll-seo-tag", "~> 2.8"   # minima's head.html calls seo
+end
 
+gem "webrick", "~> 1.8"  # local `jekyll serve` on Ruby 3+
