@@ -1,0 +1,399 @@
+// Home intro (_partials/home-intro.html), keystone: the portrait is the keystone of one composite stone. Hardware and
+// Software are the stones either side of it, cut to its taper; People is the base course and carries the tagline,
+// the blurb and the link. Then the work heading that follows on the same base slab.
+// Static state here is the settled one (JS off, reduced motion); the arrival and the drop are in _motion.scss.
+// Below md: one column, keystone on top with a V point that Hardware's top is notched to take. From md: three columns
+// (Hardware | keystone | Software) over the People course; the keystone tapers and stands proud of the course.
+
+// Chamfered octagon, corners clockwise from top-left; $w insets every edge (the inner outline of a hairline ring).
+@function facet-points($tl, $tr, $br, $bl, $w: 0px) {
+  @if $w == 0px {
+    @return unquote("#{$tl} 0, calc(100% - #{$tr}) 0, 100% #{$tr}, 100% calc(100% - #{$br}), calc(100% - #{$br}) 100%, #{$bl} 100%, 0 calc(100% - #{$bl}), 0 #{$tl}");
+  }
+  $t: "#{$w} * var(--intro-miter)";
+  @return unquote("calc(#{$tl} + #{$t}) #{$w}, calc(100% - #{$tr} - #{$t}) #{$w}, calc(100% - #{$w}) calc(#{$tr} + #{$t}), calc(100% - #{$w}) calc(100% - #{$br} - #{$t}), calc(100% - #{$br} - #{$t}) calc(100% - #{$w}), calc(#{$bl} + #{$t}) calc(100% - #{$w}), #{$w} calc(100% - #{$bl} - #{$t}), #{$w} calc(#{$tl} + #{$t})");
+}
+
+@function facet-start($tl, $w: 0px) {
+  @if $w == 0px {
+    @return unquote("#{$tl} 0");
+  }
+  @return unquote("calc(#{$tl} + #{$w} * var(--intro-miter)) #{$w}");
+}
+
+@function facet-shape($tl, $tr, $br, $bl) {
+  @return unquote("polygon(#{facet-points($tl, $tr, $br, $bl)})");
+}
+
+// Hairline ring: the outline and the outline inset by one vein, even-odd filled. Both loops close on their first point,
+// so the bridge between them is traversed there and back and has no area.
+@function facet-ring($tl, $tr, $br, $bl) {
+  $w: var(--vein-width);
+  @return unquote("polygon(evenodd, #{facet-points($tl, $tr, $br, $bl)}, #{facet-start($tl)}, #{facet-points($tl, $tr, $br, $bl, $w)}, #{facet-start($tl, $w)})");
+}
+
+// Keystone outline inset by $w: chamfered top corners, then either a V point (below md) or sides that run straight
+// down the proud part and taper by --intro-key-taper across the course (from md). Slanted edges are offset
+// horizontally, which is within a fraction of a pixel of a true parallel offset at these angles.
+@function key-points($w, $wide) {
+  $m: "#{$w} * var(--intro-miter)";
+  $top: unquote("calc(var(--intro-chamfer) + #{$m}) #{$w}, calc(100% - var(--intro-chamfer) - #{$m}) #{$w}, calc(100% - #{$w}) calc(var(--intro-chamfer) + #{$m})");
+  @if $wide {
+    @return unquote("#{$top}, calc(100% - #{$w}) var(--intro-key-proud), calc(100% - var(--intro-key-taper) - #{$w}) calc(100% - #{$w}), calc(var(--intro-key-taper) + #{$w}) calc(100% - #{$w}), #{$w} var(--intro-key-proud), #{$w} calc(var(--intro-chamfer) + #{$m})");
+  }
+  @return unquote("#{$top}, calc(100% - #{$w}) calc(100% - var(--intro-key-point) - #{$w}), 50% calc(100% - #{$w}), #{$w} calc(100% - var(--intro-key-point) - #{$w}), #{$w} calc(var(--intro-chamfer) + #{$m})");
+}
+
+@function key-start($w) {
+  @return unquote("calc(var(--intro-chamfer) + #{$w} * var(--intro-miter)) #{$w}");
+}
+
+@function key-shape($w, $wide) {
+  @return unquote("polygon(#{key-points($w, $wide)})");
+}
+
+@function key-ring($wide) {
+  $a: var(--intro-inset);
+  $b: unquote("calc(var(--intro-inset) + var(--vein-width))");
+  @return unquote("polygon(evenodd, #{key-points($a, $wide)}, #{key-start($a)}, #{key-points($b, $wide)}, #{key-start($b)})");
+}
+
+$c: var(--intro-chamfer);
+$cw: var(--intro-cut-wide);
+$rc: unquote("calc(var(--intro-chamfer) - var(--intro-inset) * var(--intro-miter))");
+$rw: unquote("calc(var(--intro-cut-wide) - var(--intro-inset) * var(--intro-miter))");
+
+.intro {
+  overflow-x: clip; // arriving facets may reach past the gutter; never a horizontal scroll
+  padding-block: var(--slab-pad) var(--space-8);
+}
+
+.facets {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(6, auto);
+}
+
+// Backlight behind the glass: the hero's warm halo, blurred by the panels in front of it.
+.facets::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--space-8) * -1) 0;
+  background-image: var(--hero-backlight);
+  pointer-events: none;
+}
+
+.facets__set {
+  position: relative;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  padding: 0;
+  list-style: none;
+}
+
+// One blur sheet under the whole composite, so the facets' separate backdrop blurs do not show as bands through the
+// joints (each clamps at its edge). No tint of its own; the keystone photo covers its part.
+.facets__set::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: #{facet-shape($c, $c, $cw, $c)};
+  pointer-events: none;
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+// One facet: glass on ::before cut to --facet-fit, a course seam on ::after where it sits on the stone above.
+.facet {
+  position: relative;
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+.facet::before,
+.facet::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.facet::before {
+  inset: 0;
+  background-color: var(--s-surface-2);
+  box-shadow: var(--glass-shadow);
+  clip-path: var(--facet-fit);
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    background-color: color-mix(in srgb, var(--s-surface-2) var(--intro-glass-mix), transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+}
+
+// Course seam: an inlay hairline along the joint with the stone above, drawn on as the stone sets (_motion.scss).
+.facet::after {
+  top: 0;
+  right: var(--intro-inset);
+  left: var(--intro-inset);
+  height: var(--vein-width);
+  background-color: var(--s-accent);
+  box-shadow: 0 0 var(--space-1) var(--inlay-glow);
+  transform-origin: left center;
+}
+
+// Hardware: under the keystone; its top is notched to take the keystone's point, so it reaches up by the point depth.
+.facet:nth-child(1) {
+  --facet-fit: polygon(0 0, 50% var(--intro-key-point), 100% 0, 100% 100%, 0 100%);
+  --facet-dx: calc(var(--intro-travel) * -1);
+  --facet-dy: 0px;
+  --facet-rot: calc(var(--intro-tilt) * -1);
+  grid-row: 2;
+  margin-top: calc(var(--intro-key-point) * -1);
+}
+
+.facet:nth-child(1)::after {
+  content: none;
+}
+
+.facet:nth-child(1) > .facet__body {
+  padding-top: calc(var(--intro-pad) + var(--intro-key-point));
+}
+
+.facet:nth-child(2) {
+  --facet-fit: none;
+  --facet-dx: var(--intro-travel);
+  --facet-dy: 0px;
+  --facet-rot: var(--intro-tilt);
+  grid-row: 3;
+}
+
+// People: the base course; carries the tiles' wide lower-outer cut and runs on under the tagline and joint.
+.facet:nth-child(3) {
+  --facet-fit: #{facet-shape(0px, 0px, $cw, $c)};
+  --facet-dx: 0px;
+  --facet-dy: var(--intro-travel);
+  --facet-rot: 0deg;
+  grid-row: 4 / -1;
+}
+
+.facet__body {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--intro-pad);
+}
+
+.facet__label {
+  font-size: var(--step-2);
+}
+
+.facet__line {
+  max-width: 34ch;
+  color: var(--s-muted);
+  line-height: var(--leading-snug);
+}
+
+// Keystone: the figure holds the grid slot (and the view timeline); the stone inside it is what drops in. The stone is
+// cut to the keystone outline and filled with the accent, the photo is cut one vein inside it, so the cut shows as a lit
+// hairline along every joint; the inlay ring sits --intro-inset inside, as on the tile frames. Nothing covers the face.
+.facets__key {
+  position: relative;
+  z-index: 3;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin: 0;
+}
+
+.facets__stone {
+  position: relative;
+  aspect-ratio: var(--aspect-portrait);
+  background-color: var(--s-accent);
+  clip-path: #{key-shape(0px, false)};
+}
+
+.facets__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  clip-path: #{key-shape(var(--vein-width), false)};
+}
+
+// Keystone inlay: glow and a dark halo on the holder, ring on ::before (a filter on the clipped element itself would be
+// clipped away with it), so the hairline holds against the bright parts of the photo.
+.facets__ring {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+  pointer-events: none;
+}
+
+.facets__ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--s-accent);
+  clip-path: #{key-ring(false)};
+}
+
+.facets__tagline,
+.facets__joint {
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / -1;
+  padding-inline: var(--intro-pad);
+}
+
+.facets__tagline {
+  grid-row: 5;
+  padding-top: var(--intro-pad);
+  font-size: var(--step-3);
+}
+
+.facets__joint {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  grid-row: 6;
+  padding-block: var(--space-4) var(--intro-pad);
+}
+
+.facets__blurb {
+  max-width: 52ch;
+  font-size: var(--step-1);
+  line-height: var(--leading-snug);
+}
+
+// Joined inlay: one ring around the whole composite, glowing like the tile inlays (filter on the holder, ring on
+// ::before). It runs behind the keystone, so the keystone breaks it.
+.facets__inlay,
+.facets__sheen {
+  position: relative;
+  z-index: 2;
+  grid-area: 1 / 1 / -1 / -1;
+  pointer-events: none;
+}
+
+.facets__inlay {
+  filter: drop-shadow(0 0 var(--vein-width) var(--s-surface)) drop-shadow(0 0 var(--space-1) var(--inlay-glow));
+}
+
+.facets__inlay::before {
+  content: "";
+  position: absolute;
+  inset: var(--intro-inset);
+  background-color: var(--s-accent);
+  clip-path: #{facet-ring($rc, $rc, $rw, $rc)};
+}
+
+// Polished sheen across the composite on hover or focus; it passes under the keystone, never over the face.
+.facets__sheen {
+  overflow: clip;
+  clip-path: #{facet-shape($c, $c, $cw, $c)};
+}
+
+.facets__sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--sheen);
+  translate: -100% 0;
+}
+
+.work__head {
+  padding-block: var(--space-7) var(--slab-pad);
+}
+
+.work__title {
+  font-size: var(--step-4);
+  font-stretch: calc(var(--width-display) * 1%);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+// Three columns: Hardware | keystone | Software on the top course, the People course across all three below it.
+// The keystone stands proud of the course (the grid's top padding) and tapers; the stones either side reach under the
+// taper and are cut to it. People's text keeps the first column; tagline and joint sit on the course under the keystone.
+@media (min-width: $bp-md) {
+  .facets {
+    grid-template-columns: minmax(0, 1fr) var(--intro-key-width) minmax(0, 1fr);
+    grid-template-rows: repeat(3, auto);
+    padding-top: var(--intro-key-proud);
+  }
+
+  .facets__key {
+    grid-column: 2;
+    margin-top: calc(var(--intro-key-proud) * -1);
+  }
+
+  .facets__stone {
+    clip-path: #{key-shape(0px, true)};
+  }
+
+  .facets__img {
+    clip-path: #{key-shape(var(--vein-width), true)};
+  }
+
+  .facets__ring::before {
+    clip-path: #{key-ring(true)};
+  }
+
+  .facet:nth-child(1) {
+    --facet-fit: polygon(#{$c} 0, calc(100% - var(--intro-key-taper)) 0, 100% 100%, 0 100%, 0 #{$c});
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: 0;
+    margin-right: calc(var(--intro-key-taper) * -1);
+  }
+
+  .facet:nth-child(1) > .facet__body {
+    padding-top: var(--intro-pad);
+    padding-right: calc(var(--intro-pad) + var(--intro-key-taper));
+  }
+
+  .facet:nth-child(2) {
+    --facet-fit: polygon(var(--intro-key-taper) 0, calc(100% - #{$c}) 0, 100% #{$c}, 100% 100%, 0 100%);
+    grid-column: 3;
+    grid-row: 1;
+    margin-left: calc(var(--intro-key-taper) * -1);
+  }
+
+  .facet:nth-child(2)::after {
+    content: none;
+  }
+
+  .facet:nth-child(2) > .facet__body {
+    padding-left: calc(var(--intro-pad) + var(--intro-key-taper));
+  }
+
+  .facet:nth-child(3) {
+    grid-column: 1 / -1;
+    grid-row: 2 / -1;
+    grid-template-columns: subgrid;
+  }
+
+  .facet:nth-child(3) > .facet__body {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+
+  .facets__tagline {
+    grid-column: 2 / -1;
+    grid-row: 2;
+  }
+
+  .facets__joint {
+    grid-column: 2 / -1;
+    align-items: end;
+    grid-row: 3;
+    padding-inline-end: var(--intro-cut-wide); // the link clears the wide lower cut
+  }
+}

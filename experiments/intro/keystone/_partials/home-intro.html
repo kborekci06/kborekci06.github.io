@@ -1,0 +1,40 @@
+{%- comment -%}
+  Home intro, keystone: the portrait is the keystone of one composite stone; Hardware and Software are the two stones
+  cut to its taper, People is the base course that carries the tagline, the blurb and the story link.
+  Pillars render only from _data/experiments/intro/keystone/pillars.yml (contract in its header); the portrait from index.md front matter
+  (param portrait = { src, widths, width, height, sizes, alt }). DOM order is heading, portrait, pillars, blurb, link.
+  Styles: scss/marble/_intro.scss; motion: scss/marble/_motion.scss (data-reveal gives the IntersectionObserver
+  fallback in js/home.js §2).
+{%- endcomment -%}
+{%- assign d = site.data.experiments.intro.keystone.pillars -%}
+<section class="intro slab slab--base slab--cut" id="intro" aria-labelledby="intro-title">
+  <div class="container intro__inner">
+    <div class="facets" data-reveal>
+      <h2 class="facets__tagline" id="intro-title">{{ d.tagline }}</h2>
+      {%- if include.portrait %}
+      <figure class="facets__key">
+        <div class="facets__stone">
+          {% include_relative _partials/responsive-image.html image=include.portrait class="facets__img" sizes=include.portrait.sizes %}
+          <span class="facets__ring" aria-hidden="true"></span>
+        </div>
+      </figure>
+      {%- endif %}
+      <ul class="facets__set" aria-label="Pillars">
+        {%- for p in d.pillars %}
+        <li class="facet facet--{{ p.id }}">
+          <div class="facet__body">
+            <h3 class="facet__label">{{ p.label }}</h3>
+            <p class="facet__line">{{ p.line }}</p>
+          </div>
+        </li>
+        {%- endfor %}
+      </ul>
+      <div class="facets__joint">
+        <p class="facets__blurb">{{ d.blurb }}</p>
+        <a class="btn btn--line facets__cta" href="{{ d.cta.url | relative_url }}">{{ d.cta.label }}</a>
+      </div>
+      <span class="facets__inlay" aria-hidden="true"></span>
+      <span class="facets__sheen" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,36 @@
+{%- comment -%}
+  Signal bubble: illustrative traces in a floating glass panel. Definition comes from data, never hand-drawn SVG:
+  include.signals = a project's signals list (contract: _data/schema/project.yml), shapes from _data/experiments/intro/keystone/signal-shapes.yml.
+  Liquid draws each trace at its rest state, so the bubble is complete with JS off and under reduced motion.
+  js/home.js redraws the same path each frame from the same data attributes: slow at rest, and on tile hover or
+  focus it eases to the active freq/amp. The caption always says the trace is not data (CLAUDE.md §5).
+  Styles: scss/marble/_signal.scss; placement on a tile: scss/marble/_tile.scss.
+{%- endcomment -%}
+{%- assign shapes = site.data.experiments.intro.keystone.signal-shapes -%}
+{%- assign win = shapes.window -%}
+<figure class="signal-bubble" data-signal-bubble data-window="{{ win }}">
+  {%- for s in include.signals %}
+  {%- assign shape = shapes[s.kind] | default: shapes.custom -%}
+  {%- assign origin = shape.origin -%}
+  {%- assign cycles = s.rest.freq | times: win -%}
+  {%- assign last = cycles | ceil -%}
+  {%- assign base_y = origin | times: -40 | plus: 50 -%}
+  {%- capture d -%}
+    {%- for c in (0..last) -%}
+      {%- for pt in shape.points -%}
+        {%- assign x = pt[0] | plus: c | divided_by: cycles | times: 400 | round: 1 -%}
+        {%- assign y = pt[1] | minus: origin | times: s.rest.amp | plus: origin | times: -40 | plus: 50 | round: 1 -%}
+        {%- if forloop.first and c == 0 %}M{% else %} L{% endif %}{{ x }},{{ y }}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endcapture %}
+  <div class="signal-bubble__row">
+    <p class="signal-bubble__label">{{ s.label }}{% if s.unit %} <span class="signal-bubble__unit">({{ s.unit }})</span>{% endif %}</p>
+    <svg class="signal-bubble__plot" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path class="signal-bubble__grid" d="M0 {{ base_y }}H400" vector-effect="non-scaling-stroke"/>
+      <path class="signal-bubble__trace" d="{{ d }}" vector-effect="non-scaling-stroke" data-signal="{{ s.id }}" data-points="{{ shape.points | jsonify | escape }}" data-origin="{{ origin }}" data-rest="{{ s.rest.freq }},{{ s.rest.amp }}" data-active="{{ s.active.freq }},{{ s.active.amp }}"/>
+    </svg>
+  </div>
+  {%- endfor %}
+  <figcaption class="signal-bubble__caption">Illustrative signal, not recorded data</figcaption>
+</figure>
