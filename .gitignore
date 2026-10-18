@@ -27,3 +27,6 @@ node_modules/
 public/
 next-env.d.ts
 *.tsbuildinfo
+
+# Reference-site feature extractions (REA), working material
+features/
