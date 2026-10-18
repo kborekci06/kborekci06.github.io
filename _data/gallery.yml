@@ -9,6 +9,7 @@
   summary: "One WebGL cloud of particles driven by native scroll: analytic shapes in the vertex shader, a spring between chapters, an ordered-dither print pass. Proof of concept with placeholder copy."
   designs:
     - { slug: dust, name: Dust, direction: "A single cloud of particles that settles into six formations as you scroll", date: 2026-10, status: working, preview: /assets/img/gallery/dust.webp }
+    - { slug: honey, name: Honey, direction: "The Dust field in honey gold and brown, with a dark and a light face", date: 2026-10, status: working, preview: /assets/img/gallery/honey.webp }
 - slug: taste
   short: T
   title: Taste
