@@ -30,3 +30,6 @@ next-env.d.ts
 
 # Reference-site feature extractions (REA), working material
 features/
+
+# Written by next dev for coding agents, never site content
+AGENTS.md
