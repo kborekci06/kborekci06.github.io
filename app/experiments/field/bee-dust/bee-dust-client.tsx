@@ -1,6 +1,6 @@
 "use client";
 
-// Honey field: the Dust field (DES-032) with a two-face palette (DES-036). Points render as grey-white on black into the
+// Bee Dust field: the Dust field (DES-032) with a two-face palette (DES-036). Points render as grey-white on black into the
 // offscreen target; the post pass dithers the coverage and maps it through a three-stop ramp (ground, mid, ink) per face.
 import { useEffect, useRef } from "react";
 
@@ -681,7 +681,7 @@ function mountDust(scene: HTMLElement, canvas: HTMLCanvasElement): () => void {
   const onToggle = () => {
     const next: Face = face === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next); // the observer below applies it
-    try { localStorage.setItem("honey-theme", next); } catch { /* private mode: the face holds for this visit only */ }
+    try { localStorage.setItem("bee-dust-theme", next); } catch { /* private mode: the face holds for this visit only */ }
   };
   const themeMo = new MutationObserver(() => { face = readFace(); labelToggle(); dirty = true; }); // one redraw on the idle and reduced paths
   const onMotionPref = () => { reduced = rmq.matches; shown = active < 0 ? 0 : active; value = shown; vel = 0; canvas.style.opacity = "1"; dirty = true; };

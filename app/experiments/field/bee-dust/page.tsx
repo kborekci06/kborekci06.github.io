@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { DustField } from "./honey-client";
+import { DustField } from "./bee-dust-client";
 
-// Honey: the Dust field (DES-032) in honey and brown, with a dark and a light face (DES-036). Copy and shapes as in Dust.
+// Bee Dust: the Dust field (DES-032) in honey and brown, with a dark and a light face (DES-036). Copy and shapes as in Dust.
 // The client owns the canvas, the scroll mapping, data-active on the chapters and the face toggle.
 export const metadata: Metadata = {
-  title: "Honey",
+  title: "Bee Dust",
   description: "A single cloud of honey-gold particles that settles into six formations as you scroll, on a brown or a creme ground.",
 };
 
@@ -56,9 +56,9 @@ const css = `
 `;
 
 // Runs while the HTML parses, before hydration: the stored face, dark when unset or unreadable. The OS preference is never read.
-const faceScript = `try{if(localStorage.getItem("honey-theme")==="light")document.currentScript.parentElement.setAttribute("data-theme","light")}catch(e){}`;
+const faceScript = `try{if(localStorage.getItem("bee-dust-theme")==="light")document.currentScript.parentElement.setAttribute("data-theme","light")}catch(e){}`;
 
-export default function Honey() {
+export default function BeeDust() {
   return (
     <div className="dust" data-theme="dark" suppressHydrationWarning>
       <script dangerouslySetInnerHTML={{ __html: faceScript }} />
@@ -82,7 +82,7 @@ export default function Honey() {
               <div className="dust__copy">
                 <div className="dust__panel">
                   <p className="dust__count">{String(i + 1).padStart(2, "0")} / {String(chapters.length).padStart(2, "0")}</p>
-                  <Title className="dust__title">{i === 0 ? "Honey" : c.label}</Title>
+                  <Title className="dust__title">{i === 0 ? "Bee Dust" : c.label}</Title>
                   <p className="dust__line">{i === 0 ? `${c.label}. ${c.line} Scroll to move the cloud.` : c.line}</p>
                 </div>
               </div>
