@@ -3,6 +3,12 @@
 # preview.webp (1200x750 screenshot of the page) beside it. Adding a design = its folder plus one entry here.
 # A design hosted elsewhere sets url: (absolute) and preview: (a path under /assets/img/gallery/) instead.
 # status: working (being developed) | candidate (in the running for the final site) | archived (kept for the record)
+- slug: field
+  short: F
+  title: Field
+  summary: "One WebGL cloud of particles driven by native scroll: analytic shapes in the vertex shader, a spring between chapters, an ordered-dither print pass. Proof of concept with placeholder copy."
+  designs:
+    - { slug: dust, name: Dust, direction: "A single cloud of particles that settles into six formations as you scroll", date: 2026-10, status: working, preview: /assets/img/gallery/dust.webp }
 - slug: taste
   short: T
   title: Taste
