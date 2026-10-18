@@ -504,8 +504,7 @@ function mountDust(scene: HTMLElement, canvas: HTMLCanvasElement): () => void {
   const sections = Array.from(root.querySelectorAll<HTMLElement>("[data-chapter]"));
   const dots = Array.from(root.querySelectorAll<HTMLElement>("[data-dot]"));
   const N = sections.length;
-  root.setAttribute("data-ready", "");
-  if (N === 0) return () => root.removeAttribute("data-ready");
+  if (N === 0) return () => undefined;
 
   const tier = pickTier();
   const count = TUNING.particles[tier], dprCap = TUNING.dprCap[tier], ratio = TUNING.renderRatio[tier], fps = TUNING.fps[tier];
@@ -589,7 +588,7 @@ function mountDust(scene: HTMLElement, canvas: HTMLCanvasElement): () => void {
     if (fps > 0) {
       const step = 1 / fps;
       acc += dt;
-      if (acc < step) return;
+      if (acc < step - 0.001) return; // epsilon: rAF jitter must not drop a 30 fps frame
       acc = acc - step > step ? 0 : acc - step;
       dt = step;
     }
@@ -653,12 +652,15 @@ function mountDust(scene: HTMLElement, canvas: HTMLCanvasElement): () => void {
       gl = canvas.getContext("webgl", { alpha: false, antialias: false, depth: false, stencil: false, powerPreference: "low-power", premultipliedAlpha: false });
       renderer = gl ? createRenderer(gl, count) : null;
     } catch {
-      renderer = null; // no WebGL: the wrapper's ground colour stays, the copy stays readable
+      renderer = null;
     }
+    // data-ready only with a live renderer; without one, data-fallback puts the copy back into the page flow
+    if (renderer) { root.setAttribute("data-ready", ""); root.removeAttribute("data-fallback"); }
+    else { root.removeAttribute("data-ready"); root.setAttribute("data-fallback", ""); }
     if (renderer && cssW > 0) renderer.resize(cssW, dpr, canvas.width, canvas.height, ratio);
   };
 
-  const onLost = (e: Event) => { e.preventDefault(); lost = true; renderer = null; sync(); };
+  const onLost = (e: Event) => { e.preventDefault(); lost = true; renderer = null; root.removeAttribute("data-ready"); root.setAttribute("data-fallback", ""); sync(); };
   const onRestored = () => { lost = false; init(); sync(); };
   const onVisibility = () => sync();
   const onOrientation = () => measure();
@@ -700,6 +702,7 @@ function mountDust(scene: HTMLElement, canvas: HTMLCanvasElement): () => void {
     sections.forEach((s) => { s.removeAttribute("data-active"); s.removeAttribute("inert"); });
     dots.forEach((d) => d.removeAttribute("aria-current"));
     root.removeAttribute("data-ready");
+    root.removeAttribute("data-fallback");
   };
 }
 

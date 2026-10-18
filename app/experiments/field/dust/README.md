@@ -32,7 +32,7 @@ Camera: fov 54 deg with the aspect fit `t = max(min(0.92, 1.4/aspect), 0.62/aspe
 
 - Constrained if `(pointer: coarse)`, width < 700, `hardwareConcurrency <= 4` or `deviceMemory <= 4`: 25,000 particles, DPR cap 1.25, render ratio 0.85, 30 fps. Full: 60,000, DPR cap 1.5, ratio 1.0, uncapped.
 - Canvas sized from the wrapper by ResizeObserver; on coarse pointers, height-only changes under 120 px (URL bar) are ignored.
-- Context lost: stop; restored: rebuild. No WebGL: the ground colour stays and the copy reads as normal. JS off: the copy falls back into the page flow.
+- Context lost: stop, `data-fallback` set; restored: rebuild. No WebGL: `data-ready` is never set, `data-fallback` puts the copy back into the page flow over the plain ground. JS off: a `<noscript>` style does the same. Before the client runs, only the first chapter's copy is visible, so there is no flash of six stacked panels.
 - Renders only while on screen and the tab is visible; delta clamped to 50 ms.
 - Reduced motion: no spring, no idle motion, one frame per settled shape, 0.4 s opacity cross-fade between shapes.
 - Dev only (`next dev`): `?at=<index>` pins the shape index (e.g. `?at=2.5`); `window.__dust` exposes `frameMs`, `cpuMs`, `draws` and `bench(n)` (n frames forced to completion by a 1 px readback).
@@ -44,4 +44,5 @@ Camera: fov 54 deg with the aspect fit `t = max(min(0.92, 1.4/aspect), 0.62/aspe
 - Frame cost (`bench`, GPU included): 1.29 ms at 1440x900 DPR 2 (2160x1350 backing), 1.10 ms at DPR 1, 0.84 ms constrained at 390x844. rAF interval 16.7 ms (vsync).
 - Scroll: target holds at 1 at 20% of travel, 1.5 at the midpoint, spring settles on 5 after a long jump.
 - Reduced motion (emulated): one draw at load, none while idle, one per chapter change, canvas opacity 0 then 1.
-- Not verified: a real phone, a software renderer, context loss and restore.
+- Fix pass (2026-10-17, after an independent review): no-WebGL rendering checked with headless Chrome `--disable-3d-apis` (copy in flow, dots visible); first paint checked with virtual time (only chapter 1 copy); the noscript style confirmed in the served HTML. 30 fps accumulator has a 1 ms epsilon; inactive dots raised to 55% ink for the 3:1 non-text minimum.
+- Not verified: a real phone, a software renderer, context loss and restore, JS-off rendering (the flag crashes headless Chrome here; verified by the served HTML only).

@@ -18,7 +18,7 @@ const chapters = [
 ];
 
 const css = `
-  .dust { --ground:#0C0F14; --ink:#E9E2D2; --muted:#AEB5BD; --scrim:rgba(12,15,20,.74); --rule:rgba(233,226,210,.28);
+  .dust { --ground:#0C0F14; --ink:#E9E2D2; --muted:#AEB5BD; --scrim:rgba(12,15,20,.74); --rule:rgba(233,226,210,.28); --dot:rgba(233,226,210,.55);
     --mono:ui-monospace,"SF Mono",Menlo,monospace; --gutter:clamp(16px,4vw,48px);
     background:var(--ground); color:var(--ink); font-family:var(--font-archivo),"Helvetica Neue",Arial,sans-serif; -webkit-font-smoothing:antialiased; }
   .dust a { color:inherit; }
@@ -30,7 +30,7 @@ const css = `
   .dust__back:hover { color:var(--ink); }
   .dust__dots { position:fixed; z-index:3; right:calc(var(--gutter) - 10px); top:50%; transform:translateY(-50%); display:flex; flex-direction:column; }
   .dust__dots a { display:grid; place-items:center; width:28px; height:28px; }
-  .dust__dots a::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--rule); transition:background .3s, transform .3s; }
+  .dust__dots a::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--dot); transition:background .3s, transform .3s; }
   .dust__dots a[aria-current]::before { background:var(--ink); transform:scale(1.35); }
   .dust__chapter { position:relative; z-index:1; min-height:200svh; }
   .dust__copy { position:fixed; inset:0; z-index:2; display:flex; align-items:flex-end; padding:var(--gutter);
@@ -45,14 +45,17 @@ const css = `
   @media (prefers-reduced-motion:reduce) {
     .dust__copy, .dust__chapter[data-active] .dust__copy { transition:opacity .2s linear, visibility 0s; }
   }
-  /* Without the client (JS off), the copy stays in flow and every chapter is readable over the plain ground. */
-  .dust:not([data-ready]) .dust__copy { position:relative; inset:auto; min-height:100svh; opacity:1; visibility:visible; }
+  /* Before the client marks the page ready, only the first chapter's copy shows: no flash of six stacked panels. */
+  .dust:not([data-ready]) .dust__chapter:first-of-type .dust__copy { opacity:1; visibility:visible; }
+  /* No WebGL (data-fallback, set by the client) or no JS (noscript below): the copy stays in flow, every chapter readable over the plain ground. */
+  .dust[data-fallback] .dust__copy { position:relative; inset:auto; min-height:100svh; opacity:1; visibility:visible; }
 `;
 
 export default function Dust() {
   return (
     <div className="dust">
       <style>{css}</style>
+      <noscript><style>{`.dust .dust__copy{position:relative;inset:auto;min-height:100svh;opacity:1;visibility:visible}`}</style></noscript>
       <DustField />
       <a className="dust__back" href="/"><span aria-hidden="true">&larr;</span> Experiments</a>
       <nav className="dust__dots" aria-label="Shapes">
